@@ -25,12 +25,28 @@
   </script>
   <style>
     * { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-    html, body { margin: 0; padding: 0; background-color: #F2F2F2; overflow-x: hidden; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+      background-color: #F2F2F2;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     img { -webkit-user-drag: none; user-select: none; }
+    #figma-stage-shell {
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
     #figma-flow-stage {
       width: 360px;
       height: 800px;
-      transform-origin: top center;
+      transform-origin: top left;
       position: relative;
       overflow: hidden;
       background-color: #F2F2F2;
@@ -51,28 +67,9 @@
     }
   </style>
 </head>
-<body class="m-0 p-0 bg-[#F2F2F2] flex items-start justify-center min-h-screen overflow-x-hidden">
-  <!-- MOBILE-ONLY PLATFORM RESTRICTION OVERLAY (Blocks Non-Mobile Platforms) -->
-  <div id="mobile-only-gate" style="display:none;position:fixed;inset:0;z-index:999999;background:linear-gradient(145deg,#243735 0%,#3A5451 100%);color:#FFFFFF;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;font-family:'Pretendard',sans-serif;">
-    <div style="max-width:440px;background:rgba(255,255,255,0.08);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);border-radius:28px;padding:40px 32px;box-shadow:0 24px 48px rgba(0,0,0,0.35);">
-      <div style="width:72px;height:72px;margin:0 auto 20px;border-radius:20px;background:#BAC9C7;color:#3A5451;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-size:22px;">ONE</div>
-      <div style="display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(186,201,199,0.22);color:#BAC9C7;font-size:12px;font-weight:700;letter-spacing:1.2px;margin-bottom:14px;">MOBILE ONLY PLATFORM</div>
-      <h1 style="font-size:24px;font-weight:700;margin:0 0 12px;line-height:1.35;">모바일 기기 전용 서비스입니다</h1>
-      <p style="font-size:15px;line-height:1.65;color:rgba(255,255,255,0.85);margin:0 0 24px;">
-        <strong>ONECYCLE (EcoCycling)</strong> 1차 웹 어플리케이션은 <strong>모바일 디바이스 전용</strong>으로 제공되며, PC/데스크톱 등 일반 플랫폼에서는 이용이 제한됩니다.<br/>
-        <span style="font-size:13px;color:#BAC9C7;">(2차 네이티브 Android 어플리케이션 출시 예정)</span>
-      </p>
-      <div style="background:rgba(0,0,0,0.24);border-radius:16px;padding:16px;text-align:left;font-size:13px;line-height:1.6;color:rgba(255,255,255,0.9);margin-bottom:18px;">
-        <div style="font-weight:700;color:#BAC9C7;margin-bottom:4px;">📱 접속 및 설치 안내</div>
-        <div>• 스마트폰(iOS / Android) 브라우저로 접속하거나 아래 <strong>Android APK 파일</strong>을 다운로드하여 설치해 주세요.</div>
-        <div>• 모바일 환경 테스트 시 브라우저 개발자 도구(<code>F12</code>)에서 <strong>모바일 기기 툴바(폭 768px 이하)</strong>로 전환하면 즉시 활성화됩니다.</div>
-      </div>
-      <a href="ecocycling.apk" download="ONECYCLE-EcoCycling-v1.0.0.apk" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;border-radius:14px;background:#F5F5F5;color:#3A5451;font-weight:700;font-size:15px;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,0.25);">
-        <span>🤖 Android APK 다운로드 (v1.0.0)</span>
-      </a>
-    </div>
-  </div>
-  <!-- FIGMA FLOW VIEWPORT (Zero Added UI Chrome - 100% 1:1 Figma Frames & Interactions) -->
+<body class="m-0 p-0 bg-[#F2F2F2] flex items-center justify-center">
+  <!-- FIGMA FLOW VIEWPORT (Zero Added UI Chrome - 100% 1:1 Figma Frames & Fluid Cross-Platform Scaling) -->
+  <div id="figma-stage-shell">
   <main id="figma-flow-stage" class="relative flex items-center justify-center">
     <!-- SCREEN FRAME: History popup (0:48 | 166 x 65) -->
     <section id="screen-0_48" data-screen-id="0:48" data-screen-name="History popup" data-screen-w="166" data-screen-h="65" class="figma-screen hidden relative">
@@ -1325,6 +1322,7 @@ MireuLim 님</span></div>
       <div id="figma-overlay-content" class="relative"></div>
     </div>
   </main>
+  </div>
 
   <!-- TEMPLATES FOR OVERLAYS & COMPONENT VARIANTS -->
   <template id="tpl-frame-0_48">
@@ -2523,29 +2521,45 @@ MireuLim 님</span></div>
         trashKg: parseInt(localStorage.getItem('ecocycling_trash') || '250', 10)
       };
 
-      // 1. Mobile-Only Platform Enforcement & Responsive Scaling
+      // 1. Universal Fluid Multi-Platform Aspect-Fit Scaling
       function enforceMobileOnlyAndScale() {
-        const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(ua);
-        const isMobileViewport = window.innerWidth <= 768;
-        const gate = document.getElementById('mobile-only-gate');
         const stage = document.getElementById('figma-flow-stage');
+        const shell = document.getElementById('figma-stage-shell');
+        if (!stage || !shell) return;
 
-        if (!isMobileUA && !isMobileViewport) {
-          if (gate) gate.style.display = 'flex';
-          if (stage) stage.style.display = 'none';
-          return;
-        }
+        const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+        const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        const isDesktopOrTablet = vw > 500 && (vw / vh) > (360 / 800);
 
-        if (gate) gate.style.display = 'none';
-        if (stage) {
-          stage.style.display = 'flex';
-          const scale = window.innerWidth / 360;
-          stage.style.transform = `scale(${scale})`;
-          document.body.style.height = `${Math.ceil(800 * scale)}px`;
+        const padY = isDesktopOrTablet ? 24 : 0;
+        const padX = isDesktopOrTablet ? 24 : 0;
+        const availW = Math.max(240, vw - padX);
+        const availH = Math.max(360, vh - padY);
+
+        // Fit uniformly inside viewport so neither width nor height ever overflows or clips
+        const scale = Math.min(availW / 360, availH / 800);
+        const scaledW = Math.round(360 * scale);
+        const scaledH = Math.round(800 * scale);
+
+        shell.style.width = `${scaledW}px`;
+        shell.style.height = `${scaledH}px`;
+        stage.style.transform = `scale(${scale})`;
+
+        if (isDesktopOrTablet) {
+          shell.style.borderRadius = `${Math.round(24 * scale)}px`;
+          shell.style.boxShadow = '0 24px 60px rgba(0, 0, 0, 0.35)';
+          document.body.style.backgroundColor = '#243735';
+        } else {
+          shell.style.borderRadius = '0px';
+          shell.style.boxShadow = 'none';
+          const frameBg = (currentFrameId === '0:531') ? '#3A5451' : (currentFrameId === '0:319' ? '#565656' : '#F2F2F2');
+          document.body.style.backgroundColor = frameBg;
         }
       }
       window.addEventListener('resize', enforceMobileOnlyAndScale);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', enforceMobileOnlyAndScale);
+      }
 
       function safeId(id) {
         return String(id).replace(/[:;\/ ]/g, '_');
@@ -2709,6 +2723,7 @@ MireuLim 님</span></div>
         targetEl.classList.remove('hidden');
         targetEl.classList.add('block');
         currentFrameId = targetId;
+        enforceMobileOnlyAndScale();
         syncAppDataToDOM(targetEl);
         if (targetId === '0:399' || targetId === '6:230' || targetId === '0:130') {
           refreshLivePoints();
