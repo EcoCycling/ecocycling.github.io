@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EcoCycling Smart Waste Bin Kiosk</title>
+  <title>ONECYCLE (EcoCycling) — 스마트 분리배출 에코-리워드 플랫폼</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -15,704 +15,296 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background-color: #1a1a1a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-    }
-    img {
-      -webkit-user-drag: none;
-      user-select: none;
-    }
-    .kiosk-container {
-      width: 1920px;
-      height: 1080px;
-      position: absolute;
-      transform-origin: center center;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-    .screen-view {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 1920px;
-      height: 1080px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-      transform: scale(0.99);
-    }
-    .screen-view.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: scale(1);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background-color: #F2F2F2;
+      color: #2B2B2B;
     }
     .font-archivo {
       font-family: 'Archivo Black', sans-serif;
     }
-    .font-pretendard {
-      font-family: 'Pretendard', sans-serif;
-    }
-
-    /* Pulse animation for scanning and analyzing */
-    @keyframes pulse-ring {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.05); opacity: 0.4; }
-      100% { transform: scale(0.95); opacity: 0.8; }
-    }
-    .animate-pulse-ring {
-      animation: pulse-ring 2.5s infinite ease-in-out;
-    }
-
-    /* Shimmer effect for AI analyzing */
-    @keyframes shimmer {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .rotate-slow {
-      animation: shimmer 6s linear infinite;
+    .font-ubuntu {
+      font-family: 'Ubuntu', sans-serif;
     }
   </style>
 </head>
-<body class="select-none">
+<body class="min-h-screen flex flex-col">
 
-  <!-- 1920x1080 Scaling Wrapper -->
-  <div id="kiosk-scaler" class="kiosk-container">
-
-    <!-- ========================================== -->
-    <!-- FRAME 1: Stand-by (1:6)                   -->
-    <!-- ========================================== -->
-    <div id="screen-standby" class="screen-view active bg-[#3A5451] cursor-pointer" onclick="handleKioskClick('STANDBY')">
-      <!-- Background Mask group -->
-      <div class="absolute left-0 top-0 w-[1920px] h-[1080px]">
-        <img src="assets/masked_1_5.png" alt="Mask group" class="w-full h-full object-contain block pointer-events-none select-none" />
+  <!-- Navigation Header -->
+  <header class="sticky top-0 z-50 bg-[#3A5451]/95 backdrop-blur border-b border-white/10 text-[#F5F5F5]">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="font-archivo text-2xl tracking-tight text-[#F5F5F5]">ONECYCLE</span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#BAC9C7] text-[#3A5451] font-semibold">by None Labs</span>
       </div>
-      <!-- Logo ONECYCLE -->
-      <div class="absolute left-[120px] top-[486px] w-[606px] h-[109px] flex flex-col select-none font-[400] text-[100px] leading-[108.80px] text-left items-start justify-start text-[#F5F5F5] font-archivo">
-        <span class="whitespace-pre">ONECYCLE</span>
-      </div>
-      <!-- Version Tag -->
-      <div class="absolute left-[20px] top-[20px] w-[349px] h-[25px] flex flex-col select-none font-[500] text-[25px] leading-[29.83px] text-left items-start justify-start text-[#F5F5F5] font-pretendard">
-        <span class="whitespace-pre" id="kiosk-version-label">Ver. Smart Bin IoT Agent v1.0.0</span>
-      </div>
-      <!-- Right Graphic -->
-      <div class="absolute left-[1386px] top-[106px] w-[414px] h-[868px]">
-        <img src="assets/img_0cc78c3dee87d8ec55ec0696e7dfb5b3336a4141.png" alt="image 16" class="w-full h-full object-cover block pointer-events-none select-none" />
-      </div>
-      <!-- Wake-up touch guidance hint -->
-      <div class="absolute left-[120px] top-[630px] flex items-center gap-4 text-[#F5F5F5] opacity-80 text-[28px] font-pretendard">
-        <span class="animate-pulse">화면을 터치하여 분리수거를 시작하세요 ➔</span>
-      </div>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[#F5F5F5]/90">
+        <a href="#about" class="hover:text-white transition">서비스 소개</a>
+        <a href="#workflow" class="hover:text-white transition">이용 절차</a>
+        <a href="#architecture" class="hover:text-white transition">시스템 아키텍처</a>
+        <a href="#live-services" class="px-4 py-2 rounded-lg bg-[#F5F5F5] text-[#3A5451] font-semibold hover:bg-[#BAC9C7] transition">라이브 서비스 바로가기</a>
+      </nav>
     </div>
+  </header>
 
-    <!-- ========================================== -->
-    <!-- FRAME 2: Step 1 (QR Scan) (1:8)           -->
-    <!-- ========================================== -->
-    <div id="screen-step1" class="screen-view bg-[#F5F5F5] cursor-pointer" onclick="handleKioskClick('STEP1_QR')">
-      <!-- Right Graphic Group 1 -->
-      <div class="absolute left-[1326px] top-[-302px] w-[788.69px] h-[1583px] pointer-events-none opacity-90">
-        <div class="absolute left-[409.78px] top-0 w-[378.91px] h-[760.63px]">
-          <img src="assets/img_90f4786ef9441eb118d2af58a405038983117491.png" alt="image 9" class="w-full h-full object-cover block pointer-events-none select-none" />
+  <!-- Hero Section -->
+  <section class="relative bg-[#3A5451] text-[#F5F5F5] overflow-hidden py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-6 relative z-10 grid md:grid-cols-12 gap-12 items-center">
+      <div class="md:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-medium tracking-wide">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>GCP Cloud Run (asia-northeast3) 실시간 운영 중</span>
         </div>
-        <div class="absolute left-0 top-[760.63px] w-[409.78px] h-[822.37px]">
-          <img src="assets/img_1f980f0fbc508769413e6d9e5a20c5531f994e07.png" alt="image 10" class="w-full h-full object-cover block pointer-events-none select-none" />
+        <h1 class="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
+          일상의 분리배출이<br />
+          <span class="font-archivo text-[#BAC9C7]">ONECYCLE</span> 리워드가 되다
+        </h1>
+        <p class="text-lg md:text-xl text-[#F5F5F5]/85 leading-relaxed max-w-2xl">
+          <strong>EcoCycling (ONECYCLE)</strong>은 AI 비전 객체 분류와 IoT 스마트 쓰레기통 키오스크를 결합해,
+          캔·페트병·유리병·일반쓰레기를 분리배출할 때마다 실시간 포인트를 적립하고 지역 친환경 가맹점에서 사용할 수 있는 스마트 자원순환 플랫폼입니다.
+        </p>
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="https://ecocycling-kiosk-service-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener"
+             class="px-6 py-3.5 rounded-xl bg-[#F5F5F5] text-[#3A5451] font-bold text-base shadow-lg hover:bg-[#BAC9C7] transition flex items-center gap-2">
+            <span>🖥️ 스마트 키오스크 에이전트 실행</span>
+            <span>↗</span>
+          </a>
+          <a href="https://ecocycling-web-client-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener"
+             class="px-6 py-3.5 rounded-xl bg-white/15 border border-white/30 text-[#F5F5F5] font-semibold text-base hover:bg-white/25 transition flex items-center gap-2">
+            <span>📱 모바일 웹 앱 (1차 배포)</span>
+            <span>↗</span>
+          </a>
         </div>
+        <p class="text-xs text-[#BAC9C7]">
+          * 모바일 웹 어플리케이션(1차)은 모바일 전용 정책이 적용되어 스마트폰 또는 모바일 뷰포트(폭 768px 이하)에서만 이용 가능합니다. (2차 네이티브 Android 앱 출시 예정)
+        </p>
       </div>
 
-      <!-- Top Left Logo -->
-      <div class="absolute left-[50px] top-[50px] w-[364px] h-[65px] flex flex-col select-none font-[400] text-[60px] leading-[65.28px] text-left items-start justify-start text-[#8E8E8E] font-archivo">
-        <span class="whitespace-pre">ONECYCLE</span>
-      </div>
-
-      <!-- Stepper: Step 1 Active -->
-      <div class="absolute left-[1500px] top-[35px] w-[390px] h-[95px]">
-        <div class="absolute left-0 top-0 w-[390px] h-[95px] rounded-[50px] bg-[#F5F5F5]" style="box-shadow:inset 0 0 0 2px #8E8E8E"></div>
-        <div class="absolute left-[35px] top-[47px] w-[320px] h-0">
-          <img src="assets/svg_1_27.svg" alt="Line 1" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:320px;height:3px" />
-        </div>
-        <!-- Circle 1 Active -->
-        <div class="absolute left-[20px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#3A5451] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#F5F5F5] font-pretendard">1</span>
-        </div>
-        <!-- Circle 2 Inactive -->
-        <div class="absolute left-[170px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">2</span>
-        </div>
-        <!-- Circle 3 Inactive -->
-        <div class="absolute left-[320px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">3</span>
-        </div>
-      </div>
-
-      <!-- Center QR Code Box -->
-      <div class="absolute left-[710px] top-[188px] w-[500px] h-[500px] overflow-hidden rounded-[30px] flex items-center justify-center bg-white" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-        <img id="kiosk-qr-image" src="assets/img_0350068abaca15d925dca727eca43207e2a6a788.png" alt="QR Code" class="w-[460px] h-[460px] object-contain block pointer-events-none select-none" />
-      </div>
-
-      <!-- Instruction Text -->
-      <div class="absolute left-[671px] top-[749px] w-[577px] h-[144px] flex flex-col select-none font-[400] leading-none text-center items-center justify-start text-[#343434] font-pretendard">
-        <span class="whitespace-pre">
-          <span class="font-archivo font-[400] text-[60px] leading-[71.60px] text-[#3A5451]">ONECYCLE</span><span class="font-pretendard font-[400] text-[60px] leading-[71.60px] text-[#343434]"> 앱에서<br/>QR코드를 스캔해 주세요</span>
-        </span>
-      </div>
-
-      <!-- Device Identifier and Simulation Bar -->
-      <div class="absolute left-[710px] top-[920px] w-[500px] flex justify-center items-center gap-3 text-[#8E8E8E] text-[20px] font-pretendard">
-        <span>기기 ID: <strong id="step1-device-id" class="text-[#3A5451]">BIN-SEOUL-001</strong></span>
-        <span>•</span>
-        <span class="text-sm bg-gray-200 px-3 py-1 rounded-full text-gray-600">앱 스캔 대기 중 (클릭 시 스캔 시뮬레이션)</span>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- FRAME 3: Step 2 (Door Open) (1:563)       -->
-    <!-- ========================================== -->
-    <div id="screen-step2" class="screen-view bg-[#F5F5F5] cursor-pointer" onclick="handleKioskClick('STEP2_DOOR_OPEN')">
-      <!-- Right Graphic Group 1 -->
-      <div class="absolute left-[1326px] top-[-302px] w-[788.69px] h-[1583px] pointer-events-none opacity-90">
-        <div class="absolute left-[409.78px] top-0 w-[378.91px] h-[760.63px]">
-          <img src="assets/img_90f4786ef9441eb118d2af58a405038983117491.png" alt="image 9" class="w-full h-full object-cover block pointer-events-none select-none" />
-        </div>
-        <div class="absolute left-0 top-[760.63px] w-[409.78px] h-[822.37px]">
-          <img src="assets/img_1f980f0fbc508769413e6d9e5a20c5531f994e07.png" alt="image 10" class="w-full h-full object-cover block pointer-events-none select-none" />
-        </div>
-      </div>
-
-      <!-- Top Left Logo -->
-      <div class="absolute left-[50px] top-[50px] w-[364px] h-[65px] flex flex-col select-none font-[400] text-[60px] leading-[65.28px] text-left items-start justify-start text-[#8E8E8E] font-archivo">
-        <span class="whitespace-pre">ONECYCLE</span>
-      </div>
-
-      <!-- Stepper: Step 2 Active -->
-      <div class="absolute left-[1500px] top-[35px] w-[390px] h-[95px]">
-        <div class="absolute left-0 top-0 w-[390px] h-[95px] rounded-[50px] bg-[#F5F5F5]" style="box-shadow:inset 0 0 0 2px #8E8E8E"></div>
-        <div class="absolute left-[35px] top-[50px] w-[320px] h-0">
-          <img src="assets/svg_1_571.svg" alt="Line 1" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:320px;height:3px" />
-        </div>
-        <!-- Circle 1 Inactive -->
-        <div class="absolute left-[20px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">1</span>
-        </div>
-        <!-- Circle 2 Active -->
-        <div class="absolute left-[170px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#3A5451] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#F5F5F5] font-pretendard">2</span>
-        </div>
-        <!-- Circle 3 Inactive -->
-        <div class="absolute left-[320px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">3</span>
-        </div>
-      </div>
-
-      <!-- User Welcome & Balance Bar -->
-      <div class="absolute left-[250px] top-[190px] w-[1420px] h-[60px] flex items-center justify-between font-pretendard">
-        <div class="font-[500] text-[50px] leading-[59.67px] text-[#343434]">
-          <span id="user-greeting-name" class="text-[#3A5451] font-[500]">MireuLim</span>님, 환영해요
-        </div>
-        <div class="flex items-center gap-3">
-          <img src="assets/svg_1_591.svg" alt="savings" class="w-[50px] h-[50px] block" />
-          <span id="user-current-pts" class="font-[500] text-[40px] leading-[47.73px] text-[#343434]">500pts</span>
-        </div>
-      </div>
-
-      <!-- Divider Line 2 -->
-      <div class="absolute left-[731px] top-[220px] w-[717px] h-0">
-        <img src="assets/svg_1_568.svg" alt="Line 2" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:717px;height:3px" />
-      </div>
-
-      <!-- Left Card: Waste Items Breakdown (Group 6: 250px, 295px, 700x496) -->
-      <div class="absolute left-[250px] top-[295px] w-[700px] h-[496px] rounded-[15px] bg-[#F5F5F5] p-6 flex flex-col justify-around" style="box-shadow:inset 0 0 0 2px #8E8E8E">
-        <!-- Item 1: Can -->
-        <div class="flex items-center justify-between px-4">
-          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">캔</div>
-          <div class="flex items-center gap-4">
-            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
-            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-              <span id="item-can-qty">x5</span>
+      <!-- Brand Card Showcase -->
+      <div class="md:col-span-5">
+        <div class="bg-[#2B3F3D] border border-white/15 rounded-3xl p-6 shadow-2xl space-y-5">
+          <div class="flex items-center justify-between border-b border-white/10 pb-4">
+            <div>
+              <div class="font-archivo text-2xl text-[#F5F5F5]">ONECYCLE</div>
+              <div class="text-xs text-[#BAC9C7]">Smart Waste Sorting &amp; Eco-Reward</div>
             </div>
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold">Production v1.0</span>
           </div>
-          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
-            <span id="item-can-pts">400</span><span class="text-[#343434] font-[400]">pts</span>
-          </div>
-        </div>
-
-        <!-- Item 2: PET -->
-        <div class="flex items-center justify-between px-4">
-          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">페트병</div>
-          <div class="flex items-center gap-4">
-            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
-            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-              <span id="item-pet-qty">x3</span>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div class="text-xs text-[#BAC9C7]">캔 (CAN)</div>
+              <div class="text-2xl font-bold mt-1">+80 <span class="text-sm font-normal">pts/개</span></div>
             </div>
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
-          </div>
-          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
-            <span id="item-pet-pts">300</span><span class="text-[#343434] font-[400]">pts</span>
-          </div>
-        </div>
-
-        <!-- Item 3: Glass -->
-        <div class="flex items-center justify-between px-4">
-          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">유리병</div>
-          <div class="flex items-center gap-4">
-            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
-            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-              <span id="item-glass-qty">x2</span>
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div class="text-xs text-[#BAC9C7]">페트병 (PET)</div>
+              <div class="text-2xl font-bold mt-1">+100 <span class="text-sm font-normal">pts/개</span></div>
             </div>
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
-          </div>
-          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
-            <span id="item-glass-pts">240</span><span class="text-[#343434] font-[400]">pts</span>
-          </div>
-        </div>
-
-        <!-- Item 4: General Waste -->
-        <div class="flex items-center justify-between px-4">
-          <div class="w-[180px] font-pretendard text-[40px] text-[#343434]">일반쓰레기</div>
-          <div class="flex items-center gap-4">
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
-            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-              <span id="item-general-qty">x10</span>
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div class="text-xs text-[#BAC9C7]">유리병 (GLASS)</div>
+              <div class="text-2xl font-bold mt-1">+120 <span class="text-sm font-normal">pts/개</span></div>
             </div>
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div class="text-xs text-[#BAC9C7]">탄소 절감 효과</div>
+              <div class="text-2xl font-bold mt-1">250 <span class="text-sm font-normal">kg CO₂</span></div>
+            </div>
           </div>
-          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
-            <span id="item-general-pts">5</span><span class="text-[#343434] font-[400]">pts</span>
+          <div class="bg-[#3A5451] rounded-2xl p-4 flex items-center justify-between">
+            <div>
+              <div class="text-xs text-[#BAC9C7]">1회 분리수거 예시 적립량</div>
+              <div class="text-sm text-white/90 mt-0.5">캔 5개 · 페트 3개 · 유리 2개 · 일반 10개</div>
+            </div>
+            <div class="text-2xl font-bold text-white">+945 pts</div>
           </div>
-        </div>
-      </div>
-
-      <!-- Left Bottom Card: Total Points Reward (Group 7: 250px, 811px, 700x184) -->
-      <div class="absolute left-[250px] top-[811px] w-[700px] h-[184px] rounded-[15px] bg-[#3A5451] flex items-center justify-between px-8 font-pretendard">
-        <div class="text-[40px] text-[#F5F5F5]">적립될 포인트</div>
-        <div class="text-right">
-          <span id="total-reward-pts" class="font-[700] text-[60px] leading-[71.60px] text-[#F5F5F5]">945</span>
-          <span class="font-[400] text-[60px] leading-[71.60px] text-[#F5F5F5]">pts</span>
-        </div>
-      </div>
-
-      <!-- Right Card: Door Opened Status (Group 12: 970px, 295px, 700x700) -->
-      <div class="absolute left-[970px] top-[295px] w-[700px] h-[700px] rounded-[15px] bg-[#F5F5F5] flex flex-col items-center justify-center gap-8" style="box-shadow:inset 0 0 0 2px #8E8E8E">
-        <div class="w-[120px] h-[120px] flex items-center justify-center">
-          <img src="assets/svg_1_622.svg" alt="bottom_panel_open" class="w-[100px] h-[100px] block" />
-        </div>
-        <div class="font-pretendard font-[400] text-[50px] leading-[59.67px] text-[#343434] text-center">
-          투입구가 열립니다
-        </div>
-        <div class="text-gray-500 text-[24px] font-pretendard">
-          쓰레기를 투입구에 넣고 터치해주세요
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- ========================================== -->
-    <!-- FRAME 4: Step 3 (AI Analyzing & Weighing) (1:107) -->
-    <!-- ========================================== -->
-    <div id="screen-step3" class="screen-view bg-[#F5F5F5] cursor-pointer" onclick="handleKioskClick('STEP3_ANALYZING')">
-      <!-- Right Graphic Group 1 -->
-      <div class="absolute left-[1326px] top-[-302px] w-[788.69px] h-[1583px] pointer-events-none opacity-90">
-        <div class="absolute left-[409.78px] top-0 w-[378.91px] h-[760.63px]">
-          <img src="assets/img_90f4786ef9441eb118d2af58a405038983117491.png" alt="image 9" class="w-full h-full object-cover block pointer-events-none select-none" />
-        </div>
-        <div class="absolute left-0 top-[760.63px] w-[409.78px] h-[822.37px]">
-          <img src="assets/img_1f980f0fbc508769413e6d9e5a20c5531f994e07.png" alt="image 10" class="w-full h-full object-cover block pointer-events-none select-none" />
-        </div>
+  <!-- About & Core Value Section -->
+  <section id="about" class="py-16 md:py-24 max-w-6xl mx-auto px-6">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">Core Features</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-3 text-[#2B2B2B]">EcoCycling이 만드는 지속 가능한 순환 생태계</h2>
+      <p class="text-[#565656] mt-3">모바일 앱과 스마트 키오스크, AI 분류 엔진이 유기적으로 연결되어 누구나 쉽고 즐겁게 자원순환에 참여합니다.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">01</div>
+        <h3 class="text-xl font-bold text-[#2B2B2B]">모바일 앱 (1:1 Figma UX)</h3>
+        <p class="text-sm text-[#565656] leading-relaxed">
+          휴대폰 번호 인증 및 Google OAuth 2.0 간편 로그인, 키오스크 QR 스캔, 실시간 포인트 바코드 및 모바일 상품권 교환, 내 주변 친환경 가맹점(Certified Place) 지도 탐색을 제공합니다.
+        </p>
       </div>
 
-      <!-- Top Left Logo -->
-      <div class="absolute left-[50px] top-[50px] w-[364px] h-[65px] flex flex-col select-none font-[400] text-[60px] leading-[65.28px] text-left items-start justify-start text-[#8E8E8E] font-archivo">
-        <span class="whitespace-pre">ONECYCLE</span>
+      <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">02</div>
+        <h3 class="text-xl font-bold text-[#2B2B2B]">스마트 키오스크 에이전트</h3>
+        <p class="text-sm text-[#565656] leading-relaxed">
+          Golang 기반 IoT 상태 머신과 WebSocket 실시간 양방향 동기화를 통해 대기 화면부터 QR 스캔, 투입구 개방 및 품목별 카운팅, AI 비전 분석, 포인트 적립 완료까지 5단계 레이아웃을 제어합니다.
+        </p>
       </div>
 
-      <!-- Stepper: Step 2 Active (Analyzing Phase) -->
-      <div class="absolute left-[1500px] top-[35px] w-[390px] h-[95px]">
-        <div class="absolute left-0 top-0 w-[390px] h-[95px] rounded-[50px] bg-[#F5F5F5]" style="box-shadow:inset 0 0 0 2px #8E8E8E"></div>
-        <div class="absolute left-[35px] top-[50px] w-[320px] h-0">
-          <img src="assets/svg_1_113.svg" alt="Line 1" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:320px;height:3px" />
-        </div>
-        <!-- Circle 1 Inactive -->
-        <div class="absolute left-[20px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">1</span>
-        </div>
-        <!-- Circle 2 Active -->
-        <div class="absolute left-[170px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#3A5451] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#F5F5F5] font-pretendard">2</span>
-        </div>
-        <!-- Circle 3 Inactive -->
-        <div class="absolute left-[320px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">3</span>
-        </div>
+      <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">03</div>
+        <h3 class="text-xl font-bold text-[#2B2B2B]">탄소 저감 통계 &amp; 가맹점 리워드</h3>
+        <p class="text-sm text-[#565656] leading-relaxed">
+          내가 버린 쓰레기 무게(kg)와 감축한 탄소 배출량(나무 식재 효과·자동차 감소 효과)을 직관적인 통계로 확인하고, 적립된 포인트를 지역 가맹점 및 편의점에서 즉시 사용할 수 있습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-Step Workflow Section -->
+  <section id="workflow" class="py-16 bg-white border-y border-black/5">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">How It Works</span>
+        <h2 class="text-3xl font-bold mt-3 text-[#2B2B2B]">스마트 키오스크 4단계 분리배출 프로세스</h2>
       </div>
 
-      <!-- User Welcome & Balance Bar -->
-      <div class="absolute left-[250px] top-[190px] w-[1420px] h-[60px] flex items-center justify-between font-pretendard">
-        <div class="font-[500] text-[50px] leading-[59.67px] text-[#343434]">
-          <span id="step3-greeting-name" class="text-[#3A5451] font-[500]">MireuLim</span>님, 환영해요
-        </div>
-        <div class="flex items-center gap-3">
-          <img src="assets/svg_2_336.svg" alt="savings" class="w-[50px] h-[50px] block" />
-          <span id="step3-current-pts" class="font-[500] text-[40px] leading-[47.73px] text-[#343434]">500pts</span>
-        </div>
-      </div>
-
-      <!-- Divider Line 2 -->
-      <div class="absolute left-[731px] top-[220px] w-[717px] h-0">
-        <img src="assets/svg_2_329.svg" alt="Line 2" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:717px;height:3px" />
-      </div>
-
-      <!-- Left Card: Waste Items Breakdown -->
-      <div class="absolute left-[250px] top-[295px] w-[700px] h-[496px] rounded-[15px] bg-[#F5F5F5] p-6 flex flex-col justify-around" style="box-shadow:inset 0 0 0 2px #8E8E8E">
-        <!-- Item 1: Can -->
-        <div class="flex items-center justify-between px-4">
-          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">캔</div>
-          <div class="flex items-center gap-4">
-            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
-            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-              <span id="step3-item-can-qty">x5</span>
-            </div>
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
-          </div>
-          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
-            <span id="step3-item-can-pts">400</span><span class="text-[#343434] font-[400]">pts</span>
-          </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5">
+          <div class="text-xs font-bold text-[#3A5451]">STEP 01 · QR 인증</div>
+          <div class="text-lg font-bold mt-1">ONECYCLE 앱 QR 스캔</div>
+          <p class="text-sm text-[#565656] mt-2">키오스크 화면을 터치해 깨운 뒤, 모바일 앱으로 화면의 QR코드를 스캔하여 사용자를 인증합니다.</p>
         </div>
 
-        <!-- Item 2: PET -->
-        <div class="flex items-center justify-between px-4">
-          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">페트병</div>
-          <div class="flex items-center gap-4">
-            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
-            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-              <span id="step3-item-pet-qty">x3</span>
-            </div>
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
-          </div>
-          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
-            <span id="step3-item-pet-pts">300</span><span class="text-[#343434] font-[400]">pts</span>
-          </div>
+        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5">
+          <div class="text-xs font-bold text-[#3A5451]">STEP 02 · 쓰레기 투입</div>
+          <div class="text-lg font-bold mt-1">투입구 개방 및 분리배출</div>
+          <p class="text-sm text-[#565656] mt-2">투입구 도어가 자동으로 열리고 캔, 페트병, 유리병, 일반쓰레기 투입 수량과 예상 적립 포인트가 실시간 집계됩니다.</p>
         </div>
 
-        <!-- Item 3: Glass -->
-        <div class="flex items-center justify-between px-4">
-          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">유리병</div>
-          <div class="flex items-center gap-4">
-            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
-            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-              <span id="step3-item-glass-qty">x2</span>
-            </div>
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
-          </div>
-          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
-            <span id="step3-item-glass-pts">240</span><span class="text-[#343434] font-[400]">pts</span>
-          </div>
+        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5">
+          <div class="text-xs font-bold text-[#3A5451]">STEP 03 · AI 분석</div>
+          <div class="text-lg font-bold mt-1">카메라 비전 &amp; 로드셀 측정</div>
+          <p class="text-sm text-[#565656] mt-2">투입 완료 시 도어가 닫히며 AI 카메라 객체 인식과 로드셀 무게 센서로 재질 및 중량을 정밀 검증합니다.</p>
         </div>
 
-        <!-- Item 4: General Waste -->
-        <div class="flex items-center justify-between px-4">
-          <div class="w-[180px] font-pretendard text-[40px] text-[#343434]">일반쓰레기</div>
-          <div class="flex items-center gap-4">
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
-            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
-              <span id="step3-item-general-qty">x10</span>
-            </div>
-            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
-          </div>
-          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
-            <span id="step3-item-general-pts">5</span><span class="text-[#343434] font-[400]">pts</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Left Bottom Card: Total Points Reward -->
-      <div class="absolute left-[250px] top-[811px] w-[700px] h-[184px] rounded-[15px] bg-[#3A5451] flex items-center justify-between px-8 font-pretendard">
-        <div class="text-[40px] text-[#F5F5F5]">적립될 포인트</div>
-        <div class="text-right">
-          <span id="step3-total-reward-pts" class="font-[700] text-[60px] leading-[71.60px] text-[#F5F5F5]">945</span>
-          <span class="font-[400] text-[60px] leading-[71.60px] text-[#F5F5F5]">pts</span>
-        </div>
-      </div>
-
-      <!-- Right Card: AI Classification Camera & Weighing (Group 12: 970px, 295px, 700x700) -->
-      <div class="absolute left-[970px] top-[295px] w-[700px] h-[700px] rounded-[15px] bg-[#F5F5F5] flex flex-col items-center justify-center gap-8 relative overflow-hidden" style="box-shadow:inset 0 0 0 2px #8E8E8E">
-        <!-- Animated Scanner Ring -->
-        <div class="w-[200px] h-[200px] rounded-full border-4 border-dashed border-[#3A5451] flex items-center justify-center rotate-slow">
-          <img src="assets/svg_2_299.svg" alt="photo_camera" class="w-[90px] h-[90px] block" />
-        </div>
-        <div class="font-pretendard font-[500] text-[50px] leading-[59.67px] text-[#343434] text-center">
-          AI 분석 및 무게 측정 중...
-        </div>
-        <div id="ai-status-detail" class="text-gray-500 text-[26px] font-pretendard flex items-center gap-2">
-          <span>카메라 비전 검출 및 고정밀 로드셀 감지 완료</span>
+        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5">
+          <div class="text-xs font-bold text-[#3A5451]">STEP 04 · 적립 완료</div>
+          <div class="text-lg font-bold mt-1">포인트 즉시 지급</div>
+          <p class="text-sm text-[#565656] mt-2">검증된 포인트가 사용자 계정에 즉시 적립되며, 모바일 앱에서 적립 내역과 탄소 감축량을 바로 확인할 수 있습니다.</p>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- ========================================== -->
-    <!-- FRAME 5: Step 4 (Complete) (1:192)        -->
-    <!-- ========================================== -->
-    <div id="screen-step4" class="screen-view bg-[#F5F5F5] cursor-pointer" onclick="handleKioskClick('STEP4_COMPLETE')">
-      <!-- Right Graphic Group 1 -->
-      <div class="absolute left-[1326px] top-[-302px] w-[788.69px] h-[1583px] pointer-events-none opacity-90">
-        <div class="absolute left-[409.78px] top-0 w-[378.91px] h-[760.63px]">
-          <img src="assets/img_90f4786ef9441eb118d2af58a405038983117491.png" alt="image 9" class="w-full h-full object-cover block pointer-events-none select-none" />
+  <!-- Live Services Section -->
+  <section id="live-services" class="py-16 md:py-24 max-w-6xl mx-auto px-6">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">Cloud Run Deployments</span>
+      <h2 class="text-3xl font-bold mt-3 text-[#2B2B2B]">배포된 라이브 서비스 바로가기</h2>
+      <p class="text-[#565656] mt-2">모든 서비스는 GCP 서울 리전(<code>asia-northeast3</code>) Cloud Run 컨테이너 환경에 최소 권한 서비스 계정으로 격리 배포되어 있습니다.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Mobile Web App -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/10 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-[#BAC9C7] text-[#3A5451] text-xs font-bold">1차 모바일 웹 (Mobile Only)</span>
+            <span class="text-xs text-emerald-600 font-semibold">● ONLINE</span>
+          </div>
+          <h3 class="text-xl font-bold mt-4">EcoCycling 모바일 웹 앱</h3>
+          <p class="text-sm text-[#565656] mt-2">
+            앱 피그마(Figma) 원본 디자인 100% 반영. 휴대폰/Google 인증, 포인트 조회 및 상품권 교환, 활동 기록, 탄소 감축 통계, 가맹점 지도 탐색, 키오스크 QR 스캔 기능 탑재.
+          </p>
+          <div class="mt-4 p-3 rounded-xl bg-[#F2F2F2] text-xs text-[#3A5451]">
+            <strong>플랫폼 정책:</strong> 모바일 기기 또는 모바일 화면 너비(<code>&le; 768px</code>)에서만 동작하며 데스크톱 전체화면 접근은 제한됩니다. (2차 네이티브 Android 앱 개발 예정)
+          </div>
         </div>
-        <div class="absolute left-0 top-[760.63px] w-[409.78px] h-[822.37px]">
-          <img src="assets/img_1f980f0fbc508769413e6d9e5a20c5531f994e07.png" alt="image 10" class="w-full h-full object-cover block pointer-events-none select-none" />
-        </div>
+        <a href="https://ecocycling-web-client-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener"
+           class="mt-6 w-full py-3 rounded-xl bg-[#3A5451] text-white font-semibold text-sm text-center hover:bg-[#2B3F3D] transition">
+          모바일 웹 어플리케이션 열기 ↗
+        </a>
       </div>
 
-      <!-- Top Left Logo -->
-      <div class="absolute left-[50px] top-[50px] w-[364px] h-[65px] flex flex-col select-none font-[400] text-[60px] leading-[65.28px] text-left items-start justify-start text-[#8E8E8E] font-archivo">
-        <span class="whitespace-pre">ONECYCLE</span>
+      <!-- Smart Kiosk Container -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/10 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-[#BAC9C7] text-[#3A5451] text-xs font-bold">IoT Kiosk Container</span>
+            <span class="text-xs text-emerald-600 font-semibold">● ONLINE</span>
+          </div>
+          <h3 class="text-xl font-bold mt-4">스마트 키오스크 에이전트</h3>
+          <p class="text-sm text-[#565656] mt-2">
+            1920x1080 키오스크 피그마 5대 레이아웃(Stand by, Step 1~4) 1:1 구현 및 Golang IoT 에이전트 연동. 품목별 실시간 투입 수량 조절, AI 카메라 분류, 백엔드 포인트 적립 연동.
+          </p>
+          <div class="mt-4 p-3 rounded-xl bg-[#F2F2F2] text-xs text-[#3A5451]">
+            <strong>컨테이너 구성:</strong> Go 1.22 에이전트 + WebSocket 허브 + 하드웨어 시뮬레이터 (<code>ecocycling-iot-sa</code> 전용 계정 구동)
+          </div>
+        </div>
+        <a href="https://ecocycling-kiosk-service-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener"
+           class="mt-6 w-full py-3 rounded-xl bg-[#3A5451] text-white font-semibold text-sm text-center hover:bg-[#2B3F3D] transition">
+          스마트 키오스크 에이전트 열기 ↗
+        </a>
       </div>
 
-      <!-- Stepper: Step 3 Active -->
-      <div class="absolute left-[1500px] top-[35px] w-[390px] h-[95px]">
-        <div class="absolute left-0 top-0 w-[390px] h-[95px] rounded-[50px] bg-[#F5F5F5]" style="box-shadow:inset 0 0 0 2px #8E8E8E"></div>
-        <div class="absolute left-[35px] top-[50px] w-[320px] h-0">
-          <img src="assets/svg_1_201.svg" alt="Line 1" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:320px;height:3px" />
+      <!-- Backend API Server -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/10 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-[#BAC9C7] text-[#3A5451] text-xs font-bold">Core Backend API</span>
+            <span class="text-xs text-emerald-600 font-semibold">● ONLINE</span>
+          </div>
+          <h3 class="text-xl font-bold mt-4">EcoCycling API 서버</h3>
+          <p class="text-sm text-[#565656] mt-2">
+            Golang (Fiber) 기반 RESTful API 서버. JWT 인증, Google OAuth 2.0 콜백, 포인트 적립/차감 트랜잭션, IoT 디바이스 하트비트 및 친환경 가맹점(EcoPlace) API 제공.
+          </p>
+          <div class="mt-4 p-3 rounded-xl bg-[#F2F2F2] text-xs text-[#3A5451]">
+            <strong>보안 아키텍처:</strong> GCP Secret Manager 시크릿 주입 및 <code>ecocycling-api-sa</code> 최소 권한 서비스 계정 분리 운영
+          </div>
         </div>
-        <!-- Circle 1 Inactive -->
-        <div class="absolute left-[20px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">1</span>
-        </div>
-        <!-- Circle 2 Inactive -->
-        <div class="absolute left-[170px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">2</span>
-        </div>
-        <!-- Circle 3 Active -->
-        <div class="absolute left-[320px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#3A5451] flex items-center justify-center">
-          <span class="font-[600] text-[25px] leading-[29.83px] text-[#F5F5F5] font-pretendard">3</span>
-        </div>
+        <a href="https://ecocycling-api-server-lajbl2hcgq-du.a.run.app/health" target="_blank" rel="noopener"
+           class="mt-6 w-full py-3 rounded-xl bg-[#2B2B2B] text-white font-semibold text-sm text-center hover:bg-black transition">
+          API 상태 확인 (/health) ↗
+        </a>
       </div>
+    </div>
+  </section>
 
-      <!-- Completion Message Block (Group 18: 560px, 450px, 800x180) -->
-      <div class="absolute left-[560px] top-[430px] w-[800px] flex flex-col items-center justify-center text-center font-pretendard">
-        <!-- Success Checkmark Badge -->
-        <div class="w-[100px] h-[100px] mb-6 rounded-full bg-[#3A5451] flex items-center justify-center text-white text-[50px]">
-          ✓
+  <!-- Architecture & Security Governance -->
+  <section id="architecture" class="py-14 bg-[#2B2B2B] text-[#F2F2F2]">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-2xl font-bold mb-6">클라우드 인프라 및 보안 격리 아키텍처 (Terraform &amp; GitHub Actions)</h2>
+      <div class="grid md:grid-cols-4 gap-4 text-sm">
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div class="text-[#BAC9C7] font-bold">GCP Region &amp; Cost</div>
+          <div class="mt-1 text-white/80">서울 리전 (<code>asia-northeast3</code>) · Cloud Run Scale-to-Zero (<code>min=0, max=2, cpu_idle=true</code>) 최저 비용 구성</div>
         </div>
-        <div class="w-full font-[400] text-[50px] leading-[59.67px] text-[#343434] mb-3">
-          <span id="step4-points-earned" class="font-bold text-[#3A5451]">945pts</span>가 적립되었습니다
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div class="text-[#BAC9C7] font-bold">IAM 계정 분리</div>
+          <div class="mt-1 text-white/80">서비스별 전용 SA (<code>ecocycling-api-sa</code>, <code>ecocycling-iot-sa</code>, <code>ecocycling-ai-sa</code>, <code>github-actions-deployer</code>) 격리</div>
         </div>
-        <div class="w-full font-[500] text-[80px] leading-[95.47px] text-[#343434]">
-          이용해 주셔서 감사합니다
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div class="text-[#BAC9C7] font-bold">Zero Hardcoded Secrets</div>
+          <div class="mt-1 text-white/80"><code>GoogleClientSecret</code>, <code>JWTSecret</code> 등 모든 민감 정보는 GCP Secret Manager 및 GitHub Secrets로만 주입</div>
         </div>
-        <div class="mt-6 text-[24px] text-gray-500">
-          잠시 후 대기 화면으로 돌아갑니다 (<span id="standby-countdown">5</span>초)
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div class="text-[#BAC9C7] font-bold">IaC &amp; GitOps</div>
+          <div class="mt-1 text-white/80">Terraform Remote Backend (<code>gs://nonelabs-ecocycling-tfstate</code>) 및 GitHub Actions 자동 배포 파이프라인</div>
         </div>
       </div>
     </div>
+  </section>
 
-  </div>
+  <!-- Footer -->
+  <footer class="mt-auto py-8 bg-[#1F1F1F] text-white/60 text-xs">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-archivo text-white text-sm">ONECYCLE</span>
+        <span>© 2026 EcoCycling by None Labs. All rights reserved.</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/EcoCycling" target="_blank" rel="noopener" class="hover:text-white transition">GitHub Organization</a>
+        <span>·</span>
+        <span>PM &amp; Owner: limmireu1214@gmail.com</span>
+      </div>
+    </div>
+  </footer>
 
-  <!-- WebSocket & UI State Controller -->
-  <script>
-    // Responsive Scaler to fit any screen while maintaining 1920x1080
-    function updateScale() {
-      const scaler = document.getElementById('kiosk-scaler');
-      const targetW = 1920;
-      const targetH = 1080;
-      const windowW = window.innerWidth;
-      const windowH = window.innerHeight;
-      const scale = Math.min(windowW / targetW, windowH / targetH);
-      scaler.style.transform = `scale(${scale})`;
-    }
-    window.addEventListener('resize', updateScale);
-    window.addEventListener('DOMContentLoaded', updateScale);
-
-    // Kiosk States
-    const STATES = {
-      STANDBY: 'STANDBY',
-      STEP1_QR: 'STEP1_QR',
-      STEP2_DOOR_OPEN: 'STEP2_DOOR_OPEN',
-      STEP3_ANALYZING: 'STEP3_ANALYZING',
-      STEP4_COMPLETE: 'STEP4_COMPLETE'
-    };
-
-    let currentState = STATES.STANDBY;
-    let ws = null;
-    let countdownTimer = null;
-
-    // View Switching
-    function setScreen(state) {
-      currentState = state;
-      document.querySelectorAll('.screen-view').forEach(el => el.classList.remove('active'));
-
-      if (state === STATES.STANDBY) {
-        document.getElementById('screen-standby').classList.add('active');
-      } else if (state === STATES.STEP1_QR) {
-        document.getElementById('screen-step1').classList.add('active');
-      } else if (state === STATES.STEP2_DOOR_OPEN) {
-        document.getElementById('screen-step2').classList.add('active');
-      } else if (state === STATES.STEP3_ANALYZING) {
-        document.getElementById('screen-step3').classList.add('active');
-      } else if (state === STATES.STEP4_COMPLETE) {
-        document.getElementById('screen-step4').classList.add('active');
-        startStandbyCountdown(5);
-      }
-    }
-
-    function startStandbyCountdown(seconds) {
-      if (countdownTimer) clearInterval(countdownTimer);
-      let remaining = seconds;
-      const label = document.getElementById('standby-countdown');
-      if (label) label.innerText = remaining;
-      countdownTimer = setInterval(() => {
-        remaining--;
-        if (label) label.innerText = remaining;
-        if (remaining <= 0) {
-          clearInterval(countdownTimer);
-          triggerAction('RESET_TO_STANDBY');
-        }
-      }, 1000);
-    }
-
-    // Update dynamic data from Agent
-    function updateKioskData(data) {
-      if (!data) return;
-
-      if (data.user_name) {
-        const u1 = document.getElementById('user-greeting-name');
-        const u2 = document.getElementById('step3-greeting-name');
-        if (u1) u1.innerText = data.user_name;
-        if (u2) u2.innerText = data.user_name;
-      }
-      if (data.current_points !== undefined) {
-        const p1 = document.getElementById('user-current-pts');
-        const p2 = document.getElementById('step3-current-pts');
-        if (p1) p1.innerText = `${data.current_points}pts`;
-        if (p2) p2.innerText = `${data.current_points}pts`;
-      }
-      if (data.earned_points !== undefined) {
-        const r1 = document.getElementById('total-reward-pts');
-        const r2 = document.getElementById('step3-total-reward-pts');
-        const r3 = document.getElementById('step4-points-earned');
-        if (r1) r1.innerText = data.earned_points;
-        if (r2) r2.innerText = data.earned_points;
-        if (r3) r3.innerText = `${data.earned_points}pts`;
-      }
-      if (data.items) {
-        for (const item of data.items) {
-          if (item.type === 'CAN') {
-            const q = document.getElementById('item-can-qty');
-            const p = document.getElementById('item-can-pts');
-            if (q) q.innerText = `x${item.quantity}`;
-            if (p) p.innerText = item.points;
-          } else if (item.type === 'PET') {
-            const q = document.getElementById('item-pet-qty');
-            const p = document.getElementById('item-pet-pts');
-            if (q) q.innerText = `x${item.quantity}`;
-            if (p) p.innerText = item.points;
-          } else if (item.type === 'GLASS') {
-            const q = document.getElementById('item-glass-qty');
-            const p = document.getElementById('item-glass-pts');
-            if (q) q.innerText = `x${item.quantity}`;
-            if (p) p.innerText = item.points;
-          } else if (item.type === 'GENERAL') {
-            const q = document.getElementById('item-general-qty');
-            const p = document.getElementById('item-general-pts');
-            if (q) q.innerText = `x${item.quantity}`;
-            if (p) p.innerText = item.points;
-          }
-        }
-      }
-      if (data.device_id) {
-        const d = document.getElementById('step1-device-id');
-        if (d) d.innerText = data.device_id;
-      }
-    }
-
-    // Touch / Click Handler for Interactive Kiosk Simulation
-    function handleKioskClick(screenId) {
-      if (screenId === 'STANDBY') {
-        triggerAction('START_SESSION');
-      } else if (screenId === 'STEP1_QR') {
-        triggerAction('USER_SCANNED');
-      } else if (screenId === 'STEP2_DOOR_OPEN') {
-        triggerAction('INSERT_COMPLETE');
-      } else if (screenId === 'STEP3_ANALYZING') {
-        // AI analyzing completes automatically or on click
-        triggerAction('ANALYSIS_COMPLETE');
-      } else if (screenId === 'STEP4_COMPLETE') {
-        if (countdownTimer) clearInterval(countdownTimer);
-        triggerAction('RESET_TO_STANDBY');
-      }
-    }
-
-    function triggerAction(actionName, payload = {}) {
-      if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ action: actionName, payload: payload }));
-      } else {
-        // Fallback local transitions when running without WebSocket
-        localStateTransition(actionName);
-      }
-    }
-
-    function localStateTransition(action) {
-      if (action === 'START_SESSION') {
-        setScreen(STATES.STEP1_QR);
-      } else if (action === 'USER_SCANNED') {
-        setScreen(STATES.STEP2_DOOR_OPEN);
-      } else if (action === 'INSERT_COMPLETE') {
-        setScreen(STATES.STEP3_ANALYZING);
-        setTimeout(() => setScreen(STATES.STEP4_COMPLETE), 2000);
-      } else if (action === 'RESET_TO_STANDBY') {
-        setScreen(STATES.STANDBY);
-      }
-    }
-
-    // WebSocket Setup
-    function initWebSocket() {
-      const loc = window.location;
-      const proto = loc.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = `${proto}//${loc.host}/ws`;
-
-      ws = new WebSocket(wsUrl);
-
-      ws.onopen = () => {
-        console.log('[Kiosk WS] Connected to Golang IoT Agent');
-      };
-
-      ws.onmessage = (event) => {
-        try {
-          const msg = JSON.parse(event.data);
-          console.log('[Kiosk WS] Received:', msg);
-
-          if (msg.type === 'STATE_CHANGE') {
-            if (msg.payload && msg.payload.state) {
-              setScreen(msg.payload.state);
-            }
-            if (msg.payload && msg.payload.data) {
-              updateKioskData(msg.payload.data);
-            }
-          } else if (msg.type === 'DATA_UPDATE') {
-            updateKioskData(msg.payload);
-          }
-        } catch (e) {
-          console.error('[Kiosk WS] Parse error:', e);
-        }
-      };
-
-      ws.onclose = () => {
-        console.warn('[Kiosk WS] Disconnected. Reconnecting in 2s...');
-        setTimeout(initWebSocket, 2000);
-      };
-
-      ws.onerror = (err) => {
-        console.error('[Kiosk WS] Error:', err);
-      };
-    }
-
-    initWebSocket();
-  </script>
 </body>
 </html>
