@@ -70,11 +70,11 @@
 
   <!-- Hero Section -->
   <section class="relative bg-[#3A5451] text-[#F5F5F5] overflow-hidden py-20 md:py-28">
-    <div class="max-w-6xl mx-auto px-6 relative z-10 grid md:grid-cols-12 gap-12 items-center">
-      <div class="md:col-span-7 space-y-6">
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <div class="max-w-3xl space-y-6">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-medium tracking-wide">
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>AI 비전 분류 · IoT 키오스크 · 3D 프린팅 자원순환 생태계</span>
+          <span>AI 비전 분류 · IoT 키오스크 · 자원순환 생태계</span>
         </div>
         <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight tracking-tight">
           일상의 분리배출이<br />
@@ -87,51 +87,13 @@
         <div class="flex flex-wrap gap-3 pt-2">
           <a href="/press/"
              class="px-5 py-3.5 rounded-xl bg-[#F5F5F5] text-[#3A5451] font-bold text-base shadow-lg hover:bg-[#BAC9C7] transition flex items-center gap-2">
-            <span>🏛️ 홍보관 · 수상 및 연구 아카이브 (/press)</span>
+            <span>🏛️ 연구 · 보도자료 바로가기</span>
             <span>→</span>
           </a>
           <a href="#research-awards"
              class="px-5 py-3.5 rounded-xl bg-white/15 border border-white/30 text-[#F5F5F5] font-semibold text-base hover:bg-white/25 transition flex items-center gap-2">
             <span>🏆 주요 학술 논문 · 수상 성과 보기</span>
           </a>
-        </div>
-      </div>
-
-      <!-- Brand Card Showcase -->
-      <div class="md:col-span-5">
-        <div class="bg-[#2B3F3D] border border-white/15 rounded-3xl p-6 shadow-2xl space-y-5">
-          <div class="flex items-center justify-between border-b border-white/10 pb-4">
-            <div>
-              <div class="font-archivo text-2xl text-[#F5F5F5]">ONECYCLE</div>
-              <div class="text-xs text-[#BAC9C7]">Smart Waste Sorting &amp; Eco-Reward</div>
-            </div>
-            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold">Production v1.0</span>
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-              <div class="text-xs text-[#BAC9C7]">캔 (CAN)</div>
-              <div class="text-2xl font-bold mt-1">+80 <span class="text-sm font-normal">pts/개</span></div>
-            </div>
-            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-              <div class="text-xs text-[#BAC9C7]">페트병 (PET)</div>
-              <div class="text-2xl font-bold mt-1">+100 <span class="text-sm font-normal">pts/개</span></div>
-            </div>
-            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-              <div class="text-xs text-[#BAC9C7]">유리병 (GLASS)</div>
-              <div class="text-2xl font-bold mt-1">+120 <span class="text-sm font-normal">pts/개</span></div>
-            </div>
-            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-              <div class="text-xs text-[#BAC9C7]">탄소 절감 효과</div>
-              <div class="text-2xl font-bold mt-1">250 <span class="text-sm font-normal">kg CO₂</span></div>
-            </div>
-          </div>
-          <div class="bg-[#3A5451] rounded-2xl p-4 flex items-center justify-between">
-            <div>
-              <div class="text-xs text-[#BAC9C7]">1회 분리수거 예시 적립량</div>
-              <div class="text-sm text-white/90 mt-0.5">캔 5개 · 페트 3개 · 유리 2개 · 일반 10개</div>
-            </div>
-            <div class="text-2xl font-bold text-white">+945 pts</div>
-          </div>
         </div>
       </div>
     </div>
@@ -145,28 +107,20 @@
       <p class="text-[#565656] mt-3">모바일 앱과 스마트 키오스크, AI 분류 엔진이 유기적으로 연결되어 누구나 쉽고 즐겁게 자원순환에 참여합니다.</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8">
+    <div class="grid md:grid-cols-2 gap-8">
       <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
         <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">01</div>
-        <h3 class="text-xl font-bold text-[#2B2B2B]">모바일 앱 (1:1 Figma UX)</h3>
+        <h3 class="text-xl font-bold text-[#2B2B2B]">스마트 키오스크 에이전트</h3>
         <p class="text-sm text-[#565656] leading-relaxed">
-          휴대폰 번호 인증 및 Google OAuth 2.0 간편 로그인, 키오스크 QR 스캔, 실시간 포인트 바코드 및 모바일 상품권 교환, 내 주변 친환경 가맹점(Certified Place) 지도 탐색을 제공합니다.
+          Golang 기반 IoT 상태 머신과 WebSocket 실시간 양방향 동기화를 통해 대기 화면부터 QR 스캔, 투입구 개방 및 품목별 카운팅, AI 비전 분석, 포인트 적립 완료까지 분리배출 하드웨어를 지능적으로 제어합니다.
         </p>
       </div>
 
       <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
         <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">02</div>
-        <h3 class="text-xl font-bold text-[#2B2B2B]">스마트 키오스크 에이전트</h3>
-        <p class="text-sm text-[#565656] leading-relaxed">
-          Golang 기반 IoT 상태 머신과 WebSocket 실시간 양방향 동기화를 통해 대기 화면부터 QR 스캔, 투입구 개방 및 품목별 카운팅, AI 비전 분석, 포인트 적립 완료까지 5단계 레이아웃을 제어합니다.
-        </p>
-      </div>
-
-      <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
-        <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">03</div>
         <h3 class="text-xl font-bold text-[#2B2B2B]">탄소 저감 통계 &amp; 가맹점 리워드</h3>
         <p class="text-sm text-[#565656] leading-relaxed">
-          내가 버린 쓰레기 무게(kg)와 감축한 탄소 배출량(나무 식재 효과·자동차 감소 효과)을 직관적인 통계로 확인하고, 적립된 포인트를 지역 가맹점 및 편의점에서 즉시 사용할 수 있습니다.
+          내가 버린 쓰레기 무게(kg)와 감축한 탄소 배출량(나무 식재 효과·자동차 감소 효과)을 직관적인 통계로 확인하고, 적립된 포인트를 지역 친환경 가맹점 및 편의점에서 바로 활용할 수 있습니다.
         </p>
       </div>
     </div>
