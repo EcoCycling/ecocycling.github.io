@@ -39,6 +39,20 @@
       align-items: center;
       justify-content: center;
     }
+    @media (max-width: 640px) {
+      html, body {
+        display: block;
+        width: 100vw;
+        height: 100dvh;
+        overflow: hidden;
+      }
+      #figma-stage-shell {
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-width: 100vw !important;
+        max-height: 100dvh !important;
+      }
+    }
     img { -webkit-user-drag: none; user-select: none; }
     #figma-stage-shell {
       position: relative;
@@ -2558,32 +2572,48 @@ MireuLim 님</span></div>
 
         const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
         const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-        const isDesktopOrTablet = vw > 500 && (vw / vh) > (360 / 800);
+        const isDesktop = vw > 640 && (vw / vh) > (360 / 720);
 
-        const padY = isDesktopOrTablet ? 24 : 0;
-        const padX = isDesktopOrTablet ? 24 : 0;
-        const availW = Math.max(240, vw - padX);
-        const availH = Math.max(360, vh - padY);
+        let scale = 1;
+        let scaledW = 360;
+        let scaledH = 800;
 
-        // Fit uniformly inside viewport so neither width nor height ever overflows or clips
-        const scale = Math.min(availW / 360, availH / 800);
-        const scaledW = Math.round(360 * scale);
-        const scaledH = Math.round(800 * scale);
+        if (isDesktop) {
+          // On Desktop PC/Laptop: aspect-fit device frame centered on screen
+          const padY = 32;
+          const padX = 32;
+          const availW = Math.max(280, vw - padX);
+          const availH = Math.max(480, vh - padY);
+          scale = Math.min(availW / 360, availH / 800);
+          scaledW = Math.round(360 * scale);
+          scaledH = Math.round(800 * scale);
 
-        shell.style.width = `${scaledW}px`;
-        shell.style.height = `${scaledH}px`;
-        stage.style.transform = `scale(${scale})`;
-
-        if (isDesktopOrTablet) {
-          shell.style.borderRadius = `${Math.round(24 * scale)}px`;
-          shell.style.boxShadow = '0 24px 60px rgba(0, 0, 0, 0.35)';
+          shell.style.width = `${scaledW}px`;
+          shell.style.height = `${scaledH}px`;
+          shell.style.borderRadius = `${Math.round(28 * scale)}px`;
+          shell.style.boxShadow = '0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)';
           document.body.style.backgroundColor = '#243735';
         } else {
+          // On Mobile devices: ALWAYS fill 100% of viewport width (width: 100vw, no leftover horizontal margins!)
+          scale = vw / 360;
+          scaledW = vw;
+          // Scale height proportionally to maintain 360:800 design ratio or fill viewport height
+          scaledH = Math.max(vh, Math.round(800 * scale));
+
+          shell.style.width = '100vw';
+          shell.style.height = '100dvh';
+          shell.style.maxWidth = '100vw';
+          shell.style.maxHeight = '100dvh';
           shell.style.borderRadius = '0px';
           shell.style.boxShadow = 'none';
+
           const frameBg = (currentFrameId === '0:531') ? '#3A5451' : (currentFrameId === '0:319' ? '#565656' : '#F2F2F2');
           document.body.style.backgroundColor = frameBg;
         }
+
+        // Apply scale transform and pass CSS custom property for pointer gesture scaling
+        stage.style.transform = `scale(${scale})`;
+        shell.style.setProperty('--stage-scale', String(scale));
       }
       window.addEventListener('resize', enforceMobileOnlyAndScale);
       if (window.visualViewport) {

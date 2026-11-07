@@ -3,618 +3,243 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ONECYCLE (EcoCycling) 홍보관 — 학술논문 · 수상 내역 · 기술 아카이브</title>
+  <title>ONECYCLE (EcoCycling) — 공식 프레스 & 보도자료</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Pretendard:wght@300;400;500;600;700;800&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
     }
     html {
       scroll-behavior: smooth;
     }
     body {
-      margin: 0;
-      padding: 0;
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       background-color: #F2F2F2;
       color: #2B2B2B;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
     .font-archivo {
       font-family: 'Archivo Black', sans-serif;
-    }
-    .font-ubuntu {
-      font-family: 'Ubuntu', sans-serif;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- Sticky Navigation Header -->
+  <!-- Header -->
   <header class="sticky top-0 z-50 bg-[#2B3F3D]/95 backdrop-blur border-b border-white/10 text-[#F5F5F5]">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <a href="/" class="font-archivo text-2xl tracking-tight text-[#F5F5F5] hover:text-[#BAC9C7] transition">ONECYCLE</a>
-        <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#BAC9C7] text-[#2B3F3D] font-bold">PRESS &amp; ARCHIVE</span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#BAC9C7] text-[#2B3F3D] font-bold">PRESS RELEASE</span>
       </div>
-      <nav class="hidden lg:flex items-center gap-6 text-sm font-medium text-[#F5F5F5]/90">
-        <a href="#timeline" class="hover:text-white transition">연대기</a>
-        <a href="#kcc-2022" class="hover:text-white transition">2022 KCC 학술논문</a>
-        <a href="#jeju-award-2022" class="hover:text-white transition">2022 제주 창업경진대회 창의상</a>
-        <a href="#onecycle-2024" class="hover:text-white transition">2024 대학생 창업경진대회</a>
-        <a href="#opensource" class="hover:text-white transition">오픈소스 명세</a>
-        <a href="#team" class="hover:text-white transition">제작진 소개</a>
-        <a href="/" class="px-4 py-2 rounded-lg bg-[#F5F5F5] text-[#2B3F3D] font-semibold hover:bg-[#BAC9C7] transition">← 메인 쇼케이스</a>
-      </nav>
-      <a href="/" class="lg:hidden px-3.5 py-1.5 rounded-lg bg-[#F5F5F5] text-[#2B3F3D] text-xs font-bold">← 메인으로</a>
+      <a href="/" class="px-3.5 py-1.5 rounded-lg bg-[#F5F5F5] text-[#2B3F3D] text-xs font-bold hover:bg-[#BAC9C7] transition">← 메인 쇼케이스</a>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="relative bg-[#2B3F3D] text-[#F5F5F5] py-20 md:py-28 border-b border-white/10">
+  <section class="relative bg-[#2B3F3D] text-[#F5F5F5] py-16 md:py-20 border-b border-white/10">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-3xl space-y-6">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold tracking-wide text-[#BAC9C7]">
-          <span>OFFICIAL RESEARCH, AWARDS &amp; MEDIA ARCHIVE (2022–2026)</span>
+          <span>OFFICIAL RESEARCH &amp; AWARDS PRESS RELEASE</span>
         </div>
-        <h1 class="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
-          연구 논문에서 시작된<br />
-          <span class="font-archivo text-[#BAC9C7]">ONECYCLE</span> 자원순환 혁신 기록
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight">
+          연구 논문 및 경진대회 수상으로 검증된<br />
+          <span class="font-archivo text-[#BAC9C7]">ONECYCLE</span> 자원순환 혁신
         </h1>
         <p class="text-base md:text-lg text-[#F5F5F5]/85 leading-relaxed">
-          <strong>None Labs (Team None)</strong>의 <strong>EcoCycling · ONECYCLE</strong> 프로젝트는 2022년 한국정보과학회(KIISE) 한국컴퓨터종합학술대회(KCC 2022)에 등재된 CNN 기반 쓰레기 자동 분류 장치 학술 연구에서 출발하여, 2022년 제주 공공데이터 활용 창업경진대회 특별경쟁 부문 창의상(특별부문 1등) 수상, 그리고 2024년 제3회 전국 장애·비장애 대학생 창업경진대회 유니버설 AI 스마트 키오스크 및 초분광 플라스틱 순환 플랫폼으로 발전해 온 검증된 엔지니어링 프로젝트입니다.
+          <strong>None Labs</strong>의 <strong>EcoCycling · ONECYCLE</strong> 프로젝트는 2022년 한국정보과학회(KIISE) 한국컴퓨터종합학술대회(KCC 2022) 등재 학술 연구와 2022년 제주 공공데이터 활용 창업경진대회 수상, 2024년 제3회 전국 장애·비장애 대학생 창업경진대회를 거쳐 지속적으로 발전해 온 기술 기반 프로젝트입니다.
         </p>
-        <div class="flex flex-wrap gap-3 pt-2">
+        <div class="flex flex-col sm:flex-row flex-wrap gap-3 pt-2 w-full max-w-full">
           <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113931" target="_blank" rel="noopener"
-             class="px-5 py-3 rounded-xl bg-[#F5F5F5] text-[#2B3F3D] font-bold text-sm hover:bg-[#BAC9C7] transition">
+             class="px-4 py-3 rounded-xl bg-[#F5F5F5] text-[#2B3F3D] font-bold text-sm hover:bg-[#BAC9C7] transition text-center block w-full sm:w-auto">
             📄 DBpia 학술논문 원문 (NODE11113931) ↗
           </a>
           <a href="https://www.xn--289an12ayigrkcntay10e.kr/859525" target="_blank" rel="noopener"
-             class="px-5 py-3 rounded-xl bg-white/15 border border-white/30 text-white font-semibold text-sm hover:bg-white/25 transition">
+             class="px-4 py-3 rounded-xl bg-white/15 border border-white/30 text-white font-semibold text-sm hover:bg-white/25 transition text-center block w-full sm:w-auto">
             📰 안전환경일보 수상 보도자료 (859525) ↗
           </a>
-          <a href="#onecycle-2024"
-             class="px-5 py-3 rounded-xl bg-white/10 border border-white/20 text-[#BAC9C7] font-semibold text-sm hover:bg-white/20 transition">
-            🚀 2024 ONECYCLE IR 아카이브 보기 ↓
-          </a>
-        </div>
-      </div>
-
-      <!-- Key Metrics Bar -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14 pt-10 border-t border-white/10">
-        <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
-          <div class="text-xs text-[#BAC9C7] font-semibold">KIISE KCC 2022 학술논문</div>
-          <div class="text-2xl md:text-3xl font-bold mt-1">89.0%</div>
-          <div class="text-xs text-white/70 mt-1">6종 재활용품 CNN 분류 정확도 (2,527장 데이터셋)</div>
-        </div>
-        <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
-          <div class="text-xs text-[#BAC9C7] font-semibold">2022 제주 공공데이터 경진대회</div>
-          <div class="text-2xl md:text-3xl font-bold mt-1">창의상 (1등)</div>
-          <div class="text-xs text-white/70 mt-1">제주특별자치도지사 상장 제475호 (제2022-21호)</div>
-        </div>
-        <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
-          <div class="text-xs text-[#BAC9C7] font-semibold">제주 연간 관광객 일회용컵</div>
-          <div class="text-2xl md:text-3xl font-bold mt-1">6,300만 개</div>
-          <div class="text-xs text-white/70 mt-1">1인당 일평균 생활폐기물 1.8kg (전국 1위 문제 해결)</div>
-        </div>
-        <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
-          <div class="text-xs text-[#BAC9C7] font-semibold">초분광 카메라 정밀 선별</div>
-          <div class="text-2xl md:text-3xl font-bold mt-1">10종+ 플라스틱</div>
-          <div class="text-xs text-white/70 mt-1">PLA·ABS·PVC·PP·PET 펠릿 및 3D 필라멘트 자원화</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Chronological Timeline Section -->
-  <section id="timeline" class="py-16 bg-white border-b border-black/5">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="mb-10">
-        <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">Project Evolution Timeline</span>
-        <h2 class="text-3xl font-bold mt-3 text-[#2B2B2B]">EcoCycling에서 ONECYCLE까지의 기술 진화 연대기</h2>
+  <!-- Main Content: Press & Achievements -->
+  <main class="max-w-6xl mx-auto px-6 py-16 space-y-16">
+
+    <!-- 1. 2022 KCC Academic Paper -->
+    <section class="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-black/5 space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded-full bg-[#3A5451] text-white text-xs font-bold">2022.06</span>
+        <span class="text-xs font-semibold text-[#565656]">한국정보과학회 (KIISE) · KCC 2022</span>
       </div>
-
-      <div class="grid md:grid-cols-4 gap-6">
-        <div class="rounded-2xl bg-[#F2F2F2] p-6 border-l-4 border-[#3A5451]">
-          <div class="text-xs font-bold text-[#3A5451]">2022. 03 – 2022. 06</div>
-          <h3 class="text-lg font-bold mt-1">1단계 · CNN 쓰레기 분류 학술 연구</h3>
-          <p class="text-xs text-[#565656] mt-2 leading-relaxed">
-            함덕고등학교 임미르·제주대학교 한승의 공동 연구. TensorFlow/Keras CNN 비전 모델과 아두이노·서보모터·블루투스 제어부를 결합한 자동 분리수거 장치 프로토타입 완성 및 <strong>KCC 2022 학술대회 논문 게재</strong>.
-          </p>
-        </div>
-
-        <div class="rounded-2xl bg-[#F2F2F2] p-6 border-l-4 border-[#3A5451]">
-          <div class="text-xs font-bold text-[#3A5451]">2022. 07 – 2022. 08</div>
-          <h3 class="text-lg font-bold mt-1">2단계 · 제주 공공데이터 창업경진대회 수상</h3>
-          <p class="text-xs text-[#565656] mt-2 leading-relaxed">
-            제주 관광객 이동 동선 공공데이터와 AI 분리수거함, HDPE·LDPE 폐플라스틱 3D 프린팅 팜을 결합한 <strong>EcoCycling</strong> 모델을 제안하여 <strong>제주특별자치도지사 창의상(특별부문 1등)</strong> 수상 및 언론 보도.
-          </p>
-        </div>
-
-        <div class="rounded-2xl bg-[#F2F2F2] p-6 border-l-4 border-[#3A5451]">
-          <div class="text-xs font-bold text-[#3A5451]">2023. 12 – 2024. 02</div>
-          <h3 class="text-lg font-bold mt-1">3단계 · 제3회 장애·비장애 대학생 창업경진대회</h3>
-          <p class="text-xs text-[#565656] mt-2 leading-relaxed">
-            브랜드를 <strong>ONECYCLE</strong>로 리브랜딩. 다중 쓰레기 동시 투입 AI 자동 분류 키오스크, 초분광 카메라(Hyperspectral) 기반 폐플라스틱 펠릿·필라멘트 가공 공정, 만보기·지역 상권 리워드 앱으로 통합.
-          </p>
-        </div>
-
-        <div class="rounded-2xl bg-[#F2F2F2] p-6 border-l-4 border-[#3A5451]">
-          <div class="text-xs font-bold text-[#3A5451]">2024 – 2026 현재</div>
-          <h3 class="text-lg font-bold mt-1">4단계 · 클라우드 네이티브 &amp; 웹 플랫폼 고도화</h3>
-          <p class="text-xs text-[#565656] mt-2 leading-relaxed">
-            Golang 백엔드 API 및 WebSocket 키오스크 상태 머신, 모바일·데스크톱 유동적 반응형 웹 애플리케이션, Terraform 기반 클라우드 아키텍처로 통합 쇼케이스 구축.
-          </p>
-        </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-[#2B2B2B]">
+        CNN 분류 프로그램을 이용한 쓰레기 분류 장치에 대한 연구
+      </h2>
+      <p class="text-sm md:text-base text-[#565656] leading-relaxed">
+        본 연구는 카메라 비전 센서와 딥러닝(CNN) 모델을 활용하여 일상에서 배출되는 생활 폐기물(캔, 페트병, 유리, 종이 등)을 실시간으로 식별하고 하드웨어 제어부와 연동하여 자동으로 분리 수거하는 메커니즘을 제안하였습니다.
+      </p>
+      <div class="grid sm:grid-cols-2 gap-4 text-xs bg-[#F5F5F5] p-5 rounded-2xl border border-black/5">
+        <div><span class="text-[#737373]">발행처:</span> <strong class="text-[#2B2B2B]">한국정보과학회 학술발표논문집</strong></div>
+        <div><span class="text-[#737373]">학술대회:</span> <strong class="text-[#2B2B2B]">2022 한국컴퓨터종합학술대회 (KCC 2022)</strong></div>
+        <div><span class="text-[#737373]">저자:</span> <strong class="text-[#2B2B2B]">임미르 (함덕고등학교), 한승의 (제주대학교)</strong></div>
+        <div><span class="text-[#737373]">수록면:</span> <strong class="text-[#2B2B2B]">pp. 2,269 – 2,270</strong></div>
       </div>
-    </div>
-  </section>
-
-  <!-- SECTION 1: 2022 KCC Academic Paper -->
-  <section id="kcc-2022" class="py-16 md:py-24 max-w-6xl mx-auto px-6">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
       <div>
-        <span class="text-xs font-bold uppercase tracking-widest text-white bg-[#3A5451] px-3 py-1 rounded-full">01 · Academic Research (2022.06)</span>
-        <h2 class="text-3xl md:text-4xl font-bold mt-3 text-[#2B2B2B]">「CNN 분류 프로그램을 이용한 쓰레기 분류 장치에 대한 연구」</h2>
-        <p class="text-sm text-[#565656] mt-2">
-          <strong>A Study on Garbage Sorting Device Using CNN Classification Program</strong> · 한국정보과학회 『2022 한국컴퓨터종합학술대회 논문집 (KCC 2022)』 pp. 2,269–2,270
-        </p>
-      </div>
-      <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113931" target="_blank" rel="noopener"
-         class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#3A5451] text-white font-semibold text-sm hover:bg-[#2B3F3D] transition shrink-0">
-        <span>DBpia 공식 논문 페이지 열기 (NODE11113931)</span>
-        <span>↗</span>
-      </a>
-    </div>
-
-    <!-- Paper Metadata & Abstract Grid -->
-    <div class="grid lg:grid-cols-12 gap-8 mb-12">
-      <div class="lg:col-span-7 bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-5">
-        <div>
-          <div class="text-xs font-bold text-[#3A5451] uppercase tracking-wider">논문 초록 (Abstract) 및 연구 배경</div>
-          <p class="text-sm text-[#2B2B2B] mt-2 leading-relaxed bg-[#F2F2F2] p-4 rounded-xl border border-black/5">
-            “AI에서 사용되는 CNN(Convolution Neural Network)은 데이터의 특징을 추출하여 특징의 패턴을 파악하는 구조로 되어있는 모델이다. 이러한 모델은 이미지 분류, 분석 등에서 영상 이미지 처리 부분쪽에서 많이 사용되고 있다. 본 논문에서는 이러한 모듈을 이용해서 <strong>제어부, 클라이언트, API, AI 머신러닝</strong>으로 구성된 쓰레기 분류 장치를 연구하였다. 또한 연구된 쓰레기 분류 장치를 구현하고 동작 테스트를 통해 이미지 분류를 통한 쓰레기 분류가 가능한 장치를 개발하였다.”
-          </p>
-        </div>
-
-        <div class="grid sm:grid-cols-2 gap-4 text-xs">
-          <div class="p-4 rounded-xl bg-[#F2F2F2]">
-            <div class="font-bold text-[#3A5451]">저자 및 소속 (Authors)</div>
-            <div class="mt-1 text-[#2B2B2B] font-semibold">임미르 (함덕고등학교, 제1저자)</div>
-            <div class="text-[#565656]">한승의 (제주대학교, 공동저자)</div>
-          </div>
-          <div class="p-4 rounded-xl bg-[#F2F2F2]">
-            <div class="font-bold text-[#3A5451]">학술지 및 발행 정보 (Publication)</div>
-            <div class="mt-1 text-[#2B2B2B] font-semibold">한국정보과학회 (KIISE) KCC 2022</div>
-            <div class="text-[#565656]">2022년 6월 발행 · pp. 2,269–2,270 (DBpia NODE11113931)</div>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="text-base font-bold text-[#2B2B2B] mb-2">4대 핵심 시스템 아키텍처 및 하드웨어 제어 원리</h3>
-          <ul class="space-y-2 text-xs text-[#565656] leading-relaxed">
-            <li>• <strong>클라이언트 (Android App):</strong> 사용자가 배출할 재활용 쓰레기(플라스틱 페트병, 종이, 유리, 캔 등)를 카메라로 촬영하고 API 서버로 이미지를 전송하여 분류 코드를 요청한 뒤, 블루투스(Bluetooth) 통신으로 제어부에 도어 개방 명령을 전달합니다.</li>
-            <li>• <strong>API 서버 &amp; AI 분류 모델 (TensorFlow/Keras):</strong> <code>512×384×3</code> 해상도 이미지를 입력받아 4단계 <code>Conv2D + MaxPooling2D</code> 계층을 거쳐 6개 클래스(캔, 유리, 종이, 플라스틱, 박스, 비닐/일반)로 분류하고 결과 코드(예: <code>{"plastic": 1}</code>)를 반환합니다.</li>
-            <li>• <strong>아두이노 제어부 (Arduino &amp; 3-Channel Servo Motors):</strong> 블루투스 모듈(<code>BT.read()</code>)로 수신한 분류 코드에 따라 1번(캔/금속), 2번(유리), 3번(플라스틱) 서보모터를 90도 회전시켜 해당 분리수거함 도어를 자동으로 개방하고 2.5초 뒤 닫습니다.</li>
-          </ul>
-        </div>
-
-        <!-- Keras Model Architecture Table -->
-        <div>
-          <h3 class="text-sm font-bold text-[#2B2B2B] mb-2">CNN 딥러닝 모델 레이어 명세 (총 1,620,422 Trainable Parameters · 70 Epochs · 정확도 89%)</h3>
-          <div class="overflow-x-auto rounded-xl border border-black/10">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-[#3A5451] text-white">
-                <tr>
-                  <th class="py-2 px-3">Layer (Type)</th>
-                  <th class="py-2 px-3">Output Shape</th>
-                  <th class="py-2 px-3">Kernel / Pool</th>
-                  <th class="py-2 px-3">Params</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-black/5 bg-[#F2F2F2]">
-                <tr><td class="py-1.5 px-3 font-mono">Conv2D (ReLU, same)</td><td class="py-1.5 px-3 font-mono">(None, 512, 384, 32)</td><td class="py-1.5 px-3">3×3, 32 filters</td><td class="py-1.5 px-3 font-mono">896</td></tr>
-                <tr><td class="py-1.5 px-3 font-mono">MaxPooling2D</td><td class="py-1.5 px-3 font-mono">(None, 256, 192, 32)</td><td class="py-1.5 px-3">pool_size=2</td><td class="py-1.5 px-3 font-mono">0</td></tr>
-                <tr><td class="py-1.5 px-3 font-mono">Conv2D_1 (ReLU, same)</td><td class="py-1.5 px-3 font-mono">(None, 256, 192, 64)</td><td class="py-1.5 px-3">3×3, 64 filters</td><td class="py-1.5 px-3 font-mono">18,496</td></tr>
-                <tr><td class="py-1.5 px-3 font-mono">MaxPooling2D_1</td><td class="py-1.5 px-3 font-mono">(None, 128, 96, 64)</td><td class="py-1.5 px-3">pool_size=2</td><td class="py-1.5 px-3 font-mono">0</td></tr>
-                <tr><td class="py-1.5 px-3 font-mono">Conv2D_2 (ReLU, same)</td><td class="py-1.5 px-3 font-mono">(None, 128, 96, 32)</td><td class="py-1.5 px-3">3×3, 32 filters</td><td class="py-1.5 px-3 font-mono">18,464</td></tr>
-                <tr><td class="py-1.5 px-3 font-mono">MaxPooling2D_2</td><td class="py-1.5 px-3 font-mono">(None, 64, 48, 32)</td><td class="py-1.5 px-3">pool_size=2</td><td class="py-1.5 px-3 font-mono">0</td></tr>
-                <tr><td class="py-1.5 px-3 font-mono">Conv2D_3 (ReLU, same)</td><td class="py-1.5 px-3 font-mono">(None, 64, 48, 32)</td><td class="py-1.5 px-3">3×3, 32 filters</td><td class="py-1.5 px-3 font-mono">9,248</td></tr>
-                <tr><td class="py-1.5 px-3 font-mono">MaxPooling2D_3 + Flatten</td><td class="py-1.5 px-3 font-mono">(None, 24576)</td><td class="py-1.5 px-3">32×24×32</td><td class="py-1.5 px-3 font-mono">0</td></tr>
-                <tr><td class="py-1.5 px-3 font-mono">Dense (ReLU) + Softmax</td><td class="py-1.5 px-3 font-mono">(None, 64) → (None, 6)</td><td class="py-1.5 px-3">6 Classes</td><td class="py-1.5 px-3 font-mono">1,573,318</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Paper Original Scans (p.2269 & p.2270) -->
-      <div class="lg:col-span-5 grid grid-cols-2 gap-4">
-        <div class="bg-white rounded-2xl p-3 shadow-sm border border-black/5 flex flex-col">
-          <img src="/assets/press/kcc2022-paper-p1.png" alt="KCC 2022 논문 1쪽 (p.2269)" class="w-full rounded-xl border border-black/5" />
-          <div class="text-xs font-semibold text-center text-[#565656] mt-2">KCC 2022 논문집 p. 2,269 (원문 1쪽)</div>
-        </div>
-        <div class="bg-white rounded-2xl p-3 shadow-sm border border-black/5 flex flex-col">
-          <img src="/assets/press/kcc2022-paper-p2.png" alt="KCC 2022 논문 2쪽 (p.2270)" class="w-full rounded-xl border border-black/5" />
-          <div class="text-xs font-semibold text-center text-[#565656] mt-2">KCC 2022 논문집 p. 2,270 (원문 2쪽)</div>
-        </div>
-        <div class="col-span-2 bg-white rounded-2xl p-4 shadow-sm border border-black/5">
-          <img src="/assets/press/cnn-hardware-prototype.jpg" alt="CNN 인공지능 분리수거 장치 프로토타입 동작 테스트" class="w-full h-56 object-cover rounded-xl" />
-          <div class="text-xs text-[#565656] mt-2">
-            <strong>[그림 4] 실제 구현된 AI 분리수거함 하드웨어 및 안드로이드 클라이언트 연동 테스트:</strong> 페트병 촬영 시 <code>{"plastic": 1}</code> 분류 코드가 반환되어 1번 플라스틱 투입구 서보모터 도어가 자동 개방되는 모습.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Paper Diagrams Row -->
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-black/5 flex flex-col justify-between">
-        <img src="/assets/press/cnn-system-architecture.png" alt="[그림 1] 시스템 구성도" class="w-full h-44 object-contain bg-[#F2F2F2] rounded-xl p-3" />
-        <div class="mt-3">
-          <div class="text-xs font-bold text-[#3A5451]">[그림 1] 시스템 구성도</div>
-          <p class="text-xs text-[#565656] mt-1">클라이언트, API 서버, AI 머신러닝셋, 아두이노 제어부 간의 이미지 데이터 및 쓰레기 분류 코드 통신 구조.</p>
-        </div>
-      </div>
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-black/5 flex flex-col justify-between">
-        <img src="/assets/press/cnn-client-control-flowchart.png" alt="[그림 2] 클라이언트, 제어부 순서도" class="w-full h-44 object-contain bg-[#F2F2F2] rounded-xl p-2" />
-        <div class="mt-3">
-          <div class="text-xs font-bold text-[#3A5451]">[그림 2] 클라이언트 · 제어부 동작 순서도</div>
-          <p class="text-xs text-[#565656] mt-1">카메라 촬영 → <code>keras.preprocessing</code> → <code>model.predict()</code> → 블루투스 전송 → 품목별 서보모터 90° 개방 후 2.5초 뒤 닫힘.</p>
-        </div>
-      </div>
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-black/5 flex flex-col justify-between">
-        <img src="/assets/press/cnn-model-architecture.png" alt="[그림 3] AI CNN모델 순서도" class="w-full h-44 object-contain bg-[#F2F2F2] rounded-xl p-2" />
-        <div class="mt-3">
-          <div class="text-xs font-bold text-[#3A5451]">[그림 3] AI CNN 모델 파이프라인</div>
-          <p class="text-xs text-[#565656] mt-1"><code>Input(512, 384)</code>부터 4단계 <code>Conv2 + MaxPool</code> 특징 추출 후 6종 SoftMax 출력으로 이어지는 신경망 구조.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 2: 2022 Jeju Public Data Competition Award & Media Coverage -->
-  <section id="jeju-award-2022" class="py-16 md:py-24 bg-white border-y border-black/5">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-widest text-white bg-amber-600 px-3 py-1 rounded-full">02 · Competition Award &amp; Press Release (2022.07–08)</span>
-          <h2 class="text-3xl md:text-4xl font-bold mt-3 text-[#2B2B2B]">2022년 제주 공공데이터 활용 창업경진대회 창의상 수상</h2>
-          <p class="text-sm text-[#565656] mt-2">
-            <strong>특별경쟁 부문 창의상 (특별부문 1등) — None Labs 팀 (대표 임미르)</strong> · 제주특별자치도지사 상장 제475호 (제2022-21호 포상수여증명서)
-          </p>
-        </div>
-        <a href="https://www.xn--289an12ayigrkcntay10e.kr/859525" target="_blank" rel="noopener"
-           class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#2B3F3D] text-white font-semibold text-sm hover:bg-[#3A5451] transition shrink-0">
-          <span>안전환경일보 공식 보도자료 전문 보기 (859525)</span>
+        <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113931" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-bold text-[#3A5451] hover:underline">
+          <span>DBpia 공식 논문 상세정보 바로가기</span>
           <span>↗</span>
         </a>
       </div>
+    </section>
 
-      <div class="grid lg:grid-cols-12 gap-8 items-start">
-        <!-- Award Certificate & Official Press Release Citation -->
-        <div class="lg:col-span-5 bg-[#F2F2F2] rounded-2xl p-5 border border-black/5 space-y-4">
-          <img src="/assets/press/award-certificate-2022.png" alt="제2022-21호 포상수여증명서 (임미르, None Labs)" class="w-full rounded-xl shadow-sm border border-black/10 bg-white" />
-          <div class="p-4 rounded-xl bg-white border border-black/5 text-xs space-y-1.5">
-            <div class="font-bold text-[#3A5451] text-sm">제주특별자치도 공식 포상수여증명서 (제 2022 - 21호)</div>
-            <div><strong>성명 / 소속:</strong> 임미르 / None Labs</div>
-            <div><strong>포상종류 / 호수:</strong> 상장 (제475호) · 수여일: 2022. 07. 25 (증명발급: 2022. 08. 01)</div>
-            <div><strong>포상공적:</strong> 2022년 제주 공공데이터 활용 창업경진대회 (특별부문 1등 / 창의상)</div>
-            <div><strong>발급기관:</strong> 제주특별자치도지사</div>
-          </div>
-        </div>
-
-        <!-- Ceremony Photos & 2022 EcoCycling Business Plan Details -->
-        <div class="lg:col-span-7 space-y-6">
-          <!-- Press Release Quote Card -->
-          <div class="rounded-2xl bg-[#2B3F3D] text-white p-6 space-y-3">
-            <div class="flex items-center justify-between text-xs text-[#BAC9C7]">
-              <span>언론 보도 인용 · 안전환경일보 (2022.07.26)</span>
-              <a href="https://www.xn--289an12ayigrkcntay10e.kr/859525" target="_blank" rel="noopener" class="underline hover:text-white">기사 원문 ↗</a>
-            </div>
-            <h3 class="text-lg font-bold">「제주도, 2022년 제주 공공데이터 활용 창업경진대회 최종 결과 발표」</h3>
-            <p class="text-xs text-white/85 leading-relaxed">
-              제주특별자치도, 제주국제자유도시개발센터(JDC), 제주특별자치도개발공사(JPDC), 제주창조경제혁신센터, 제주지방기상청이 공동 주최한 『2022년 제주 공공데이터 활용 창업경진대회』에서 <strong>None Labs 팀(대표 임미르, 김수빈, 이예린, 디자인 엄기빈)</strong>이 제주 관광지 폐기물 데이터 및 관광객 이동 동선 데이터를 활용한 <strong>AI 스마트 분리수거함 및 3D 프린팅 팜 자원순환 플랫폼 ‘EcoCycling’</strong>으로 <strong>특별경쟁 부문 창의상(특별부문 1등)</strong>에 선정되었습니다.
-            </p>
-          </div>
-
-          <!-- Ceremony Stage Photos -->
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div class="bg-[#F2F2F2] rounded-2xl p-3 border border-black/5">
-              <img src="/assets/press/jeju-award-ceremony-1.jpg" alt="2022.08.01 제주특별자치도 소통과 공감의 날 시상식 기념촬영" class="w-full h-52 object-cover rounded-xl" />
-              <div class="text-xs text-[#565656] mt-2 font-medium">
-                <strong>2022. 08. 01 제주특별자치도 친수 시상식:</strong> 오영훈 제주특별자치도지사로부터 상장을 수여받은 None Labs 대표 임미르(좌측).
-              </div>
-            </div>
-            <div class="bg-[#F2F2F2] rounded-2xl p-3 border border-black/5">
-              <img src="/assets/press/jeju-award-ceremony-2.jpg" alt="2022.08.01 제주특별자치도지사 상장 수여 현장" class="w-full h-52 object-cover rounded-xl" />
-              <div class="text-xs text-[#565656] mt-2 font-medium">
-                <strong>「8월 소통과 공감의 날 — 빛나는 제주」:</strong> 2022 제주 공공데이터 활용 창업경진대회 단상 수상 장면.
-              </div>
-            </div>
-          </div>
-
-          <!-- 2022 EcoCycling Idea & Hardware Spec Box -->
-          <div class="bg-[#F2F2F2] rounded-2xl p-6 border border-black/5 space-y-4">
-            <h4 class="text-base font-bold text-[#2B2B2B]">2022 EcoCycling 사업계획서 및 엔지니어링 설계 핵심 요약</h4>
-            <div class="grid sm:grid-cols-2 gap-4 text-xs text-[#565656]">
-              <div class="bg-white p-4 rounded-xl border border-black/5">
-                <div class="font-bold text-[#3A5451] mb-1">1. 제주 관광지 쓰레기 문제 &amp; 공공데이터 분석</div>
-                우도·성산일출봉·함덕해수욕장·삼양해수욕장 등 관광객 밀집 구역에서 매년 일회용 컵 약 <strong>6,300만 개</strong>가 배출되며 제주도민 1인당 일평균 생활폐기물 배출량이 <strong>1.8kg(전국 평균 1.1kg 대비 1위)</strong>에 달하는 문제를 해결하기 위해, 제주 관광객 이동 동선 클러스터 데이터를 기반으로 최적의 AI 수거함 거점을 설계했습니다.
-              </div>
-              <div class="bg-white p-4 rounded-xl border border-black/5">
-                <div class="font-bold text-[#3A5451] mb-1">2. 시제품 H/W 및 24시간 3D 프린팅 팜</div>
-                • <strong>AI 분리수거함 시제품:</strong> NVIDIA Jetson Nano 컴퓨팅 보드, LV5300 QR 스캐너, YR-030 인식 카메라, DF2020 프로파일 프레임<br />
-                • <strong>3D 프린팅 팜 설비:</strong> NPCP-150 플라스틱 분쇄기(크러셔)로 세척·파쇄된 HDPE/LDPE를 SJ25 압출기로 필라멘트화하여 Ender-5 Plus 3D 프린터 팜에서 기념품·교육용 과학 키트 생산.
-              </div>
-            </div>
-            <div class="grid sm:grid-cols-2 gap-4 pt-2">
-              <img src="/assets/press/ecocycling-2022-idea-p1.png" alt="2022 EcoCycling 아이디어 제안서 1쪽" class="w-full h-56 object-contain bg-white rounded-xl p-2 border border-black/5" />
-              <img src="/assets/press/ecocycling-2022-idea-p3.png" alt="2022 EcoCycling 제주 관광객 동선 조사" class="w-full h-56 object-contain bg-white rounded-xl p-2 border border-black/5" />
-            </div>
-          </div>
-        </div>
+    <!-- 2. 2022 Jeju Public Data Startup Competition -->
+    <section class="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-black/5 space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded-full bg-[#BAC9C7] text-[#3A5451] text-xs font-bold">2022.07</span>
+        <span class="text-xs font-semibold text-[#565656]">제주특별자치도 · JDC · JPDC · 제주창조경제혁신센터</span>
       </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3: 2024 3rd Disabled/Non-Disabled University Startup Competition (ONECYCLE) -->
-  <section id="onecycle-2024" class="py-16 md:py-24 max-w-6xl mx-auto px-6">
-    <div class="mb-12">
-      <span class="text-xs font-bold uppercase tracking-widest text-white bg-emerald-700 px-3 py-1 rounded-full">03 · Platform Evolution (2024 제3회 전국 장애·비장애 대학생 창업경진대회)</span>
-      <h2 class="text-3xl md:text-4xl font-bold mt-3 text-[#2B2B2B]">ONECYCLE: 유니버설 AI 분리수거 &amp; 초분광 펠릿·필라멘트 순환 플랫폼</h2>
-      <p class="text-sm text-[#565656] mt-2 max-w-3xl">
-        2024년 제3회 전국 장애·비장애 대학생 창업경진대회에서 Team None은 기존 EcoCycling을 <strong>ONECYCLE(원사이클)</strong>로 고도화하여, 누구나 제약 없이 한 번에 여러 쓰레기를 투입할 수 있는 배리어프리(Barrier-Free) 키오스크 UX와 초분광 카메라(Hyperspectral Camera) 기반 2차 정밀 분류·펠릿(Pellet) 제조 공정을 선보였습니다.
+      <h2 class="text-2xl md:text-3xl font-bold text-[#2B2B2B]">
+        2022년 제주 공공데이터 활용 창업경진대회 창의상 수상
+      </h2>
+      <p class="text-sm md:text-base text-[#565656] leading-relaxed">
+        제주특별자치도와 유관기관이 공동 주관한 공공데이터 활용 창업경진대회에서 특별경쟁 부문 창의상(특별부문 1등)을 수상하였습니다. 도내 관광 상권 데이터와 분리배출 자원순환 인프라를 연계한 창의적인 아이디어로 공공성과 사업성을 인정받았습니다.
       </p>
-    </div>
-
-    <!-- 3 Pillars of 2024 Evolution -->
-    <div class="grid md:grid-cols-3 gap-6 mb-12">
-      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/5 space-y-2">
-        <div class="text-xs font-bold text-[#3A5451]">EVOLUTION 01 · UNIVERSAL ACCESSIBILITY</div>
-        <h3 class="text-lg font-bold text-[#2B2B2B]">다중 쓰레기 동시 투입 &amp; 배리어프리 키오스크</h3>
-        <p class="text-xs text-[#565656] leading-relaxed">
-          한 번에 한 개씩 단일 품목(페트·캔)만 넣어야 했던 기존 수거함(슈퍼빈 등)과 달리, <strong>묶음·다중 쓰레기를 동시에 투입해도 AI가 자동 선별</strong>합니다. NFC/QR 태깅 시 자동 도어 개폐(<code>투입구가 열립니다</code>)와 직관적인 3단계 상태 UI로 장애·비장애인 모두 편리하게 이용할 수 있습니다.
-        </p>
+      <div class="grid sm:grid-cols-2 gap-4 text-xs bg-[#F5F5F5] p-5 rounded-2xl border border-black/5">
+        <div><span class="text-[#737373]">수상명:</span> <strong class="text-[#2B2B2B]">특별경쟁 부문 창의상 (특별부문 1등)</strong></div>
+        <div><span class="text-[#737373]">수상팀:</span> <strong class="text-[#2B2B2B]">None Labs 팀 (대표 임미르)</strong></div>
+        <div><span class="text-[#737373]">수여 기관:</span> <strong class="text-[#2B2B2B]">제주특별자치도지사</strong></div>
+        <div><span class="text-[#737373]">수여일:</span> <strong class="text-[#2B2B2B]">2022년 7월</strong></div>
       </div>
-
-      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/5 space-y-2">
-        <div class="text-xs font-bold text-[#3A5451]">EVOLUTION 02 · HYPERSPECTRAL SORTING</div>
-        <h3 class="text-lg font-bold text-[#2B2B2B]">초분광 카메라 기반 10종+ 폐플라스틱 정밀 분류</h3>
-        <p class="text-xs text-[#565656] leading-relaxed">
-          인간의 가시광선 영역을 넘어선 파장을 분석하는 <strong>초분광 카메라(Hyperspectral Camera)</strong>를 2차 공정에 도입하여 PLA, ABS, PVC, PP, PET 등 10종 이상의 플라스틱 재질을 정확히 선별·파쇄하고 고순도 <strong>플라스틱 펠릿(Pellet)</strong>과 <strong>3D 프린터 필라멘트</strong>로 가공합니다.
-        </p>
+      <div>
+        <a href="https://www.xn--289an12ayigrkcntay10e.kr/859525" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-bold text-[#3A5451] hover:underline">
+          <span>(주)안전환경일보 언론 보도 원문 확인하기</span>
+          <span>↗</span>
+        </a>
       </div>
+    </section>
 
-      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/5 space-y-2">
-        <div class="text-xs font-bold text-[#3A5451]">EVOLUTION 03 · TOURISM &amp; ESG MARKET</div>
-        <h3 class="text-lg font-bold text-[#2B2B2B]">관광 상권 플로깅(Plogging) 만보기 &amp; B2B·B2G 확장</h3>
-        <p class="text-xs text-[#565656] leading-relaxed">
-          부산 해운대·제주 함덕·인천 차이나타운·대학가 등 유동 인구가 많은 관광 상권과 연계해 걸음 수(만보기)와 배출량에 따라 지역 가맹점 상품권(5,000원/10,000원권)을 지급하며, 국내 201조 원·글로벌 737억 달러 규모(2026 전망) 재활용 시장을 타겟팅합니다.
-        </p>
+    <!-- 3. 2024 University Startup Competition -->
+    <section class="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-black/5 space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded-full bg-[#3A5451] text-white text-xs font-bold">2024</span>
+        <span class="text-xs font-semibold text-[#565656]">전국 대학생 창업경진대회</span>
       </div>
-    </div>
-
-    <!-- 2024 IR Deck Visual Showcase Grid -->
-    <div class="grid md:grid-cols-2 gap-6 mb-8">
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-black/5">
-        <img src="/assets/press/onecycle-2024-hardware-kiosk.png" alt="ONECYCLE AI 쓰레기통 3D 하드웨어 및 키오스크 UI" class="w-full rounded-xl border border-black/5" />
-        <div class="mt-3 px-1">
-          <div class="text-xs font-bold text-[#3A5451]">ONECYCLE AI 스마트 쓰레기통 &amp; 키오스크 인터페이스</div>
-          <p class="text-xs text-[#565656] mt-1">3채널 분리수거 하드웨어 외관 설계 및 캔(400pts)·페트병(300pts)·유리병(240pts)·일반쓰레기(5pts) 실시간 합산(945pts) 화면.</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-[#2B2B2B]">
+        2024 제3회 전국 장애·비장애 대학생 창업경진대회 출전 (ONECYCLE)
+      </h2>
+      <p class="text-sm md:text-base text-[#565656] leading-relaxed">
+        기존 분리배출 수거함의 사용성 한계를 개선하여 장애인과 비장애인 모두 편리하게 이용할 수 있는 유니버설 디자인 스마트 키오스크 및 자원순환 리워드 플랫폼 <strong>ONECYCLE</strong>을 기획·개발하여 출전하였습니다.
+      </p>
+      <div class="grid sm:grid-cols-3 gap-4 text-xs">
+        <div class="bg-[#F5F5F5] p-5 rounded-2xl border border-black/5 space-y-1">
+          <div class="font-bold text-[#2B2B2B]">배리어프리 키오스크 UX</div>
+          <div class="text-[#565656]">누구나 쉽게 이용할 수 있는 음성/시각 인터페이스 및 자동 투입 시스템</div>
+        </div>
+        <div class="bg-[#F5F5F5] p-5 rounded-2xl border border-black/5 space-y-1">
+          <div class="font-bold text-[#2B2B2B]">AI 정밀 선별 기술</div>
+          <div class="text-[#565656]">다양한 재질의 폐기물을 빠르고 정밀하게 분류하는 지능형 비전 기술</div>
+        </div>
+        <div class="bg-[#F5F5F5] p-5 rounded-2xl border border-black/5 space-y-1">
+          <div class="font-bold text-[#2B2B2B]">자원순환 리워드</div>
+          <div class="text-[#565656]">올바른 분리배출 참여에 따른 실시간 에코 포인트 및 상권 쿠폰 지급</div>
         </div>
       </div>
+    </section>
 
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-black/5">
-        <img src="/assets/press/onecycle-2024-app-ui.png" alt="ONECYCLE 스마트폰 앱 UI" class="w-full rounded-xl border border-black/5" />
-        <div class="mt-3 px-1">
-          <div class="text-xs font-bold text-[#3A5451]">ONECYCLE 모바일 앱 (관광지·맛집 탐색 / AI 쓰레기통 지도 / 포인트 교환)</div>
-          <p class="text-xs text-[#565656] mt-1">QR코드 스캔, 내 주변 ONECYCLE 가맹점 및 쓰레기 수거함 탐색, 지역 상권 모바일 이용권 교환 UI.</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-black/5">
-        <img src="/assets/press/onecycle-2024-hyperspectral-factory.png" alt="초분광 카메라 플라스틱 재활용 공장 공정" class="w-full rounded-xl border border-black/5" />
-        <div class="mt-3 px-1">
-          <div class="text-xs font-bold text-[#3A5451]">초분광 카메라(Hyperspectral) 기반 폐플라스틱 펠릿 · 필라멘트 공정</div>
-          <p class="text-xs text-[#565656] mt-1">01 초분광 분류(PLA, ABS / PVC, PP) → 02 플레이크 파쇄 → 03 용도별 압출 가공을 통한 3D 필라멘트 및 산업용 펠릿 생산.</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-black/5">
-        <img src="/assets/press/onecycle-2024-revenue-structure.png" alt="ONECYCLE 자원순환 수익 구조" class="w-full rounded-xl border border-black/5" />
-        <div class="mt-3 px-1">
-          <div class="text-xs font-bold text-[#3A5451]">자원순환 B2B · B2C 다각화 수익 모델 (Revenue Structure)</div>
-          <p class="text-xs text-[#565656] mt-1">캔(고철 거래), 종이류(재생지 생산 및 제지사 납품), 플라스틱(재생 펠릿 및 3D 프린팅 필라멘트 제조·오픈마켓 판매).</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Additional 2024 Slides & Business Plan Scans -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-black/5">
-        <img src="/assets/press/onecycle-2024-problem-jeju.png" alt="제주 해안 쓰레기 실태조사" class="w-full h-36 object-cover rounded-lg border border-black/5" />
-        <div class="text-xs font-semibold text-[#2B2B2B] mt-2">문제 정의: 제주 관광객 폐기물 실태</div>
-      </div>
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-black/5">
-        <img src="/assets/press/onecycle-2024-ecosystem.png" alt="ONECYCLE 플랫폼 생태계" class="w-full h-36 object-cover rounded-lg border border-black/5" />
-        <div class="text-xs font-semibold text-[#2B2B2B] mt-2">지자체 · 사용자 · 오픈마켓 순환 구조</div>
-      </div>
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-black/5">
-        <img src="/assets/press/onecycle-2024-competitor-diff.png" alt="경쟁사 비교 차별점" class="w-full h-36 object-cover rounded-lg border border-black/5" />
-        <div class="text-xs font-semibold text-[#2B2B2B] mt-2">동시 투입 &amp; 관광지 거점 차별화</div>
-      </div>
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-black/5">
-        <img src="/assets/press/onecycle-2024-roadmap.png" alt="ONECYCLE 사업화 로드맵" class="w-full h-36 object-cover rounded-lg border border-black/5" />
-        <div class="text-xs font-semibold text-[#2B2B2B] mt-2">대학가 시범 설치 · 특허 · MOU 로드맵</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 4: Open Source Attribution & Tech Stack -->
-  <section id="opensource" class="py-16 bg-[#2B3F3D] text-[#F5F5F5]">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="mb-10">
-        <span class="text-xs font-bold uppercase tracking-widest text-[#2B3F3D] bg-[#BAC9C7] px-3 py-1 rounded-full">04 · Open Source Notices &amp; Software Bill of Materials</span>
-        <h2 class="text-3xl font-bold mt-3">활용 오픈소스 소프트웨어 및 데이터셋 명세</h2>
-        <p class="text-sm text-[#BAC9C7] mt-2 max-w-3xl">
-          ONECYCLE (EcoCycling) 연구 논문, 하드웨어 제어부, 모바일 웹 애플리케이션, 스마트 키오스크 및 백엔드 서버 구현에 활용된 모든 오픈소스 라이브러리·폰트·데이터셋 내역입니다.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6 text-xs">
-        <div class="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-3">
-          <div class="text-sm font-bold text-[#BAC9C7]">1. AI 비전 연구 및 하드웨어 제어 (2022–2024)</div>
-          <ul class="space-y-2 text-white/85 leading-relaxed">
-            <li>• <strong>TensorFlow &amp; Keras</strong> (<code>Apache-2.0 License</code>): 4-Stage Conv2D 쓰레기 이미지 분류 딥러닝 모델 학습 및 추론</li>
-            <li>• <strong>Python &amp; NumPy / Pillow</strong> (<code>PSF / BSD-3-Clause</code>): 이미지 전처리(512×384 리사이징) 및 추론 API 서버</li>
-            <li>• <strong>Kaggle Garbage Classification Dataset</strong> (<code>CCHANG, 2018</code>): 6종 재활용 쓰레기 2,527장 학습/테스트 데이터셋</li>
-            <li>• <strong>Arduino Servo &amp; SoftwareSerial Library</strong> (<code>LGPL-2.1+</code>): 블루투스(HC-06) 시리얼 통신 및 3채널 서보모터 도어 개폐 제어</li>
-          </ul>
-        </div>
-
-        <div class="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-3">
-          <div class="text-sm font-bold text-[#BAC9C7]">2. 프론트엔드 웹 앱 &amp; 디자인 시스템</div>
-          <ul class="space-y-2 text-white/85 leading-relaxed">
-            <li>• <strong>Tailwind CSS</strong> (<code>MIT License</code>): 유틸리티 기반 반응형 스타일링 및 소개/홍보관 레이아웃 시스템</li>
-            <li>• <strong>Pretendard Font</strong> (<code>SIL Open Font License 1.1</code>, by Kil Hyung-jin): 한글·영문 UI 기본 본문 타이포그래피</li>
-            <li>• <strong>Archivo Black &amp; Ubuntu Fonts</strong> (<code>SIL OFL 1.1 / Ubuntu Font License</code>, Google Fonts): ONECYCLE 브랜드 워드마크 및 숫자 디스플레이 폰트</li>
-            <li>• <strong>HTML5 MediaDevices / Canvas / Touch Events API</strong> (<code>W3C Web Standards</code>): 실시간 QR 카메라 스캐너 및 터치 스와이프 캐러셀</li>
-          </ul>
-        </div>
-
-        <div class="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-3">
-          <div class="text-sm font-bold text-[#BAC9C7]">3. 백엔드 API · IoT 에이전트 &amp; 클라우드</div>
-          <ul class="space-y-2 text-white/85 leading-relaxed">
-            <li>• <strong>Go (Golang 1.22 Standard Library)</strong> (<code>BSD-3-Clause</code>): 백엔드 코어 서버 및 IoT 키오스크 에이전트 런타임</li>
-            <li>• <strong>GoFiber (<code>github.com/gofiber/fiber/v2</code>)</strong> (<code>MIT License</code>): 고성능 RESTful API 라우팅 및 미들웨어</li>
-            <li>• <strong>Gorilla WebSocket / Fasthttp WebSocket</strong> (<code>BSD-2-Clause</code>): 키오스크-모바일 실시간 상태 동기화</li>
-            <li>• <strong>golang-jwt/jwt</strong> (<code>MIT License</code>): OAuth 2.0 및 사용자 세션 JWT 토큰 서명·검증</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 5: Official Team None Labs / ONECYCLE Makers -->
-  <section id="team" class="py-16 md:py-24 bg-white">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">05 · Team None Labs · Makers</span>
-        <h2 class="text-3xl md:text-4xl font-bold mt-3 text-[#2B2B2B]">ONECYCLE 팀원 및 제작진 소개</h2>
-        <p class="text-[#565656] mt-2">
-          2022년 제주에서 출발해 ONECYCLE 플랫폼을 설계·구현한 <strong>None Labs (Team None)</strong> 공식 제작진입니다.
-        </p>
+    <!-- 4. Team Members Section -->
+    <section id="team" class="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-black/5 space-y-8">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">Team Members</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-3 text-[#2B2B2B]">ONECYCLE 제작진 및 팀원 소개</h2>
+        <p class="text-[#565656] mt-2 text-sm">자원순환의 가치를 기술과 디자인으로 풀어내는 None Labs 팀원들입니다.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Member 1: 임미르 -->
-        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5 flex flex-col justify-between">
+        <!-- Mireu Lim -->
+        <div class="bg-[#F5F5F5] rounded-2xl p-6 border border-black/5 flex flex-col justify-between space-y-4">
           <div>
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-1 rounded-md bg-[#3A5451] text-white text-xs font-bold">엔지니어 / 계획자</span>
-              <span class="text-xs font-semibold text-[#3A5451]">Project Lead</span>
-            </div>
-            <h3 class="text-xl font-bold text-[#2B2B2B] mt-4">임미르 <span class="text-sm font-normal text-[#565656]">Mireu Lim</span></h3>
-            <p class="text-xs text-[#565656] mt-1">Engineer &amp; Planner</p>
-            <p class="text-xs text-[#565656] mt-3 leading-relaxed">
-              클라우드/백엔드 아키텍처, CNN 비전 분류 모델 및 IoT 하드웨어 시스템 설계 총괄. 2022 KCC 학술대회 논문 제1저자 및 None Labs 대표.
-            </p>
+            <div class="text-xs font-bold text-[#3A5451] uppercase tracking-wider">엔지니어 / 계획자</div>
+            <div class="text-xl font-bold text-[#2B2B2B] mt-1">임미르</div>
+            <div class="text-xs text-[#565656] mt-1">Project Lead &amp; Software Architecture</div>
           </div>
-          <div class="mt-5 pt-4 border-t border-black/10 space-y-2 text-xs">
-            <a href="mailto:limmireu1214@gmail.com" class="flex items-center justify-between text-[#2B2B2B] hover:text-[#3A5451] font-medium transition">
-              <span>✉️ 이메일</span>
-              <span class="underline">limmireu1214@gmail.com</span>
+          <div class="space-y-1.5 pt-3 border-t border-black/5 text-xs">
+            <a href="https://www.instagram.com/life_mireu" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-[#3A5451] hover:underline font-medium">
+              <span>📷 @life_mireu</span>
             </a>
-            <a href="https://www.instagram.com/life_mireu" target="_blank" rel="noopener" class="flex items-center justify-between text-[#2B2B2B] hover:text-[#3A5451] font-medium transition">
-              <span>📸 Instagram</span>
-              <span class="font-semibold text-[#3A5451]">@life_mireu ↗</span>
+            <a href="mailto:limmireu1214@gmail.com" class="flex items-center gap-1.5 text-[#565656] hover:text-[#2B2B2B] font-mono break-all">
+              <span>✉ limmireu1214@gmail.com</span>
             </a>
           </div>
         </div>
 
-        <!-- Member 2: 엄기빈 -->
-        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5 flex flex-col justify-between">
+        <!-- Gibin Eom -->
+        <div class="bg-[#F5F5F5] rounded-2xl p-6 border border-black/5 flex flex-col justify-between space-y-4">
           <div>
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-1 rounded-md bg-[#3A5451] text-white text-xs font-bold">디자이너</span>
-              <span class="text-xs font-semibold text-[#3A5451]">UI/UX &amp; Brand</span>
-            </div>
-            <h3 class="text-xl font-bold text-[#2B2B2B] mt-4">엄기빈 <span class="text-sm font-normal text-[#565656]">Gibin Eom</span></h3>
-            <p class="text-xs text-[#565656] mt-1">UI/UX &amp; Product Designer</p>
-            <p class="text-xs text-[#565656] mt-3 leading-relaxed">
-              ONECYCLE 모바일 앱(35 Frames) 및 스마트 키오스크(5 Steps) Figma 디자인 시스템, 브랜드 아이덴티티 및 IR 비주얼 총괄.
-            </p>
+            <div class="text-xs font-bold text-[#3A5451] uppercase tracking-wider">디자이너</div>
+            <div class="text-xl font-bold text-[#2B2B2B] mt-1">엄기빈</div>
+            <div class="text-xs text-[#565656] mt-1">UI/UX &amp; Product Design</div>
           </div>
-          <div class="mt-5 pt-4 border-t border-black/10 space-y-2 text-xs">
-            <a href="mailto:eom12400@naver.com" class="flex items-center justify-between text-[#2B2B2B] hover:text-[#3A5451] font-medium transition">
-              <span>✉️ 이메일</span>
-              <span class="underline">eom12400@naver.com</span>
+          <div class="space-y-1.5 pt-3 border-t border-black/5 text-xs">
+            <a href="https://www.instagram.com/cjnabsjsk" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-[#3A5451] hover:underline font-medium">
+              <span>📷 @cjnabsjsk</span>
             </a>
-            <a href="https://www.instagram.com/cjnabsjsk" target="_blank" rel="noopener" class="flex items-center justify-between text-[#2B2B2B] hover:text-[#3A5451] font-medium transition">
-              <span>📸 Instagram</span>
-              <span class="font-semibold text-[#3A5451]">@cjnabsjsk ↗</span>
+            <a href="mailto:eom12400@naver.com" class="flex items-center gap-1.5 text-[#565656] hover:text-[#2B2B2B] font-mono break-all">
+              <span>✉ eom12400@naver.com</span>
             </a>
           </div>
         </div>
 
-        <!-- Member 3: 이예린 -->
-        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5 flex flex-col justify-between">
+        <!-- Yerin Lee -->
+        <div class="bg-[#F5F5F5] rounded-2xl p-6 border border-black/5 flex flex-col justify-between space-y-4">
           <div>
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-1 rounded-md bg-[#3A5451] text-white text-xs font-bold">기획자</span>
-              <span class="text-xs font-semibold text-[#3A5451]">Service Strategy</span>
-            </div>
-            <h3 class="text-xl font-bold text-[#2B2B2B] mt-4">이예린 <span class="text-sm font-normal text-[#565656]">Yerin Lee</span></h3>
-            <p class="text-xs text-[#565656] mt-1">Service Planner</p>
-            <p class="text-xs text-[#565656] mt-3 leading-relaxed">
-              제주 및 전국 관광지 리워드 비즈니스 모델 설계, 친환경 가맹점(Certified Place) 파트너십 전략 및 서비스 운영 기획.
-            </p>
+            <div class="text-xs font-bold text-[#3A5451] uppercase tracking-wider">기획자</div>
+            <div class="text-xl font-bold text-[#2B2B2B] mt-1">이예린</div>
+            <div class="text-xs text-[#565656] mt-1">Service Planning &amp; Strategy</div>
           </div>
-          <div class="mt-5 pt-4 border-t border-black/10 space-y-2 text-xs">
-            <a href="mailto:yiyerin04@gmail.com" class="flex items-center justify-between text-[#2B2B2B] hover:text-[#3A5451] font-medium transition">
-              <span>✉️ 이메일</span>
-              <span class="underline">yiyerin04@gmail.com</span>
+          <div class="space-y-1.5 pt-3 border-t border-black/5 text-xs">
+            <a href="https://www.instagram.com/yxyxrxn" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-[#3A5451] hover:underline font-medium">
+              <span>📷 @yxyxrxn</span>
             </a>
-            <a href="https://www.instagram.com/yxyxrxn" target="_blank" rel="noopener" class="flex items-center justify-between text-[#2B2B2B] hover:text-[#3A5451] font-medium transition">
-              <span>📸 Instagram</span>
-              <span class="font-semibold text-[#3A5451]">@yxyxrxn ↗</span>
+            <a href="mailto:yiyerin04@gmail.com" class="flex items-center gap-1.5 text-[#565656] hover:text-[#2B2B2B] font-mono break-all">
+              <span>✉ yiyerin04@gmail.com</span>
             </a>
           </div>
         </div>
 
-        <!-- Member 4: 김수빈 -->
-        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5 flex flex-col justify-between">
+        <!-- Subin Kim -->
+        <div class="bg-[#F5F5F5] rounded-2xl p-6 border border-black/5 flex flex-col justify-between space-y-4">
           <div>
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-1 rounded-md bg-[#3A5451] text-white text-xs font-bold">엔지니어</span>
-              <span class="text-xs font-semibold text-[#3A5451]">HW / SW Eng</span>
-            </div>
-            <h3 class="text-xl font-bold text-[#2B2B2B] mt-4">김수빈 <span class="text-sm font-normal text-[#565656]">Subin Kim</span></h3>
-            <p class="text-xs text-[#565656] mt-1">Hardware / Software Engineer</p>
-            <p class="text-xs text-[#565656] mt-3 leading-relaxed">
-              클라이언트 애플리케이션 개발 및 임베디드 하드웨어/키오스크 디바이스 연동, IR 발표 및 기술 검증 수행.
-            </p>
+            <div class="text-xs font-bold text-[#3A5451] uppercase tracking-wider">엔지니어</div>
+            <div class="text-xl font-bold text-[#2B2B2B] mt-1">김수빈</div>
+            <div class="text-xs text-[#565656] mt-1">Hardware &amp; System Engineering</div>
           </div>
-          <div class="mt-5 pt-4 border-t border-black/10 space-y-2 text-xs">
-            <a href="mailto:kimsubin1160@gmail.com" class="flex items-center justify-between text-[#2B2B2B] hover:text-[#3A5451] font-medium transition">
-              <span>✉️ 이메일</span>
-              <span class="underline">kimsubin1160@gmail.com</span>
+          <div class="space-y-1.5 pt-3 border-t border-black/5 text-xs">
+            <a href="https://www.instagram.com/rla_subin/" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-[#3A5451] hover:underline font-medium">
+              <span>📷 @rla_subin</span>
             </a>
-            <a href="https://www.instagram.com/rla_subin/" target="_blank" rel="noopener" class="flex items-center justify-between text-[#2B2B2B] hover:text-[#3A5451] font-medium transition">
-              <span>📸 Instagram</span>
-              <span class="font-semibold text-[#3A5451]">@rla_subin ↗</span>
+            <a href="mailto:kimsubin1160@gmail.com" class="flex items-center gap-1.5 text-[#565656] hover:text-[#2B2B2B] font-mono break-all">
+              <span>✉ kimsubin1160@gmail.com</span>
             </a>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+  </main>
 
   <!-- Footer -->
   <footer class="mt-auto py-8 bg-[#1F1F1F] text-white/60 text-xs">
@@ -624,11 +249,7 @@
         <span>© 2026 EcoCycling by None Labs. All rights reserved.</span>
       </div>
       <div class="flex items-center gap-4">
-        <a href="/" class="hover:text-white transition">메인 쇼케이스 (/)</a>
-        <span>·</span>
-        <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113931" target="_blank" rel="noopener" class="hover:text-white transition">KCC 2022 학술논문 ↗</a>
-        <span>·</span>
-        <a href="https://www.xn--289an12ayigrkcntay10e.kr/859525" target="_blank" rel="noopener" class="hover:text-white transition">안전환경일보 보도자료 ↗</a>
+        <a href="https://github.com/EcoCycling" target="_blank" rel="noopener" class="hover:text-white transition">GitHub Organization</a>
         <span>·</span>
         <span>PM &amp; Owner: limmireu1214@gmail.com</span>
       </div>
