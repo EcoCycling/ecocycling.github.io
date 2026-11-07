@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&family=Noto+Sans+CJK+KR:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Red+Hat+Display:wght@300;400;500;600;700;800&family=Red+Hat+Text:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700;800&family=Ubuntu:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     (function() {
@@ -64,6 +66,33 @@
       background: #4ADE80;
       box-shadow: 0 0 12px #4ADE80;
       animation: scan-line 2.2s ease-in-out infinite;
+    }
+    .discover-leaflet-host .leaflet-control-attribution {
+      font-size: 8px !important;
+      opacity: 0.65;
+      background: rgba(255, 255, 255, 0.72) !important;
+      padding: 0 4px !important;
+    }
+    .discover-leaflet-host .leaflet-popup-content-wrapper {
+      border-radius: 12px !important;
+      padding: 2px !important;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22) !important;
+      font-family: 'Noto Sans CJK KR', 'Noto Sans KR', sans-serif !important;
+    }
+    .discover-leaflet-host .leaflet-popup-content {
+      margin: 8px 10px !important;
+      font-size: 12px !important;
+      line-height: 1.4 !important;
+    }
+    @keyframes ecoMapPulse {
+      0% { box-shadow: inset 0 0 0 2px #FFFFFF, 0 0 0 0 rgba(0, 87, 255, 0.55); }
+      70% { box-shadow: inset 0 0 0 2px #FFFFFF, 0 0 0 12px rgba(0, 87, 255, 0); }
+      100% { box-shadow: inset 0 0 0 2px #FFFFFF, 0 0 0 0 rgba(0, 87, 255, 0); }
+    }
+    @keyframes ecoPinDrop {
+      0% { transform: scale(0.3) translateY(-12px); opacity: 0; }
+      70% { transform: scale(1.12) translateY(0); opacity: 1; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
     }
   </style>
 </head>
@@ -2585,6 +2614,19 @@ MireuLim 님</span></div>
         root.querySelectorAll('[data-figma-id="0:186"] span').forEach(el => {
           el.textContent = String(appState.trashKg);
         });
+        // Sync selected Discover place details into bottom sheets (21:106, 31:322, 31:358) and full screens (31:89, 31:118, 31:147)
+        if (window.__selectedDiscoverPlace) {
+          const sp = window.__selectedDiscoverPlace;
+          root.querySelectorAll('[data-figma-id="31:254"] span, [data-figma-id="31:346"] span, [data-figma-id="31:381"] span, [data-figma-id="31:103"] span, [data-figma-id="31:132"] span, [data-figma-id="31:291"] span, [data-figma-id="31:161"] span').forEach(el => {
+            el.textContent = sp.name;
+          });
+          root.querySelectorAll('[data-figma-id="31:255"] span, [data-figma-id="31:347"] span, [data-figma-id="31:382"] span, [data-figma-id="31:104"] span, [data-figma-id="31:133"] span, [data-figma-id="31:292"] span, [data-figma-id="31:162"] span').forEach(el => {
+            el.textContent = sp.categoryLabel || sp.subtitle || '한식';
+          });
+          root.querySelectorAll('[data-figma-id="31:251"] span, [data-figma-id="31:343"] span, [data-figma-id="31:378"] span, [data-figma-id="31:92"] span, [data-figma-id="31:121"] span, [data-figma-id="31:288"] span, [data-figma-id="31:150"] span').forEach(el => {
+            el.textContent = sp.desc || '20년 전통의 순대국밥 집입니다. 다른 집과는 다른\n돌솥밥과 순대국밥의 조화가 일품입니다.';
+          });
+        }
       }
 
       // Fetch live state from Backend API & Kiosk Agent
@@ -2728,6 +2770,11 @@ MireuLim 님</span></div>
         if (targetId === '0:399' || targetId === '6:230' || targetId === '0:130') {
           refreshLivePoints();
         }
+        if (targetId === '0:259' || targetId === '63:2') {
+          if (typeof window.__ecocyclingInvalidateMaps === 'function') {
+            window.__ecocyclingInvalidateMaps();
+          }
+        }
         scheduleAfterTimeout(targetEl);
       }
 
@@ -2749,6 +2796,9 @@ MireuLim 님</span></div>
       function executeActions(actions, sourceEl, triggerType) {
         if (!Array.isArray(actions)) return;
         const figmaId = sourceEl ? sourceEl.getAttribute('data-figma-id') : '';
+        if (figmaId === '6:68') {
+          FALLBACK_DESTINATIONS['6:68'].pos.y = Math.max(80, Math.min(700, 550 + (window.__discoverSheetOffsetY || 0)));
+        }
 
         // Custom functional hooks before navigation
         if (figmaId === '6:24') {
@@ -3329,46 +3379,858 @@ MireuLim 님</span></div>
           card.addEventListener('click', () => showFrame('31:147', true));
         });
 
-        // 9. Discover Store Items, Sub Discover Map (63:2), Bottom Sheets (21:106, 31:322, 31:358), Full Screens (31:89, 31:118, 31:147), & Certified Place Badge (56:163)
-        root.querySelectorAll('[data-figma-id="6:398"]').forEach(item => {
-          if (item.dataset.navBound) return;
-          item.dataset.navBound = 'true';
-          item.classList.add('cursor-pointer');
-          item.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openOverlay('31:322', { x: 0, y: 605, screenAbsolute: true });
-          });
-        });
-        root.querySelectorAll('[data-figma-id="6:404"]').forEach(item => {
-          if (item.dataset.navBound) return;
-          item.dataset.navBound = 'true';
-          item.classList.add('cursor-pointer');
-          item.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openOverlay('31:358', { x: 0, y: 605, screenAbsolute: true });
-          });
-        });
-        // Clicking map area or handle on Main Discover (0:259) -> Sub Discover (63:2)
-        root.querySelectorAll('#screen-0_259 [data-figma-id="0:263"], #screen-0_259 [data-figma-id="0:264"], #screen-0_259 [data-figma-id="0:265"], #screen-0_259 [data-figma-id="0:266"]').forEach(el => {
-          if (el.dataset.mapBound) return;
-          el.dataset.mapBound = 'true';
-          el.classList.add('cursor-pointer');
-          el.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showFrame('63:2', true);
-          });
-        });
-        // Clicking pins on Sub Discover (63:2) opens Discover place bottom sheets
-        root.querySelectorAll('#screen-63_2 [data-figma-id="63:7"], #screen-63_2 [data-figma-id="63:8"], #screen-63_2 [data-figma-id="63:9"]').forEach((pin, idx) => {
-          if (pin.dataset.pinBound) return;
-          pin.dataset.pinBound = 'true';
-          pin.classList.add('cursor-pointer');
-          pin.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const sheetIds = ['21:106', '31:322', '31:358'];
-            openOverlay(sheetIds[idx % 3], { x: 0, y: 605, screenAbsolute: true });
-          });
-        });
+        // 9. Discover Interactive Leaflet Map (0:259 & 63:2), Point Pinning, Category Filters (6:151), Slide-Up Sheet & Bottom Sheets
+        if (!window.__discoverModule) {
+          const BASE_LAT = 33.5142;
+          const BASE_LNG = 126.5278;
+          const DISCOVER_PLACES = [
+            {
+              id: 'rest-popeye',
+              category: 'restaurant',
+              categoryLabel: '한식 · 순대국밥',
+              name: '뽀빠이순대',
+              subtitle: '대한민국 대통령',
+              distanceKm: 0.5,
+              distanceText: '0.5km',
+              certified: true,
+              lat: 33.5151,
+              lng: 126.5262,
+              sheetId: '21:106',
+              fullId: '31:89',
+              img: 'assets/img_79fad3a6880379fac76f30c869e3d8a7a8c2700f.png',
+              desc: '20년 전통의 순대국밥 집입니다. 다른 집과는 다른\n돌솥밥과 순대국밥의 조화가 일품입니다.'
+            },
+            {
+              id: 'rest-jo',
+              category: 'restaurant',
+              categoryLabel: '한식 · 전통피순대',
+              name: '조점례남문피순대',
+              subtitle: '대한민국 대통령',
+              distanceKm: 2.0,
+              distanceText: '2km',
+              certified: false,
+              lat: 33.5126,
+              lng: 126.5248,
+              sheetId: '31:322',
+              fullId: '31:118',
+              img: 'assets/img_b8dae7b54c8ab7d53aa9aff3e8bbcf3448e70dae.png',
+              desc: '진한 사골 육수와 전통 피순대가 어우러진\n남문시장 대표 순대국밥 전문점입니다.'
+            },
+            {
+              id: 'rest-maisan',
+              category: 'restaurant',
+              categoryLabel: '중국 음식점 · 퓨전순대',
+              name: '마이산피순대',
+              subtitle: '중국 음식점',
+              distanceKm: 1.2,
+              distanceText: '1.2km',
+              certified: false,
+              lat: 33.5164,
+              lng: 126.5295,
+              sheetId: '31:358',
+              fullId: '31:147',
+              img: 'assets/img_1e13aca1894dcb212473797bf669ffa67e3706a7.png',
+              desc: '깊은 풍미의 순대전골과 모둠순대를 맛볼 수 있는\n건입동 인기 로컬 식당입니다.'
+            },
+            {
+              id: 'rest-blackpork',
+              category: 'restaurant',
+              categoryLabel: '한식 · 제주흑돼지',
+              name: '건입동 흑돼지식당',
+              subtitle: '제주 흑돼지 전문점',
+              distanceKm: 0.8,
+              distanceText: '0.8km',
+              certified: true,
+              lat: 33.5138,
+              lng: 126.5308,
+              sheetId: '21:106',
+              fullId: '31:89',
+              img: 'assets/img_79fad3a6880379fac76f30c869e3d8a7a8c2700f.png',
+              desc: '다회용기 포장 및 잔반 제로 캠페인에 동참하는\nECOCYCLING 공식 친환경 가맹 식당입니다.'
+            },
+            {
+              id: 'bin-geonip-1',
+              category: 'bin',
+              categoryLabel: '스마트 수거함 · AI IoT',
+              name: '건입동 스마트 수거함 #1',
+              subtitle: 'IoT 페트병·캔 AI 수거기',
+              distanceKm: 0.2,
+              distanceText: '0.2km',
+              certified: true,
+              lat: 33.5146,
+              lng: 126.5282,
+              sheetId: '21:106',
+              fullId: '31:89',
+              img: 'assets/img_79fad3a6880379fac76f30c869e3d8a7a8c2700f.png',
+              desc: '투명 페트병과 알루미늄 캔을 투입하면 즉시\nONECYCLE 포인트가 적립되는 AI 스마트 수거함입니다.'
+            },
+            {
+              id: 'bin-sanjicheon',
+              category: 'bin',
+              categoryLabel: '스마트 수거함 · 자원순환',
+              name: '산지천 에코사이클링 스테이션',
+              subtitle: '다회용기 반납 & 자원순환 부스',
+              distanceKm: 0.4,
+              distanceText: '0.4km',
+              certified: true,
+              lat: 33.5156,
+              lng: 126.5273,
+              sheetId: '31:322',
+              fullId: '31:118',
+              img: 'assets/img_b8dae7b54c8ab7d53aa9aff3e8bbcf3448e70dae.png',
+              desc: '산지천 산책로 입구에 위치한 스마트 재활용 수거 및\n다회용 컵 무인 반납 스테이션입니다.'
+            },
+            {
+              id: 'bin-dongmun',
+              category: 'bin',
+              categoryLabel: '스마트 수거함 · 동문시장',
+              name: '동문시장 입구 스마트 수거함',
+              subtitle: '투명 페트병 전용 포인트 적립기',
+              distanceKm: 0.6,
+              distanceText: '0.6km',
+              certified: true,
+              lat: 33.5131,
+              lng: 126.5269,
+              sheetId: '31:358',
+              fullId: '31:147',
+              img: 'assets/img_1e13aca1894dcb212473797bf669ffa67e3706a7.png',
+              desc: '동문시장 방문객이 일회용 컵과 투명 페트병을 배출하고\n에코 포인트를 적립할 수 있는 거점 수거함입니다.'
+            },
+            {
+              id: 'tour-sanjicheon',
+              category: 'tourism',
+              categoryLabel: '관광지 · 친환경 생태공원',
+              name: '산지천 생태문화공원',
+              subtitle: '친환경 생태하천 산책로',
+              distanceKm: 0.3,
+              distanceText: '0.3km',
+              certified: true,
+              lat: 33.5149,
+              lng: 126.5270,
+              sheetId: '21:106',
+              fullId: '31:89',
+              img: 'assets/img_79fad3a6880379fac76f30c869e3d8a7a8c2700f.png',
+              desc: '제주시 건입동과 일도동을 잇는 도심 속 생태하천으로\n플로깅과 친환경 산책을 즐기기 좋은 명소입니다.'
+            },
+            {
+              id: 'tour-tapdong',
+              category: 'tourism',
+              categoryLabel: '관광지 · 해안광장',
+              name: '탑동 해변공연장 광장',
+              subtitle: '제주 해안 산책로 & 광장',
+              distanceKm: 0.9,
+              distanceText: '0.9km',
+              certified: false,
+              lat: 33.5178,
+              lng: 126.5256,
+              sheetId: '31:322',
+              fullId: '31:118',
+              img: 'assets/img_b8dae7b54c8ab7d53aa9aff3e8bbcf3448e70dae.png',
+              desc: '제주시 앞바다를 따라 해안 플로깅 코스가 조성된\n대표적인 시민 휴식 광장입니다.'
+            },
+            {
+              id: 'tour-kimmandeok',
+              category: 'tourism',
+              categoryLabel: '관광지 · 역사문화명소',
+              name: '김만덕기념관 & 객주터',
+              subtitle: '건입동 역사문화 명소',
+              distanceKm: 0.7,
+              distanceText: '0.7km',
+              certified: true,
+              lat: 33.5159,
+              lng: 126.5304,
+              sheetId: '31:358',
+              fullId: '31:147',
+              img: 'assets/img_1e13aca1894dcb212473797bf669ffa67e3706a7.png',
+              desc: '나눔과 순환의 가치를 기리는 건입동 역사문화 명소로\n다회용 컵 공유 캠페인 거점입니다.'
+            }
+          ];
+
+          let savedCustom = [];
+          try {
+            savedCustom = JSON.parse(localStorage.getItem('ecocycling_custom_points') || '[]');
+            if (!Array.isArray(savedCustom)) savedCustom = [];
+          } catch (_) {
+            savedCustom = [];
+          }
+
+          const state = {
+            activeCategory: 'restaurant', // 'bin' | 'restaurant' | 'tourism' | 'all'
+            sortMode: 'distance',         // 'distance' | 'certified'
+            searchQuery: '',
+            sheetState: 'mid',            // 'expanded' | 'mid' | 'collapsed'
+            customPoints: savedCustom,
+            mainMap: null,
+            subMap: null,
+            mainMarkersLayer: null,
+            subMarkersLayer: null
+          };
+
+          window.__discoverSheetOffsetY = 0;
+
+          function calcDistanceKm(lat1, lng1, lat2, lng2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLng / 2) * Math.sin(dLng / 2);
+            const d = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return Math.max(0.1, Math.round(d * 10) / 10);
+          }
+
+          function saveCustomPoints() {
+            try {
+              localStorage.setItem('ecocycling_custom_points', JSON.stringify(state.customPoints));
+            } catch (_) {}
+          }
+
+          function getFilteredPlaces() {
+            const all = [...state.customPoints.slice().reverse(), ...DISCOVER_PLACES];
+            const q = state.searchQuery.trim().toLowerCase();
+            let list = all.filter(item => {
+              if (!item.isCustom && state.activeCategory !== 'all' && item.category !== state.activeCategory) {
+                return false;
+              }
+              if (state.sortMode === 'certified' && !item.certified) {
+                return false;
+              }
+              if (q) {
+                const hay = `${item.name} ${item.subtitle} ${item.categoryLabel || ''} ${item.desc || ''}`.toLowerCase();
+                if (!hay.includes(q)) return false;
+              }
+              return true;
+            });
+            list.sort((a, b) => {
+              if (a.isCustom && !b.isCustom) return -1;
+              if (!a.isCustom && b.isCustom) return 1;
+              return a.distanceKm - b.distanceKm;
+            });
+            return list;
+          }
+
+          function openPlaceDetailSheet(place) {
+            if (!place) return;
+            window.__selectedDiscoverPlace = place;
+            openOverlay(place.sheetId || '21:106', { x: 0, y: 605, screenAbsolute: true });
+          }
+
+          function updateCategoryButtonsUI() {
+            const container = document.querySelector('#screen-0_259 [data-figma-id="6:151"]');
+            if (!container) return;
+            const configs = [
+              { cat: 'bin', groupId: '0:302', rectId: '0:303', labelId: '0:304', iconId: '0:305' },
+              { cat: 'restaurant', groupId: '0:296', rectId: '0:297', labelId: '0:298', iconId: '0:299' },
+              { cat: 'tourism', groupId: '0:285', rectId: '0:286', labelId: '0:287', iconId: '0:288' }
+            ];
+            configs.forEach(cfg => {
+              const group = container.querySelector(`[data-figma-id="${cfg.groupId}"]`);
+              const rect = container.querySelector(`[data-figma-id="${cfg.rectId}"]`);
+              const label = container.querySelector(`[data-figma-id="${cfg.labelId}"]`);
+              const iconImg = container.querySelector(`[data-figma-id="${cfg.iconId}"] img`);
+              const isActive = state.activeCategory === cfg.cat;
+              if (group) group.style.cursor = 'pointer';
+              if (rect) {
+                rect.style.backgroundColor = isActive ? '#3A5451' : 'transparent';
+                rect.style.boxShadow = isActive ? 'none' : 'inset 0 0 0 1px #3A5451';
+                rect.style.transition = 'background-color 180ms ease, box-shadow 180ms ease';
+              }
+              if (label) {
+                label.style.color = isActive ? '#FFFFFF' : '#2B2B2B';
+                label.style.fontWeight = isActive ? '500' : '400';
+              }
+              if (iconImg) {
+                iconImg.style.filter = isActive ? 'brightness(0) invert(1)' : 'brightness(0) opacity(0.88)';
+              }
+            });
+          }
+
+          function updatePinHelperBadges() {
+            const count = state.customPoints.length;
+            ['discover-pin-helper-main', 'discover-pin-helper-sub'].forEach(id => {
+              const badge = document.getElementById(id);
+              if (!badge) return;
+              if (count > 0) {
+                badge.innerHTML = `
+                  <span style="display:inline-flex;align-items:center;gap:4px;font-weight:500;color:#1F2937;">
+                    📍 내 포인트 <strong style="color:#3A5451;">${count}</strong>개
+                  </span>
+                  <button type="button" data-action="clear-pins" style="margin-left:6px;padding:1px 6px;border-radius:10px;background:#E03838;color:#FFFFFF;font-size:10px;font-weight:500;border:none;cursor:pointer;">초기화</button>
+                `;
+              } else {
+                badge.innerHTML = `
+                  <span style="display:inline-flex;align-items:center;gap:4px;font-weight:500;color:#2B2B2B;">
+                    📍 지도 터치하여 포인트 찍기
+                  </span>
+                `;
+              }
+            });
+          }
+
+          function createMarkerIcon(place) {
+            if (place.isCustom) {
+              return L.divIcon({
+                className: 'eco-custom-pin-icon',
+                html: `<div style="width:24px;height:24px;border-radius:9999px;background:#3A5451;border:2.5px solid #FFFFFF;box-shadow:0 4px 8px rgba(0,0,0,0.32);display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:12px;animation:ecoPinDrop 260ms ease-out;">📍</div>`,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12],
+                popupAnchor: [0, -12]
+              });
+            }
+            const bgColor = place.category === 'bin' ? '#3A5451' : (place.category === 'tourism' ? '#2563EB' : '#E03838');
+            const ring = place.certified ? '0 0 0 2px #3A5451, 0 4px 6px rgba(0,0,0,0.28)' : '0 4px 4px rgba(0,0,0,0.25)';
+            return L.divIcon({
+              className: 'eco-place-pin-icon',
+              html: `<div style="width:18px;height:18px;border-radius:9999px;background:${bgColor};box-shadow:inset 0 0 0 2.5px #FFFFFF, ${ring};cursor:pointer;"></div>`,
+              iconSize: [18, 18],
+              iconAnchor: [9, 9],
+              popupAnchor: [0, -10]
+            });
+          }
+
+          function buildPopupHTML(place) {
+            const badgeHtml = place.certified
+              ? `<span style="display:inline-block;padding:1px 6px;border-radius:4px;background:#3A5451;color:#FFFFFF;font-size:9px;font-weight:500;">${place.isCustom ? '내 지정 포인트' : 'ECOCYCLING 가맹점'}</span>`
+              : `<span style="display:inline-block;padding:1px 6px;border-radius:4px;background:#E5E7EB;color:#374151;font-size:9px;">일반 매장</span>`;
+            const deleteBtnHtml = place.isCustom
+              ? `<button type="button" data-popup-del="${place.id}" style="padding:4px 8px;border-radius:6px;background:#FEE2E2;color:#B91C1C;font-size:11px;font-weight:500;border:none;cursor:pointer;">삭제</button>`
+              : '';
+            return `
+              <div style="min-width:165px;font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:3px;">
+                  ${badgeHtml}
+                  <span style="font-size:10px;color:#737373;">${place.distanceText}</span>
+                </div>
+                <div style="font-size:13px;font-weight:600;color:#111827;margin-bottom:2px;">${place.name}</div>
+                <div style="font-size:10px;color:#6B7280;margin-bottom:7px;">${place.subtitle}</div>
+                <div style="display:flex;gap:5px;">
+                  <button type="button" data-popup-open="${place.id}" style="flex:1;padding:4px 8px;border-radius:6px;background:#3A5451;color:#FFFFFF;font-size:11px;font-weight:500;border:none;cursor:pointer;">상세 정보 보기</button>
+                  ${deleteBtnHtml}
+                </div>
+              </div>
+            `;
+          }
+
+          function renderMarkersOnMap(mapInstance, layerGroup, isSubMap) {
+            if (!mapInstance || !layerGroup) return;
+            layerGroup.clearLayers();
+
+            // 1. Current user location blue dot (matching Figma 0:264 / 63:7)
+            const userIcon = L.divIcon({
+              className: 'eco-user-loc-icon',
+              html: `<div style="width:20px;height:20px;border-radius:9999px;background:#0057FF;box-shadow:inset 0 0 0 2.5px #FFFFFF, 0 4px 6px rgba(0,0,0,0.28);animation:ecoMapPulse 2.2s infinite;"></div>`,
+              iconSize: [20, 20],
+              iconAnchor: [10, 10]
+            });
+            L.marker([BASE_LAT, BASE_LNG], { icon: userIcon, zIndexOffset: 300 })
+              .bindPopup(`<div style="font-size:11px;font-weight:500;color:#0057FF;">📍 현재 내 위치 (제주시 건입동)</div>`)
+              .addTo(layerGroup);
+
+            // 2. Filtered places + custom pinned points
+            const places = getFilteredPlaces();
+            places.forEach(place => {
+              const marker = L.marker([place.lat, place.lng], {
+                icon: createMarkerIcon(place),
+                zIndexOffset: place.isCustom ? 500 : (place.certified ? 200 : 100)
+              });
+              marker.bindPopup(buildPopupHTML(place));
+              marker.on('click', () => {
+                window.__selectedDiscoverPlace = place;
+                if (isSubMap) {
+                  openPlaceDetailSheet(place);
+                }
+              });
+              marker.on('popupopen', (e) => {
+                const popEl = e.popup && e.popup.getElement ? e.popup.getElement() : null;
+                if (!popEl) return;
+                const openBtn = popEl.querySelector(`[data-popup-open="${place.id}"]`);
+                if (openBtn) {
+                  openBtn.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    openPlaceDetailSheet(place);
+                  });
+                }
+                const delBtn = popEl.querySelector(`[data-popup-del="${place.id}"]`);
+                if (delBtn) {
+                  delBtn.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    state.customPoints = state.customPoints.filter(p => p.id !== place.id);
+                    saveCustomPoints();
+                    refreshAll();
+                  });
+                }
+              });
+              marker.addTo(layerGroup);
+            });
+          }
+
+          function renderPlaceListDOM() {
+            const listEl = document.querySelector('#screen-0_259 [data-figma-id="6:391"]');
+            if (!listEl) return;
+            const places = getFilteredPlaces();
+            listEl.innerHTML = '';
+
+            if (places.length === 0) {
+              const emptyEl = document.createElement('div');
+              emptyEl.className = 'w-full py-[28px] text-center text-[13px] text-[#737373] select-none';
+              emptyEl.style.fontFamily = "'Noto Sans CJK KR','Noto Sans KR',sans-serif";
+              emptyEl.textContent = '조건에 맞는 장소가 없습니다. 지도를 터치해 새 포인트를 찍어보세요!';
+              listEl.appendChild(emptyEl);
+              return;
+            }
+
+            places.forEach((place, idx) => {
+              const row = document.createElement('div');
+              row.className = 'relative w-[326px] shrink-0 h-[80px] rounded-[9px] cursor-pointer transition-colors hover:bg-black/5';
+              row.setAttribute('data-place-id', place.id);
+              const topOffset = idx === 0 ? 0 : 7;
+              row.style.height = idx === 0 ? '76px' : '80px';
+
+              const dividerHtml = idx > 0
+                ? `<div class="absolute left-[1px] top-[0px] w-[325px] h-[1px] bg-[#D9D9D9]"></div>`
+                : '';
+
+              const certHtml = place.certified
+                ? `<div class="absolute left-[195px] top-[${59 + topOffset}px] w-[131px] h-[17px] flex flex-col select-none font-[500] text-[10px] leading-[14.80px] text-right items-end justify-start text-[#3A5451]" style="font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif"><span class="whitespace-pre">${place.isCustom ? '📍 내 지정 포인트' : 'ECOCYCLING 가맹점'}</span></div>`
+                : '';
+
+              const deletePinChip = place.isCustom
+                ? `<button type="button" data-del-custom="${place.id}" class="absolute right-[2px] top-[${2 + topOffset}px] px-[6px] py-[2px] rounded-[6px] bg-[#FEE2E2] text-[#B91C1C] text-[10px] font-[500]">삭제</button>`
+                : '';
+
+              row.innerHTML = `
+                ${dividerHtml}
+                <div class="absolute left-[0px] top-[${topOffset}px] w-[73px] h-[73px] overflow-hidden rounded-[9px] bg-[#E5E7EB]">
+                  <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover rounded-[inherit] block pointer-events-none select-none" />
+                </div>
+                <div class="absolute left-[80px] top-[${topOffset}px] w-[195px] h-[21px] flex flex-col select-none font-[400] text-[15px] leading-[22.20px] text-left items-start justify-start text-[#000000] truncate" style="font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif"><span class="truncate">${place.name}</span></div>
+                <div class="absolute left-[80px] top-[${21 + topOffset}px] w-[210px] h-[21px] flex flex-col select-none font-[400] text-[10px] leading-[14.80px] text-left items-start justify-start text-[#737373] truncate" style="font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif"><span class="truncate">${place.subtitle}</span></div>
+                ${certHtml}
+                <div class="absolute left-[80px] top-[${59 + topOffset}px] w-[65px] h-[14px] flex flex-col select-none font-[400] text-[10px] leading-[14.80px] text-left items-start justify-start text-[#737373]" style="font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif"><span class="whitespace-pre">${place.distanceText}</span></div>
+                ${deletePinChip}
+              `;
+
+              row.addEventListener('click', (e) => {
+                const delBtn = e.target.closest('[data-del-custom]');
+                if (delBtn) {
+                  e.stopPropagation();
+                  state.customPoints = state.customPoints.filter(p => p.id !== place.id);
+                  saveCustomPoints();
+                  refreshAll();
+                  return;
+                }
+                e.stopPropagation();
+                if (state.sheetState === 'expanded') {
+                  setSheetState('mid');
+                }
+                if (state.mainMap) {
+                  state.mainMap.panTo([place.lat, place.lng], { animate: true });
+                }
+                openPlaceDetailSheet(place);
+              });
+
+              listEl.appendChild(row);
+            });
+          }
+
+          function addCustomPointAt(lat, lng, targetMap) {
+            const nextNum = state.customPoints.length + 1;
+            const distKm = calcDistanceKm(BASE_LAT, BASE_LNG, lat, lng);
+            const cat = state.activeCategory === 'all' ? 'bin' : state.activeCategory;
+            const catName = cat === 'bin' ? '스마트 수거 포인트' : (cat === 'tourism' ? '친환경 관광 포인트' : '에코 가맹 포인트');
+            const newPoint = {
+              id: 'custom-pin-' + Date.now(),
+              category: cat,
+              categoryLabel: `사용자 지정 · ${catName}`,
+              name: `내 지정 포인트 #${nextNum}`,
+              subtitle: `위도 ${lat.toFixed(4)} · 경도 ${lng.toFixed(4)}`,
+              distanceKm: distKm,
+              distanceText: `${distKm}km`,
+              certified: true,
+              isCustom: true,
+              lat: lat,
+              lng: lng,
+              sheetId: '21:106',
+              fullId: '31:89',
+              img: 'assets/img_79fad3a6880379fac76f30c869e3d8a7a8c2700f.png',
+              desc: `지도 터치로 직접 등록한 사용자 지정 포인트입니다.\n좌표: ${lat.toFixed(5)}, ${lng.toFixed(5)} (현재 위치에서 ${distKm}km)`
+            };
+            state.customPoints.push(newPoint);
+            saveCustomPoints();
+            window.__selectedDiscoverPlace = newPoint;
+            refreshAll();
+
+            const activeLayer = (targetMap === state.subMap) ? state.subMarkersLayer : state.mainMarkersLayer;
+            if (activeLayer) {
+              activeLayer.eachLayer(layer => {
+                if (layer.getLatLng && Math.abs(layer.getLatLng().lat - lat) < 1e-6 && Math.abs(layer.getLatLng().lng - lng) < 1e-6) {
+                  layer.openPopup();
+                }
+              });
+            }
+          }
+
+          function refreshAll() {
+            updateCategoryButtonsUI();
+            updatePinHelperBadges();
+            renderPlaceListDOM();
+            renderMarkersOnMap(state.mainMap, state.mainMarkersLayer, false);
+            renderMarkersOnMap(state.subMap, state.subMarkersLayer, true);
+          }
+
+          function setSheetState(nextState) {
+            const sheet = document.getElementById('discover-bottom-sheet');
+            const listEl = document.querySelector('#screen-0_259 [data-figma-id="6:391"]');
+            const searchWrap = document.getElementById('discover-search-bar-wrap');
+            const scrollBar = document.querySelector('#screen-0_259 [data-figma-id="0:262"]');
+            if (!sheet) return;
+
+            state.sheetState = nextState;
+            let offsetY = 0;
+            if (nextState === 'expanded') offsetY = -385;
+            else if (nextState === 'collapsed') offsetY = 195;
+            else offsetY = 0;
+
+            window.__discoverSheetOffsetY = offsetY;
+            sheet.style.transition = 'transform 360ms cubic-bezier(0.22, 1, 0.36, 1)';
+            sheet.style.transform = `translateY(${offsetY}px)`;
+
+            if (searchWrap) {
+              searchWrap.style.display = nextState === 'expanded' ? 'flex' : 'none';
+            }
+            if (listEl) {
+              if (nextState === 'expanded') {
+                listEl.style.top = '644px';
+                listEl.style.height = '510px';
+              } else {
+                listEl.style.top = '607px';
+                listEl.style.height = '185px';
+              }
+            }
+            if (scrollBar) {
+              scrollBar.style.top = nextState === 'expanded' ? '646px' : '598px';
+            }
+          }
+
+          function setupMainDiscoverScreen() {
+            const scr = document.querySelector('#screen-0_259 > [data-figma-id="0:259"]');
+            if (!scr || scr.dataset.discoverEnhanced === 'true') return;
+            scr.dataset.discoverEnhanced = 'true';
+
+            // Hide static Figma placeholder dots (0:264 ~ 0:272)
+            ['0:264', '0:265', '0:266', '0:267', '0:268', '0:269', '0:270', '0:271', '0:272'].forEach(id => {
+              const dot = scr.querySelector(`[data-figma-id="${id}"]`);
+              if (dot) dot.style.display = 'none';
+            });
+
+            // Keep Back button (6:71) above map
+            const backBtn = scr.querySelector('[data-figma-id="6:71"]');
+            if (backBtn) backBtn.style.zIndex = '20';
+
+            // Add floating point-pinning helper badge on map
+            const pinBadge = document.createElement('div');
+            pinBadge.id = 'discover-pin-helper-main';
+            pinBadge.style.cssText = 'position:absolute;left:80px;top:38px;z-index:20;background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);padding:6px 11px;border-radius:9999px;box-shadow:0 3px 10px rgba(0,0,0,0.18);font-size:11px;font-family:"Noto Sans CJK KR","Noto Sans KR",sans-serif;display:flex;align-items:center;';
+            pinBadge.addEventListener('click', (e) => {
+              const clearBtn = e.target.closest('[data-action="clear-pins"]');
+              if (clearBtn) {
+                e.stopPropagation();
+                state.customPoints = [];
+                saveCustomPoints();
+                refreshAll();
+              }
+            });
+            scr.appendChild(pinBadge);
+
+            // Configure map container inside 0:260
+            const mapBlock = scr.querySelector('[data-figma-id="0:260"]');
+            if (mapBlock) {
+              mapBlock.style.left = '0px';
+              mapBlock.style.top = '0px';
+              mapBlock.style.width = '360px';
+              mapBlock.style.height = '800px';
+              mapBlock.style.zIndex = '1';
+              const staticImg = mapBlock.querySelector('img');
+              if (staticImg) staticImg.style.display = 'none';
+
+              const mapHost = document.createElement('div');
+              mapHost.id = 'discover-leaflet-map-main';
+              mapHost.className = 'discover-leaflet-host w-[360px] h-[800px]';
+              mapBlock.appendChild(mapHost);
+
+              if (window.L) {
+                state.mainMap = L.map(mapHost, {
+                  center: [BASE_LAT, BASE_LNG],
+                  zoom: 16,
+                  zoomControl: false
+                });
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                  maxZoom: 19,
+                  attribution: '© OpenStreetMap'
+                }).addTo(state.mainMap);
+                state.mainMarkersLayer = L.layerGroup().addTo(state.mainMap);
+
+                state.mainMap.on('click', (ev) => {
+                  if (ev && ev.latlng) {
+                    addCustomPointAt(ev.latlng.lat, ev.latlng.lng, state.mainMap);
+                  }
+                });
+              }
+            }
+
+            // Build Slide-Up Bottom Sheet container (#discover-bottom-sheet)
+            const sheet = document.createElement('div');
+            sheet.id = 'discover-bottom-sheet';
+            sheet.style.cssText = 'position:absolute;left:0px;top:0px;width:360px;height:800px;pointer-events:none;z-index:15;transition:transform 360ms cubic-bezier(0.22, 1, 0.36, 1);transform:translateY(0px);';
+
+            const bgRect = scr.querySelector('[data-figma-id="6:419"]');
+            const headerRect = scr.querySelector('[data-figma-id="0:261"]');
+            const handlePill = scr.querySelector('[data-figma-id="0:263"]');
+            const catFrame = scr.querySelector('[data-figma-id="6:151"]');
+            const sortBtn = scr.querySelector('[data-figma-id="6:68"]');
+            const listFrame = scr.querySelector('[data-figma-id="6:391"]');
+            const scrollBar = scr.querySelector('[data-figma-id="0:262"]');
+
+            if (bgRect) {
+              bgRect.style.height = '720px';
+              bgRect.style.pointerEvents = 'auto';
+              sheet.appendChild(bgRect);
+            }
+            if (headerRect) {
+              headerRect.style.pointerEvents = 'auto';
+              headerRect.style.cursor = 'grab';
+              sheet.appendChild(headerRect);
+            }
+            if (handlePill) {
+              handlePill.style.pointerEvents = 'auto';
+              handlePill.style.cursor = 'grab';
+              handlePill.style.zIndex = '6';
+              sheet.appendChild(handlePill);
+            }
+
+            // Invisible touch target over the handle pill for smooth drag & tap
+            const handleGrabZone = document.createElement('div');
+            handleGrabZone.id = 'discover-sheet-grab-zone';
+            handleGrabZone.title = '드래그하거나 터치하여 상세 메뉴 열기/닫기';
+            handleGrabZone.style.cssText = 'position:absolute;left:90px;top:512px;width:180px;height:36px;z-index:8;pointer-events:auto;cursor:grab;';
+            sheet.appendChild(handleGrabZone);
+
+            if (catFrame) {
+              catFrame.style.pointerEvents = 'auto';
+              catFrame.style.zIndex = '7';
+              sheet.appendChild(catFrame);
+            }
+            if (sortBtn) {
+              sortBtn.style.pointerEvents = 'auto';
+              sortBtn.style.zIndex = '7';
+              sheet.appendChild(sortBtn);
+            }
+
+            // Embedded Detailed Search Bar (visible when slid up to expanded state)
+            const searchWrap = document.createElement('div');
+            searchWrap.id = 'discover-search-bar-wrap';
+            searchWrap.style.cssText = 'position:absolute;left:16px;top:596px;width:328px;height:38px;z-index:7;pointer-events:auto;display:none;align-items:center;gap:8px;padding:0 12px;border-radius:12px;background:#FFFFFF;box-shadow:inset 0 0 0 1px #D1D5DB, 0 2px 5px rgba(0,0,0,0.06);';
+            searchWrap.innerHTML = `
+              <span style="font-size:13px;color:#3A5451;">🔍</span>
+              <input id="discover-detail-search-input" type="text" placeholder="매장명, 스마트 수거함, 관광지 상세 검색..." style="flex:1;border:none;outline:none;background:transparent;font-size:13px;color:#111827;font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif;" />
+              <button type="button" id="discover-detail-search-clear" style="display:none;border:none;background:#E5E7EB;color:#374151;border-radius:9999px;width:18px;height:18px;font-size:10px;cursor:pointer;">✕</button>
+            `;
+            sheet.appendChild(searchWrap);
+
+            if (listFrame) {
+              listFrame.style.pointerEvents = 'auto';
+              listFrame.style.zIndex = '5';
+              sheet.appendChild(listFrame);
+            }
+            if (scrollBar) {
+              scrollBar.style.pointerEvents = 'none';
+              scrollBar.style.zIndex = '6';
+              sheet.appendChild(scrollBar);
+            }
+
+            scr.appendChild(sheet);
+
+            // Wire search input
+            const searchInput = searchWrap.querySelector('#discover-detail-search-input');
+            const searchClear = searchWrap.querySelector('#discover-detail-search-clear');
+            if (searchInput) {
+              searchInput.addEventListener('click', e => e.stopPropagation());
+              searchInput.addEventListener('input', e => {
+                state.searchQuery = e.target.value;
+                if (searchClear) searchClear.style.display = state.searchQuery ? 'inline-flex' : 'none';
+                refreshAll();
+              });
+            }
+            if (searchClear) {
+              searchClear.addEventListener('click', e => {
+                e.stopPropagation();
+                state.searchQuery = '';
+                if (searchInput) searchInput.value = '';
+                searchClear.style.display = 'none';
+                refreshAll();
+              });
+            }
+
+            // Wire Category Filter Buttons (0:302 쓰레기 수거함, 0:296 음식점, 0:285 관광지)
+            if (catFrame) {
+              [
+                { id: '0:302', cat: 'bin' },
+                { id: '0:296', cat: 'restaurant' },
+                { id: '0:285', cat: 'tourism' }
+              ].forEach(({ id, cat }) => {
+                const btn = catFrame.querySelector(`[data-figma-id="${id}"]`);
+                if (!btn) return;
+                btn.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  state.activeCategory = (state.activeCategory === cat) ? 'all' : cat;
+                  refreshAll();
+                });
+              });
+            }
+
+            // Wire Slide-Up / Slide-Down Drag & Tap on Header (0:261) and Handle (0:263)
+            let dragActive = false;
+            let startClientY = 0;
+            let startOffsetY = 0;
+            let movedPx = 0;
+
+            function getStageScale() {
+              const st = document.getElementById('figma-flow-stage');
+              if (!st) return 1;
+              const rect = st.getBoundingClientRect();
+              return rect.width > 0 ? (rect.width / 360) : 1;
+            }
+
+            function onDragStart(e) {
+              if (e.target.closest('[data-figma-id="6:151"], [data-figma-id="6:68"], #discover-search-bar-wrap')) return;
+              dragActive = true;
+              startClientY = e.clientY;
+              startOffsetY = window.__discoverSheetOffsetY || 0;
+              movedPx = 0;
+              sheet.style.transition = 'none';
+            }
+
+            function onDragMove(e) {
+              if (!dragActive) return;
+              const scale = getStageScale();
+              const dy = (e.clientY - startClientY) / scale;
+              movedPx = Math.max(movedPx, Math.abs(dy));
+              const nextY = Math.max(-400, Math.min(210, startOffsetY + dy));
+              window.__discoverSheetOffsetY = nextY;
+              sheet.style.transform = `translateY(${nextY}px)`;
+            }
+
+            function onDragEnd(e) {
+              if (!dragActive) return;
+              dragActive = false;
+              const curY = window.__discoverSheetOffsetY || 0;
+              if (movedPx < 6) {
+                // Tap on handle cycles: mid -> expanded -> collapsed -> mid
+                if (state.sheetState === 'mid') setSheetState('expanded');
+                else if (state.sheetState === 'expanded') setSheetState('collapsed');
+                else setSheetState('mid');
+                return;
+              }
+              if (curY < -140) setSheetState('expanded');
+              else if (curY > 95) setSheetState('collapsed');
+              else setSheetState('mid');
+            }
+
+            [headerRect, handlePill, handleGrabZone].forEach(el => {
+              if (!el) return;
+              el.addEventListener('pointerdown', onDragStart);
+            });
+            window.addEventListener('pointermove', onDragMove);
+            window.addEventListener('pointerup', onDragEnd);
+            window.addEventListener('pointercancel', onDragEnd);
+          }
+
+          function setupSubDiscoverScreen() {
+            const scr = document.querySelector('#screen-63_2 > [data-figma-id="63:2"]');
+            if (!scr || scr.dataset.discoverSubEnhanced === 'true') return;
+            scr.dataset.discoverSubEnhanced = 'true';
+
+            ['63:7', '63:8', '63:9', '63:10', '63:11', '63:12', '63:13', '63:14', '63:15'].forEach(id => {
+              const dot = scr.querySelector(`[data-figma-id="${id}"]`);
+              if (dot) dot.style.display = 'none';
+            });
+
+            const backBtn = scr.querySelector('[data-figma-id="63:54"]');
+            if (backBtn) backBtn.style.zIndex = '20';
+
+            const pinBadge = document.createElement('div');
+            pinBadge.id = 'discover-pin-helper-sub';
+            pinBadge.style.cssText = 'position:absolute;left:80px;top:38px;z-index:20;background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);padding:6px 11px;border-radius:9999px;box-shadow:0 3px 10px rgba(0,0,0,0.18);font-size:11px;font-family:"Noto Sans CJK KR","Noto Sans KR",sans-serif;display:flex;align-items:center;';
+            pinBadge.addEventListener('click', (e) => {
+              const clearBtn = e.target.closest('[data-action="clear-pins"]');
+              if (clearBtn) {
+                e.stopPropagation();
+                state.customPoints = [];
+                saveCustomPoints();
+                refreshAll();
+              }
+            });
+            scr.appendChild(pinBadge);
+
+            const mapBlock = scr.querySelector('[data-figma-id="63:3"]');
+            if (mapBlock) {
+              mapBlock.style.left = '0px';
+              mapBlock.style.top = '0px';
+              mapBlock.style.width = '360px';
+              mapBlock.style.height = '800px';
+              mapBlock.style.zIndex = '1';
+              const staticImg = mapBlock.querySelector('img');
+              if (staticImg) staticImg.style.display = 'none';
+
+              const mapHost = document.createElement('div');
+              mapHost.id = 'discover-leaflet-map-sub';
+              mapHost.className = 'discover-leaflet-host w-[360px] h-[800px]';
+              mapBlock.appendChild(mapHost);
+
+              if (window.L) {
+                state.subMap = L.map(mapHost, {
+                  center: [BASE_LAT, BASE_LNG],
+                  zoom: 16,
+                  zoomControl: false
+                });
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                  maxZoom: 19,
+                  attribution: '© OpenStreetMap'
+                }).addTo(state.subMap);
+                state.subMarkersLayer = L.layerGroup().addTo(state.subMap);
+
+                state.subMap.on('click', (ev) => {
+                  if (ev && ev.latlng) {
+                    addCustomPointAt(ev.latlng.lat, ev.latlng.lng, state.subMap);
+                  }
+                });
+              }
+            }
+          }
+
+          window.__ecocyclingInvalidateMaps = function() {
+            [50, 220, 450].forEach(delay => {
+              setTimeout(() => {
+                if (state.mainMap) state.mainMap.invalidateSize();
+                if (state.subMap) state.subMap.invalidateSize();
+              }, delay);
+            });
+          };
+
+          window.__discoverModule = {
+            init() {
+              setupMainDiscoverScreen();
+              setupSubDiscoverScreen();
+              refreshAll();
+            },
+            setSortMode(mode) {
+              state.sortMode = mode;
+              refreshAll();
+            }
+          };
+        }
+        window.__discoverModule.init();
+
         // Clicking bottom sheet overlays (21:106, 31:322, 31:358) navigates to full Discover place screens (31:89, 31:118, 31:147)
         [['21:106', '31:89'], ['31:322', '31:118'], ['31:358', '31:147']].forEach(([sheetId, fullId]) => {
           root.querySelectorAll(`[data-figma-id="${sheetId}"]`).forEach(sheet => {
@@ -3404,6 +4266,9 @@ MireuLim 님</span></div>
             const label = opt.getAttribute('data-figma-name');
             const sortLabel = document.querySelector('#screen-0_259 [data-figma-id="0:295"] span');
             if (sortLabel && label) sortLabel.textContent = label;
+            if (window.__discoverModule) {
+              window.__discoverModule.setSortMode(label === '가맹점만' ? 'certified' : 'distance');
+            }
             closeOverlay();
           });
         });
