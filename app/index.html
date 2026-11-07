@@ -48,11 +48,14 @@
         <strong>ONECYCLE (EcoCycling)</strong> 1차 웹 어플리케이션은 <strong>모바일 디바이스 전용</strong>으로 제공되며, PC/데스크톱 등 일반 플랫폼에서는 이용이 제한됩니다.<br/>
         <span style="font-size:13px;color:#BAC9C7;">(2차 네이티브 Android 어플리케이션 출시 예정)</span>
       </p>
-      <div style="background:rgba(0,0,0,0.24);border-radius:16px;padding:16px;text-align:left;font-size:13px;line-height:1.6;color:rgba(255,255,255,0.9);">
-        <div style="font-weight:700;color:#BAC9C7;margin-bottom:4px;">📱 접속 안내</div>
-        <div>• 스마트폰(iOS / Android) 브라우저로 접속해 주세요.</div>
+      <div style="background:rgba(0,0,0,0.24);border-radius:16px;padding:16px;text-align:left;font-size:13px;line-height:1.6;color:rgba(255,255,255,0.9);margin-bottom:18px;">
+        <div style="font-weight:700;color:#BAC9C7;margin-bottom:4px;">📱 접속 및 설치 안내</div>
+        <div>• 스마트폰(iOS / Android) 브라우저로 접속하거나 아래 <strong>Android APK 파일</strong>을 다운로드하여 설치해 주세요.</div>
         <div>• 모바일 환경 테스트 시 브라우저 개발자 도구(<code>F12</code>)에서 <strong>모바일 기기 툴바(폭 768px 이하)</strong>로 전환하면 즉시 활성화됩니다.</div>
       </div>
+      <a href="ecocycling.apk" download="ONECYCLE-EcoCycling-v1.0.0.apk" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;border-radius:14px;background:#F5F5F5;color:#3A5451;font-weight:700;font-size:15px;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,0.25);">
+        <span>🤖 Android APK 다운로드 (v1.0.0)</span>
+      </a>
     </div>
   </div>
   <!-- FIGMA FLOW VIEWPORT (Zero Added UI Chrome - 100% 1:1 Figma Frames & Interactions) -->
@@ -2606,6 +2609,24 @@ MireuLim 님</span></div>
           content.style.transform = '';
         }
       }
+
+      window.__ecocyclingHandleBack = function() {
+        const backdrop = document.getElementById('figma-overlay-backdrop');
+        if (backdrop && !backdrop.classList.contains('hidden')) {
+          closeOverlay();
+          return true;
+        }
+        if (historyStack.length > 0) {
+          const prev = historyStack.pop();
+          showFrame(prev, false);
+          return true;
+        }
+        if (currentFrameId && currentFrameId !== '0:399' && currentFrameId !== '0:518') {
+          showFrame('0:399', false);
+          return true;
+        }
+        return false;
+      };
 
       function openOverlay(destId, relPos, sourceEl) {
         const tpl = document.getElementById('tpl-frame-' + safeId(destId));
