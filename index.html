@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoCycling Smart Waste Bin Kiosk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+    img {
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+    .kiosk-container {
+      width: 1920px;
+      height: 1080px;
+      position: absolute;
+      transform-origin: center center;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .screen-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1080px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+      transform: scale(0.99);
+    }
+    .screen-view.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+    .font-archivo {
+      font-family: 'Archivo Black', sans-serif;
+    }
+    .font-pretendard {
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    /* Pulse animation for scanning and analyzing */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 0.4; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .animate-pulse-ring {
+      animation: pulse-ring 2.5s infinite ease-in-out;
+    }
+
+    /* Shimmer effect for AI analyzing */
+    @keyframes shimmer {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .rotate-slow {
+      animation: shimmer 6s linear infinite;
+    }
+  </style>
+</head>
+<body class="select-none">
+
+  <!-- 1920x1080 Scaling Wrapper -->
+  <div id="kiosk-scaler" class="kiosk-container">
+
+    <!-- ========================================== -->
+    <!-- FRAME 1: Stand-by (1:6)                   -->
+    <!-- ========================================== -->
+    <div id="screen-standby" class="screen-view active bg-[#3A5451] cursor-pointer" onclick="handleKioskClick('STANDBY')">
+      <!-- Background Mask group -->
+      <div class="absolute left-0 top-0 w-[1920px] h-[1080px]">
+        <img src="assets/masked_1_5.png" alt="Mask group" class="w-full h-full object-contain block pointer-events-none select-none" />
+      </div>
+      <!-- Logo ONECYCLE -->
+      <div class="absolute left-[120px] top-[486px] w-[606px] h-[109px] flex flex-col select-none font-[400] text-[100px] leading-[108.80px] text-left items-start justify-start text-[#F5F5F5] font-archivo">
+        <span class="whitespace-pre">ONECYCLE</span>
+      </div>
+      <!-- Version Tag -->
+      <div class="absolute left-[20px] top-[20px] w-[349px] h-[25px] flex flex-col select-none font-[500] text-[25px] leading-[29.83px] text-left items-start justify-start text-[#F5F5F5] font-pretendard">
+        <span class="whitespace-pre" id="kiosk-version-label">Ver. Smart Bin IoT Agent v1.0.0</span>
+      </div>
+      <!-- Right Graphic -->
+      <div class="absolute left-[1386px] top-[106px] w-[414px] h-[868px]">
+        <img src="assets/img_0cc78c3dee87d8ec55ec0696e7dfb5b3336a4141.png" alt="image 16" class="w-full h-full object-cover block pointer-events-none select-none" />
+      </div>
+      <!-- Wake-up touch guidance hint -->
+      <div class="absolute left-[120px] top-[630px] flex items-center gap-4 text-[#F5F5F5] opacity-80 text-[28px] font-pretendard">
+        <span class="animate-pulse">화면을 터치하여 분리수거를 시작하세요 ➔</span>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FRAME 2: Step 1 (QR Scan) (1:8)           -->
+    <!-- ========================================== -->
+    <div id="screen-step1" class="screen-view bg-[#F5F5F5] cursor-pointer" onclick="handleKioskClick('STEP1_QR')">
+      <!-- Right Graphic Group 1 -->
+      <div class="absolute left-[1326px] top-[-302px] w-[788.69px] h-[1583px] pointer-events-none opacity-90">
+        <div class="absolute left-[409.78px] top-0 w-[378.91px] h-[760.63px]">
+          <img src="assets/img_90f4786ef9441eb118d2af58a405038983117491.png" alt="image 9" class="w-full h-full object-cover block pointer-events-none select-none" />
+        </div>
+        <div class="absolute left-0 top-[760.63px] w-[409.78px] h-[822.37px]">
+          <img src="assets/img_1f980f0fbc508769413e6d9e5a20c5531f994e07.png" alt="image 10" class="w-full h-full object-cover block pointer-events-none select-none" />
+        </div>
+      </div>
+
+      <!-- Top Left Logo -->
+      <div class="absolute left-[50px] top-[50px] w-[364px] h-[65px] flex flex-col select-none font-[400] text-[60px] leading-[65.28px] text-left items-start justify-start text-[#8E8E8E] font-archivo">
+        <span class="whitespace-pre">ONECYCLE</span>
+      </div>
+
+      <!-- Stepper: Step 1 Active -->
+      <div class="absolute left-[1500px] top-[35px] w-[390px] h-[95px]">
+        <div class="absolute left-0 top-0 w-[390px] h-[95px] rounded-[50px] bg-[#F5F5F5]" style="box-shadow:inset 0 0 0 2px #8E8E8E"></div>
+        <div class="absolute left-[35px] top-[47px] w-[320px] h-0">
+          <img src="assets/svg_1_27.svg" alt="Line 1" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:320px;height:3px" />
+        </div>
+        <!-- Circle 1 Active -->
+        <div class="absolute left-[20px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#3A5451] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#F5F5F5] font-pretendard">1</span>
+        </div>
+        <!-- Circle 2 Inactive -->
+        <div class="absolute left-[170px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">2</span>
+        </div>
+        <!-- Circle 3 Inactive -->
+        <div class="absolute left-[320px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">3</span>
+        </div>
+      </div>
+
+      <!-- Center QR Code Box -->
+      <div class="absolute left-[710px] top-[188px] w-[500px] h-[500px] overflow-hidden rounded-[30px] flex items-center justify-center bg-white" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+        <img id="kiosk-qr-image" src="assets/img_0350068abaca15d925dca727eca43207e2a6a788.png" alt="QR Code" class="w-[460px] h-[460px] object-contain block pointer-events-none select-none" />
+      </div>
+
+      <!-- Instruction Text -->
+      <div class="absolute left-[671px] top-[749px] w-[577px] h-[144px] flex flex-col select-none font-[400] leading-none text-center items-center justify-start text-[#343434] font-pretendard">
+        <span class="whitespace-pre">
+          <span class="font-archivo font-[400] text-[60px] leading-[71.60px] text-[#3A5451]">ONECYCLE</span><span class="font-pretendard font-[400] text-[60px] leading-[71.60px] text-[#343434]"> 앱에서<br/>QR코드를 스캔해 주세요</span>
+        </span>
+      </div>
+
+      <!-- Device Identifier and Simulation Bar -->
+      <div class="absolute left-[710px] top-[920px] w-[500px] flex justify-center items-center gap-3 text-[#8E8E8E] text-[20px] font-pretendard">
+        <span>기기 ID: <strong id="step1-device-id" class="text-[#3A5451]">BIN-SEOUL-001</strong></span>
+        <span>•</span>
+        <span class="text-sm bg-gray-200 px-3 py-1 rounded-full text-gray-600">앱 스캔 대기 중 (클릭 시 스캔 시뮬레이션)</span>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FRAME 3: Step 2 (Door Open) (1:563)       -->
+    <!-- ========================================== -->
+    <div id="screen-step2" class="screen-view bg-[#F5F5F5] cursor-pointer" onclick="handleKioskClick('STEP2_DOOR_OPEN')">
+      <!-- Right Graphic Group 1 -->
+      <div class="absolute left-[1326px] top-[-302px] w-[788.69px] h-[1583px] pointer-events-none opacity-90">
+        <div class="absolute left-[409.78px] top-0 w-[378.91px] h-[760.63px]">
+          <img src="assets/img_90f4786ef9441eb118d2af58a405038983117491.png" alt="image 9" class="w-full h-full object-cover block pointer-events-none select-none" />
+        </div>
+        <div class="absolute left-0 top-[760.63px] w-[409.78px] h-[822.37px]">
+          <img src="assets/img_1f980f0fbc508769413e6d9e5a20c5531f994e07.png" alt="image 10" class="w-full h-full object-cover block pointer-events-none select-none" />
+        </div>
+      </div>
+
+      <!-- Top Left Logo -->
+      <div class="absolute left-[50px] top-[50px] w-[364px] h-[65px] flex flex-col select-none font-[400] text-[60px] leading-[65.28px] text-left items-start justify-start text-[#8E8E8E] font-archivo">
+        <span class="whitespace-pre">ONECYCLE</span>
+      </div>
+
+      <!-- Stepper: Step 2 Active -->
+      <div class="absolute left-[1500px] top-[35px] w-[390px] h-[95px]">
+        <div class="absolute left-0 top-0 w-[390px] h-[95px] rounded-[50px] bg-[#F5F5F5]" style="box-shadow:inset 0 0 0 2px #8E8E8E"></div>
+        <div class="absolute left-[35px] top-[50px] w-[320px] h-0">
+          <img src="assets/svg_1_571.svg" alt="Line 1" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:320px;height:3px" />
+        </div>
+        <!-- Circle 1 Inactive -->
+        <div class="absolute left-[20px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">1</span>
+        </div>
+        <!-- Circle 2 Active -->
+        <div class="absolute left-[170px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#3A5451] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#F5F5F5] font-pretendard">2</span>
+        </div>
+        <!-- Circle 3 Inactive -->
+        <div class="absolute left-[320px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">3</span>
+        </div>
+      </div>
+
+      <!-- User Welcome & Balance Bar -->
+      <div class="absolute left-[250px] top-[190px] w-[1420px] h-[60px] flex items-center justify-between font-pretendard">
+        <div class="font-[500] text-[50px] leading-[59.67px] text-[#343434]">
+          <span id="user-greeting-name" class="text-[#3A5451] font-[500]">MireuLim</span>님, 환영해요
+        </div>
+        <div class="flex items-center gap-3">
+          <img src="assets/svg_1_591.svg" alt="savings" class="w-[50px] h-[50px] block" />
+          <span id="user-current-pts" class="font-[500] text-[40px] leading-[47.73px] text-[#343434]">500pts</span>
+        </div>
+      </div>
+
+      <!-- Divider Line 2 -->
+      <div class="absolute left-[731px] top-[220px] w-[717px] h-0">
+        <img src="assets/svg_1_568.svg" alt="Line 2" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:717px;height:3px" />
+      </div>
+
+      <!-- Left Card: Waste Items Breakdown (Group 6: 250px, 295px, 700x496) -->
+      <div class="absolute left-[250px] top-[295px] w-[700px] h-[496px] rounded-[15px] bg-[#F5F5F5] p-6 flex flex-col justify-around" style="box-shadow:inset 0 0 0 2px #8E8E8E">
+        <!-- Item 1: Can -->
+        <div class="flex items-center justify-between px-4">
+          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">캔</div>
+          <div class="flex items-center gap-4">
+            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
+            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+              <span id="item-can-qty">x5</span>
+            </div>
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+          </div>
+          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
+            <span id="item-can-pts">400</span><span class="text-[#343434] font-[400]">pts</span>
+          </div>
+        </div>
+
+        <!-- Item 2: PET -->
+        <div class="flex items-center justify-between px-4">
+          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">페트병</div>
+          <div class="flex items-center gap-4">
+            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
+            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+              <span id="item-pet-qty">x3</span>
+            </div>
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+          </div>
+          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
+            <span id="item-pet-pts">300</span><span class="text-[#343434] font-[400]">pts</span>
+          </div>
+        </div>
+
+        <!-- Item 3: Glass -->
+        <div class="flex items-center justify-between px-4">
+          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">유리병</div>
+          <div class="flex items-center gap-4">
+            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
+            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+              <span id="item-glass-qty">x2</span>
+            </div>
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+          </div>
+          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
+            <span id="item-glass-pts">240</span><span class="text-[#343434] font-[400]">pts</span>
+          </div>
+        </div>
+
+        <!-- Item 4: General Waste -->
+        <div class="flex items-center justify-between px-4">
+          <div class="w-[180px] font-pretendard text-[40px] text-[#343434]">일반쓰레기</div>
+          <div class="flex items-center gap-4">
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+              <span id="item-general-qty">x10</span>
+            </div>
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+          </div>
+          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
+            <span id="item-general-pts">5</span><span class="text-[#343434] font-[400]">pts</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Left Bottom Card: Total Points Reward (Group 7: 250px, 811px, 700x184) -->
+      <div class="absolute left-[250px] top-[811px] w-[700px] h-[184px] rounded-[15px] bg-[#3A5451] flex items-center justify-between px-8 font-pretendard">
+        <div class="text-[40px] text-[#F5F5F5]">적립될 포인트</div>
+        <div class="text-right">
+          <span id="total-reward-pts" class="font-[700] text-[60px] leading-[71.60px] text-[#F5F5F5]">945</span>
+          <span class="font-[400] text-[60px] leading-[71.60px] text-[#F5F5F5]">pts</span>
+        </div>
+      </div>
+
+      <!-- Right Card: Door Opened Status (Group 12: 970px, 295px, 700x700) -->
+      <div class="absolute left-[970px] top-[295px] w-[700px] h-[700px] rounded-[15px] bg-[#F5F5F5] flex flex-col items-center justify-center gap-8" style="box-shadow:inset 0 0 0 2px #8E8E8E">
+        <div class="w-[120px] h-[120px] flex items-center justify-center">
+          <img src="assets/svg_1_622.svg" alt="bottom_panel_open" class="w-[100px] h-[100px] block" />
+        </div>
+        <div class="font-pretendard font-[400] text-[50px] leading-[59.67px] text-[#343434] text-center">
+          투입구가 열립니다
+        </div>
+        <div class="text-gray-500 text-[24px] font-pretendard">
+          쓰레기를 투입구에 넣고 터치해주세요
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FRAME 4: Step 3 (AI Analyzing & Weighing) (1:107) -->
+    <!-- ========================================== -->
+    <div id="screen-step3" class="screen-view bg-[#F5F5F5] cursor-pointer" onclick="handleKioskClick('STEP3_ANALYZING')">
+      <!-- Right Graphic Group 1 -->
+      <div class="absolute left-[1326px] top-[-302px] w-[788.69px] h-[1583px] pointer-events-none opacity-90">
+        <div class="absolute left-[409.78px] top-0 w-[378.91px] h-[760.63px]">
+          <img src="assets/img_90f4786ef9441eb118d2af58a405038983117491.png" alt="image 9" class="w-full h-full object-cover block pointer-events-none select-none" />
+        </div>
+        <div class="absolute left-0 top-[760.63px] w-[409.78px] h-[822.37px]">
+          <img src="assets/img_1f980f0fbc508769413e6d9e5a20c5531f994e07.png" alt="image 10" class="w-full h-full object-cover block pointer-events-none select-none" />
+        </div>
+      </div>
+
+      <!-- Top Left Logo -->
+      <div class="absolute left-[50px] top-[50px] w-[364px] h-[65px] flex flex-col select-none font-[400] text-[60px] leading-[65.28px] text-left items-start justify-start text-[#8E8E8E] font-archivo">
+        <span class="whitespace-pre">ONECYCLE</span>
+      </div>
+
+      <!-- Stepper: Step 2 Active (Analyzing Phase) -->
+      <div class="absolute left-[1500px] top-[35px] w-[390px] h-[95px]">
+        <div class="absolute left-0 top-0 w-[390px] h-[95px] rounded-[50px] bg-[#F5F5F5]" style="box-shadow:inset 0 0 0 2px #8E8E8E"></div>
+        <div class="absolute left-[35px] top-[50px] w-[320px] h-0">
+          <img src="assets/svg_1_113.svg" alt="Line 1" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:320px;height:3px" />
+        </div>
+        <!-- Circle 1 Inactive -->
+        <div class="absolute left-[20px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">1</span>
+        </div>
+        <!-- Circle 2 Active -->
+        <div class="absolute left-[170px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#3A5451] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#F5F5F5] font-pretendard">2</span>
+        </div>
+        <!-- Circle 3 Inactive -->
+        <div class="absolute left-[320px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">3</span>
+        </div>
+      </div>
+
+      <!-- User Welcome & Balance Bar -->
+      <div class="absolute left-[250px] top-[190px] w-[1420px] h-[60px] flex items-center justify-between font-pretendard">
+        <div class="font-[500] text-[50px] leading-[59.67px] text-[#343434]">
+          <span id="step3-greeting-name" class="text-[#3A5451] font-[500]">MireuLim</span>님, 환영해요
+        </div>
+        <div class="flex items-center gap-3">
+          <img src="assets/svg_2_336.svg" alt="savings" class="w-[50px] h-[50px] block" />
+          <span id="step3-current-pts" class="font-[500] text-[40px] leading-[47.73px] text-[#343434]">500pts</span>
+        </div>
+      </div>
+
+      <!-- Divider Line 2 -->
+      <div class="absolute left-[731px] top-[220px] w-[717px] h-0">
+        <img src="assets/svg_2_329.svg" alt="Line 2" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:717px;height:3px" />
+      </div>
+
+      <!-- Left Card: Waste Items Breakdown -->
+      <div class="absolute left-[250px] top-[295px] w-[700px] h-[496px] rounded-[15px] bg-[#F5F5F5] p-6 flex flex-col justify-around" style="box-shadow:inset 0 0 0 2px #8E8E8E">
+        <!-- Item 1: Can -->
+        <div class="flex items-center justify-between px-4">
+          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">캔</div>
+          <div class="flex items-center gap-4">
+            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
+            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+              <span id="step3-item-can-qty">x5</span>
+            </div>
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+          </div>
+          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
+            <span id="step3-item-can-pts">400</span><span class="text-[#343434] font-[400]">pts</span>
+          </div>
+        </div>
+
+        <!-- Item 2: PET -->
+        <div class="flex items-center justify-between px-4">
+          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">페트병</div>
+          <div class="flex items-center gap-4">
+            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
+            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+              <span id="step3-item-pet-qty">x3</span>
+            </div>
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+          </div>
+          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
+            <span id="step3-item-pet-pts">300</span><span class="text-[#343434] font-[400]">pts</span>
+          </div>
+        </div>
+
+        <!-- Item 3: Glass -->
+        <div class="flex items-center justify-between px-4">
+          <div class="w-[120px] font-pretendard text-[40px] text-[#343434]">유리병</div>
+          <div class="flex items-center gap-4">
+            <div class="h-[2px] w-[140px] bg-[#8E8E8E]"></div>
+            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+              <span id="step3-item-glass-qty">x2</span>
+            </div>
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+          </div>
+          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
+            <span id="step3-item-glass-pts">240</span><span class="text-[#343434] font-[400]">pts</span>
+          </div>
+        </div>
+
+        <!-- Item 4: General Waste -->
+        <div class="flex items-center justify-between px-4">
+          <div class="w-[180px] font-pretendard text-[40px] text-[#343434]">일반쓰레기</div>
+          <div class="flex items-center gap-4">
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+            <div class="w-[100px] h-[50px] rounded-[25px] bg-[#F5F5F5] flex items-center justify-center font-pretendard text-[30px] text-[#3A5451]" style="box-shadow:inset 0 0 0 3px #8E8E8E">
+              <span id="step3-item-general-qty">x10</span>
+            </div>
+            <div class="h-[2px] w-[80px] bg-[#8E8E8E]"></div>
+          </div>
+          <div class="font-pretendard text-[40px] text-right font-[700] text-[#3A5451]">
+            <span id="step3-item-general-pts">5</span><span class="text-[#343434] font-[400]">pts</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Left Bottom Card: Total Points Reward -->
+      <div class="absolute left-[250px] top-[811px] w-[700px] h-[184px] rounded-[15px] bg-[#3A5451] flex items-center justify-between px-8 font-pretendard">
+        <div class="text-[40px] text-[#F5F5F5]">적립될 포인트</div>
+        <div class="text-right">
+          <span id="step3-total-reward-pts" class="font-[700] text-[60px] leading-[71.60px] text-[#F5F5F5]">945</span>
+          <span class="font-[400] text-[60px] leading-[71.60px] text-[#F5F5F5]">pts</span>
+        </div>
+      </div>
+
+      <!-- Right Card: AI Classification Camera & Weighing (Group 12: 970px, 295px, 700x700) -->
+      <div class="absolute left-[970px] top-[295px] w-[700px] h-[700px] rounded-[15px] bg-[#F5F5F5] flex flex-col items-center justify-center gap-8 relative overflow-hidden" style="box-shadow:inset 0 0 0 2px #8E8E8E">
+        <!-- Animated Scanner Ring -->
+        <div class="w-[200px] h-[200px] rounded-full border-4 border-dashed border-[#3A5451] flex items-center justify-center rotate-slow">
+          <img src="assets/svg_2_299.svg" alt="photo_camera" class="w-[90px] h-[90px] block" />
+        </div>
+        <div class="font-pretendard font-[500] text-[50px] leading-[59.67px] text-[#343434] text-center">
+          AI 분석 및 무게 측정 중...
+        </div>
+        <div id="ai-status-detail" class="text-gray-500 text-[26px] font-pretendard flex items-center gap-2">
+          <span>카메라 비전 검출 및 고정밀 로드셀 감지 완료</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FRAME 5: Step 4 (Complete) (1:192)        -->
+    <!-- ========================================== -->
+    <div id="screen-step4" class="screen-view bg-[#F5F5F5] cursor-pointer" onclick="handleKioskClick('STEP4_COMPLETE')">
+      <!-- Right Graphic Group 1 -->
+      <div class="absolute left-[1326px] top-[-302px] w-[788.69px] h-[1583px] pointer-events-none opacity-90">
+        <div class="absolute left-[409.78px] top-0 w-[378.91px] h-[760.63px]">
+          <img src="assets/img_90f4786ef9441eb118d2af58a405038983117491.png" alt="image 9" class="w-full h-full object-cover block pointer-events-none select-none" />
+        </div>
+        <div class="absolute left-0 top-[760.63px] w-[409.78px] h-[822.37px]">
+          <img src="assets/img_1f980f0fbc508769413e6d9e5a20c5531f994e07.png" alt="image 10" class="w-full h-full object-cover block pointer-events-none select-none" />
+        </div>
+      </div>
+
+      <!-- Top Left Logo -->
+      <div class="absolute left-[50px] top-[50px] w-[364px] h-[65px] flex flex-col select-none font-[400] text-[60px] leading-[65.28px] text-left items-start justify-start text-[#8E8E8E] font-archivo">
+        <span class="whitespace-pre">ONECYCLE</span>
+      </div>
+
+      <!-- Stepper: Step 3 Active -->
+      <div class="absolute left-[1500px] top-[35px] w-[390px] h-[95px]">
+        <div class="absolute left-0 top-0 w-[390px] h-[95px] rounded-[50px] bg-[#F5F5F5]" style="box-shadow:inset 0 0 0 2px #8E8E8E"></div>
+        <div class="absolute left-[35px] top-[50px] w-[320px] h-0">
+          <img src="assets/svg_1_201.svg" alt="Line 1" class="absolute max-w-none pointer-events-none select-none" style="left:0;top:-3px;width:320px;height:3px" />
+        </div>
+        <!-- Circle 1 Inactive -->
+        <div class="absolute left-[20px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">1</span>
+        </div>
+        <!-- Circle 2 Inactive -->
+        <div class="absolute left-[170px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#D9D9D9] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#8E8E8E] font-pretendard">2</span>
+        </div>
+        <!-- Circle 3 Active -->
+        <div class="absolute left-[320px] top-[22px] w-[50px] h-[50px] rounded-full bg-[#3A5451] flex items-center justify-center">
+          <span class="font-[600] text-[25px] leading-[29.83px] text-[#F5F5F5] font-pretendard">3</span>
+        </div>
+      </div>
+
+      <!-- Completion Message Block (Group 18: 560px, 450px, 800x180) -->
+      <div class="absolute left-[560px] top-[430px] w-[800px] flex flex-col items-center justify-center text-center font-pretendard">
+        <!-- Success Checkmark Badge -->
+        <div class="w-[100px] h-[100px] mb-6 rounded-full bg-[#3A5451] flex items-center justify-center text-white text-[50px]">
+          ✓
+        </div>
+        <div class="w-full font-[400] text-[50px] leading-[59.67px] text-[#343434] mb-3">
+          <span id="step4-points-earned" class="font-bold text-[#3A5451]">945pts</span>가 적립되었습니다
+        </div>
+        <div class="w-full font-[500] text-[80px] leading-[95.47px] text-[#343434]">
+          이용해 주셔서 감사합니다
+        </div>
+        <div class="mt-6 text-[24px] text-gray-500">
+          잠시 후 대기 화면으로 돌아갑니다 (<span id="standby-countdown">5</span>초)
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- WebSocket & UI State Controller -->
+  <script>
+    // Responsive Scaler to fit any screen while maintaining 1920x1080
+    function updateScale() {
+      const scaler = document.getElementById('kiosk-scaler');
+      const targetW = 1920;
+      const targetH = 1080;
+      const windowW = window.innerWidth;
+      const windowH = window.innerHeight;
+      const scale = Math.min(windowW / targetW, windowH / targetH);
+      scaler.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', updateScale);
+    window.addEventListener('DOMContentLoaded', updateScale);
+
+    // Kiosk States
+    const STATES = {
+      STANDBY: 'STANDBY',
+      STEP1_QR: 'STEP1_QR',
+      STEP2_DOOR_OPEN: 'STEP2_DOOR_OPEN',
+      STEP3_ANALYZING: 'STEP3_ANALYZING',
+      STEP4_COMPLETE: 'STEP4_COMPLETE'
+    };
+
+    let currentState = STATES.STANDBY;
+    let ws = null;
+    let countdownTimer = null;
+
+    // View Switching
+    function setScreen(state) {
+      currentState = state;
+      document.querySelectorAll('.screen-view').forEach(el => el.classList.remove('active'));
+
+      if (state === STATES.STANDBY) {
+        document.getElementById('screen-standby').classList.add('active');
+      } else if (state === STATES.STEP1_QR) {
+        document.getElementById('screen-step1').classList.add('active');
+      } else if (state === STATES.STEP2_DOOR_OPEN) {
+        document.getElementById('screen-step2').classList.add('active');
+      } else if (state === STATES.STEP3_ANALYZING) {
+        document.getElementById('screen-step3').classList.add('active');
+      } else if (state === STATES.STEP4_COMPLETE) {
+        document.getElementById('screen-step4').classList.add('active');
+        startStandbyCountdown(5);
+      }
+    }
+
+    function startStandbyCountdown(seconds) {
+      if (countdownTimer) clearInterval(countdownTimer);
+      let remaining = seconds;
+      const label = document.getElementById('standby-countdown');
+      if (label) label.innerText = remaining;
+      countdownTimer = setInterval(() => {
+        remaining--;
+        if (label) label.innerText = remaining;
+        if (remaining <= 0) {
+          clearInterval(countdownTimer);
+          triggerAction('RESET_TO_STANDBY');
+        }
+      }, 1000);
+    }
+
+    // Update dynamic data from Agent
+    function updateKioskData(data) {
+      if (!data) return;
+
+      if (data.user_name) {
+        const u1 = document.getElementById('user-greeting-name');
+        const u2 = document.getElementById('step3-greeting-name');
+        if (u1) u1.innerText = data.user_name;
+        if (u2) u2.innerText = data.user_name;
+      }
+      if (data.current_points !== undefined) {
+        const p1 = document.getElementById('user-current-pts');
+        const p2 = document.getElementById('step3-current-pts');
+        if (p1) p1.innerText = `${data.current_points}pts`;
+        if (p2) p2.innerText = `${data.current_points}pts`;
+      }
+      if (data.earned_points !== undefined) {
+        const r1 = document.getElementById('total-reward-pts');
+        const r2 = document.getElementById('step3-total-reward-pts');
+        const r3 = document.getElementById('step4-points-earned');
+        if (r1) r1.innerText = data.earned_points;
+        if (r2) r2.innerText = data.earned_points;
+        if (r3) r3.innerText = `${data.earned_points}pts`;
+      }
+      if (data.items) {
+        for (const item of data.items) {
+          if (item.type === 'CAN') {
+            const q = document.getElementById('item-can-qty');
+            const p = document.getElementById('item-can-pts');
+            if (q) q.innerText = `x${item.quantity}`;
+            if (p) p.innerText = item.points;
+          } else if (item.type === 'PET') {
+            const q = document.getElementById('item-pet-qty');
+            const p = document.getElementById('item-pet-pts');
+            if (q) q.innerText = `x${item.quantity}`;
+            if (p) p.innerText = item.points;
+          } else if (item.type === 'GLASS') {
+            const q = document.getElementById('item-glass-qty');
+            const p = document.getElementById('item-glass-pts');
+            if (q) q.innerText = `x${item.quantity}`;
+            if (p) p.innerText = item.points;
+          } else if (item.type === 'GENERAL') {
+            const q = document.getElementById('item-general-qty');
+            const p = document.getElementById('item-general-pts');
+            if (q) q.innerText = `x${item.quantity}`;
+            if (p) p.innerText = item.points;
+          }
+        }
+      }
+      if (data.device_id) {
+        const d = document.getElementById('step1-device-id');
+        if (d) d.innerText = data.device_id;
+      }
+    }
+
+    // Touch / Click Handler for Interactive Kiosk Simulation
+    function handleKioskClick(screenId) {
+      if (screenId === 'STANDBY') {
+        triggerAction('START_SESSION');
+      } else if (screenId === 'STEP1_QR') {
+        triggerAction('USER_SCANNED');
+      } else if (screenId === 'STEP2_DOOR_OPEN') {
+        triggerAction('INSERT_COMPLETE');
+      } else if (screenId === 'STEP3_ANALYZING') {
+        // AI analyzing completes automatically or on click
+        triggerAction('ANALYSIS_COMPLETE');
+      } else if (screenId === 'STEP4_COMPLETE') {
+        if (countdownTimer) clearInterval(countdownTimer);
+        triggerAction('RESET_TO_STANDBY');
+      }
+    }
+
+    function triggerAction(actionName, payload = {}) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ action: actionName, payload: payload }));
+      } else {
+        // Fallback local transitions when running without WebSocket
+        localStateTransition(actionName);
+      }
+    }
+
+    function localStateTransition(action) {
+      if (action === 'START_SESSION') {
+        setScreen(STATES.STEP1_QR);
+      } else if (action === 'USER_SCANNED') {
+        setScreen(STATES.STEP2_DOOR_OPEN);
+      } else if (action === 'INSERT_COMPLETE') {
+        setScreen(STATES.STEP3_ANALYZING);
+        setTimeout(() => setScreen(STATES.STEP4_COMPLETE), 2000);
+      } else if (action === 'RESET_TO_STANDBY') {
+        setScreen(STATES.STANDBY);
+      }
+    }
+
+    // WebSocket Setup
+    function initWebSocket() {
+      const loc = window.location;
+      const proto = loc.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${proto}//${loc.host}/ws`;
+
+      ws = new WebSocket(wsUrl);
+
+      ws.onopen = () => {
+        console.log('[Kiosk WS] Connected to Golang IoT Agent');
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          console.log('[Kiosk WS] Received:', msg);
+
+          if (msg.type === 'STATE_CHANGE') {
+            if (msg.payload && msg.payload.state) {
+              setScreen(msg.payload.state);
+            }
+            if (msg.payload && msg.payload.data) {
+              updateKioskData(msg.payload.data);
+            }
+          } else if (msg.type === 'DATA_UPDATE') {
+            updateKioskData(msg.payload);
+          }
+        } catch (e) {
+          console.error('[Kiosk WS] Parse error:', e);
+        }
+      };
+
+      ws.onclose = () => {
+        console.warn('[Kiosk WS] Disconnected. Reconnecting in 2s...');
+        setTimeout(initWebSocket, 2000);
+      };
+
+      ws.onerror = (err) => {
+        console.error('[Kiosk WS] Error:', err);
+      };
+    }
+
+    initWebSocket();
+  </script>
+</body>
+</html>
