@@ -51,6 +51,13 @@
         height: 100dvh !important;
         max-width: 100vw !important;
         max-height: 100dvh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      #figma-stage-shell::-webkit-scrollbar {
+        display: none;
       }
     }
     img { -webkit-user-drag: none; user-select: none; }
@@ -2565,6 +2572,13 @@ MireuLim 님</span></div>
       };
 
       // 1. Universal Fluid Multi-Platform Aspect-Fit Scaling
+            window.__ecocyclingGetStageScale = function() {
+        const shell = document.getElementById('figma-stage-shell');
+        if (!shell) return 1;
+        const val = parseFloat(getComputedStyle(shell).getPropertyValue('--stage-scale'));
+        return (!isNaN(val) && val > 0) ? val : 1;
+      };
+
       function enforceMobileOnlyAndScale() {
         const stage = document.getElementById('figma-flow-stage');
         const shell = document.getElementById('figma-stage-shell');
@@ -2745,6 +2759,18 @@ MireuLim 님</span></div>
           content.style.position = 'absolute';
           content.style.left = '0px';
           content.style.top = '0px';
+          // Smooth slide-in from right animation for the drawer panel
+          const panel = clone.querySelector('[data-figma-id="6:334"]');
+          if (panel) {
+            panel.style.transition = 'transform 260ms cubic-bezier(0.16, 1, 0.3, 1)';
+            panel.style.transform = 'translateX(240px)';
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                const livePanel = document.querySelector('#figma-overlay-content [data-figma-id="6:334"]');
+                if (livePanel) livePanel.style.transform = 'translateX(0px)';
+              });
+            });
+          }
         } else if (relPos && typeof relPos.x === 'number' && typeof relPos.y === 'number') {
           backdrop.classList.remove('items-center', 'justify-center', 'bg-[rgba(0,0,0,0.75)]');
           backdrop.classList.add('bg-transparent');
@@ -4302,7 +4328,7 @@ MireuLim 님</span></div>
             closeOverlay();
           });
         });
-        // Hamburger menu (0:326) dim backdrop click to close
+        // Hamburger menu (0:326) dim backdrop click to close & Right-Swipe to close
         root.querySelectorAll('[data-figma-id="0:384"]').forEach(dim => {
           if (dim.dataset.dimBound) return;
           dim.dataset.dimBound = 'true';
@@ -4311,6 +4337,69 @@ MireuLim 님</span></div>
             e.stopPropagation();
             closeOverlay();
           });
+        });
+
+        // Touch & mouse right-swipe to close on the Hamburger drawer panel (0:385 / 6:334)
+        root.querySelectorAll('#figma-overlay-content [data-figma-id="6:334"], #figma-overlay-content [data-figma-id="0:385"]').forEach(drawer => {
+          if (drawer.dataset.swipeCloseBound) return;
+          drawer.dataset.swipeCloseBound = 'true';
+          let startX = 0;
+          let startY = 0;
+          let deltaX = 0;
+          let isSwiping = false;
+
+          const onStart = (clientX, clientY) => {
+            startX = clientX;
+            startY = clientY;
+            deltaX = 0;
+            isSwiping = true;
+          };
+
+          const onMove = (clientX, clientY) => {
+            if (!isSwiping) return;
+            const scale = window.__ecocyclingGetStageScale ? window.__ecocyclingGetStageScale() : 1;
+            const dx = (clientX - startX) / scale;
+            const dy = (clientY - startY) / scale;
+            if (dx > 5 && Math.abs(dx) > Math.abs(dy)) {
+              deltaX = dx;
+              const panel = document.querySelector('#figma-overlay-content [data-figma-id="6:334"]');
+              if (panel) {
+                panel.style.transition = 'none';
+                panel.style.transform = `translateX(${deltaX}px)`;
+              }
+            }
+          };
+
+          const onEnd = () => {
+            if (!isSwiping) return;
+            isSwiping = false;
+            const panel = document.querySelector('#figma-overlay-content [data-figma-id="6:334"]');
+            if (deltaX > 40) {
+              if (panel) {
+                panel.style.transition = 'transform 200ms ease-out';
+                panel.style.transform = 'translateX(240px)';
+                setTimeout(() => {
+                  closeOverlay();
+                  panel.style.transform = '';
+                }, 200);
+              } else {
+                closeOverlay();
+              }
+            } else if (panel) {
+              panel.style.transition = 'transform 200ms ease-out';
+              panel.style.transform = '';
+            }
+            deltaX = 0;
+          };
+
+          drawer.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) onStart(e.touches[0].clientX, e.touches[0].clientY);
+          }, { passive: true });
+          drawer.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) onMove(e.touches[0].clientX, e.touches[0].clientY);
+          }, { passive: true });
+          drawer.addEventListener('touchend', onEnd, { passive: true });
+          drawer.addEventListener('touchcancel', onEnd, { passive: true });
         });
         // Certified place badges across all Discover place frames -> open 56:163 overlay
         root.querySelectorAll('[data-figma-id="31:258"], [data-figma-id="31:348"], [data-figma-id="31:386"], [data-figma-id="31:227"], [data-figma-id="31:205"], [data-figma-id="31:293"], [data-figma-id="31:179"], [data-figma-id="31:141"], [data-figma-id="31:112"]').forEach(badge => {
