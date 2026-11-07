@@ -2565,7 +2565,7 @@ MireuLim 님</span></div>
       // App State persisted in localStorage
       const appState = {
         userName: localStorage.getItem('ecocycling_user') || 'MireuLim',
-        phone: localStorage.getItem('ecocycling_phone') || '010-1234-5678',
+        phone: localStorage.getItem('ecocycling_phone') || '',
         token: localStorage.getItem('ecocycling_token') || '',
         points: parseInt(localStorage.getItem('ecocycling_points') || '500', 10),
         carbonKg: parseInt(localStorage.getItem('ecocycling_carbon') || '250', 10),
@@ -2827,6 +2827,10 @@ MireuLim 님</span></div>
         if (targetId === '0:399' || targetId === '6:230' || targetId === '0:130') {
           refreshLivePoints();
         }
+                if (targetId === '0:485' || targetId === '0:475') {
+          const otpInp = document.getElementById('figma-input-otp');
+          if (otpInp) otpInp.value = '';
+        }
         if (targetId === '0:259' || targetId === '63:2') {
           if (typeof window.__ecocyclingInvalidateMaps === 'function') {
             window.__ecocyclingInvalidateMaps();
@@ -2985,7 +2989,7 @@ MireuLim 님</span></div>
           const inp = document.createElement('input');
           inp.id = 'figma-input-phone';
           inp.type = 'tel';
-          inp.value = appState.phone;
+          inp.value = appState.phone || '';
           inp.placeholder = '010-1234-5678';
           inp.className = 'w-full h-full px-[16px] bg-transparent outline-none text-[20px] text-[#000000] rounded-[16px]';
           inp.style.fontFamily = "'Noto Sans CJK KR', sans-serif";
@@ -3005,7 +3009,7 @@ MireuLim 님</span></div>
             if (idx === 0) inp.id = 'figma-input-otp';
             inp.type = 'text';
             inp.maxLength = 6;
-            inp.value = '384920';
+            inp.value = '';
             inp.placeholder = '인증번호 6자리 입력';
             inp.className = 'w-full h-full px-[16px] bg-transparent outline-none text-[20px] tracking-[4px] font-[500] text-[#3A5451] rounded-[16px]';
             inp.style.fontFamily = "'Noto Sans CJK KR', sans-serif";
