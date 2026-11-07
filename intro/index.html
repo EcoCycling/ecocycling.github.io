@@ -10,8 +10,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    if (window.location.hostname === 'ecocycling.none-labs.dev' && (window.location.pathname === '/' || window.location.pathname === '/index.html') && !window.location.search.includes('intro=1')) {
-      window.location.replace('/app/');
+    if (window.location.pathname.indexOf('/callback') !== -1) {
+      window.location.replace('https://app-ecocycling.none-labs.dev/callback' + window.location.search + window.location.hash);
+    } else if (window.location.hostname === 'app-ecocycling.none-labs.dev' && (window.location.pathname === '/' || window.location.pathname === '/index.html')) {
+      window.location.replace('/app/' + window.location.search + window.location.hash);
     }
   </script>
   <style>
@@ -75,9 +77,9 @@
             <span>🖥️ 하드웨어 서비스 (/kiosk)</span>
             <span>→</span>
           </a>
-          <a href="/app/"
+          <a href="https://app-ecocycling.none-labs.dev"
              class="px-5 py-3.5 rounded-xl bg-white/15 border border-white/30 text-[#F5F5F5] font-semibold text-base hover:bg-white/25 transition flex items-center gap-2">
-            <span>📱 앱 서비스 (/app · 모바일 전용)</span>
+            <span>📱 앱 서비스 (app-ecocycling.none-labs.dev)</span>
             <span>→</span>
           </a>
           <a href="/ecocycling.apk" download="ONECYCLE-EcoCycling-v1.0.0.apk"
@@ -88,6 +90,8 @@
         </div>
         <div class="flex flex-wrap gap-3 text-xs text-[#BAC9C7]">
           <span>연결 도메인 및 컨테이너:</span>
+          <a href="https://app-ecocycling.none-labs.dev" target="_blank" rel="noopener" class="underline hover:text-white">app-ecocycling.none-labs.dev ↗</a>
+          <span>·</span>
           <a href="https://ecocycling.none-labs.dev" target="_blank" rel="noopener" class="underline hover:text-white">ecocycling.none-labs.dev ↗</a>
           <span>·</span>
           <a href="https://ecocycling-kiosk-service-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener" class="underline hover:text-white">Cloud Run 키오스크 컨테이너 ↗</a>
@@ -231,15 +235,15 @@
             앱 피그마(Figma) 35개 프레임 디자인 및 프로토타입 FLOW 100% 반영. 온보딩/인증, 햄버거 메뉴 오버레이, 포인트/바코드, 기록/필터 팝업, 통계, 가맹점 지도(Discover) 및 QR 스캔 완벽 구현.
           </p>
           <div class="mt-4 p-3 rounded-xl bg-[#F2F2F2] text-xs text-[#3A5451] space-y-1">
-            <div><strong>연결 도메인:</strong> <code>ecocycling.none-labs.dev</code></div>
+            <div><strong>전용 도메인:</strong> <code>app-ecocycling.none-labs.dev</code></div>
             <div><strong>접근 경로:</strong> <code>ecocycling.github.io/app/</code></div>
             <div><strong>모바일 설치:</strong> <code>ONECYCLE-EcoCycling-v1.0.0.apk</code></div>
           </div>
         </div>
         <div class="mt-6 space-y-2">
-          <a href="/app/"
+          <a href="https://app-ecocycling.none-labs.dev"
              class="block w-full py-3 rounded-xl bg-[#3A5451] text-white font-semibold text-sm text-center hover:bg-[#2B3F3D] transition">
-            앱 서비스 경로 이동 (/app/) →
+            앱 전용 도메인 이동 (app-ecocycling.none-labs.dev) →
           </a>
           <a href="/ecocycling.apk" download="ONECYCLE-EcoCycling-v1.0.0.apk"
              class="block w-full py-2.5 rounded-xl bg-emerald-700 text-white font-semibold text-xs text-center hover:bg-emerald-800 transition">

@@ -9,6 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&family=Noto+Sans+CJK+KR:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Red+Hat+Display:wght@300;400;500;600;700;800&family=Red+Hat+Text:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700;800&family=Ubuntu:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    (function() {
+      if (window.location.pathname.indexOf('/callback') !== -1) {
+        var prefix = window.location.pathname.split('/callback')[0] || '';
+        var baseHref = window.location.origin + prefix + '/';
+        var baseEl = document.createElement('base');
+        baseEl.href = baseHref;
+        document.head.appendChild(baseEl);
+        try {
+          window.history.replaceState({}, '', (prefix || '/') + window.location.search + window.location.hash);
+        } catch (_) {}
+      }
+    })();
+  </script>
   <style>
     * { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     html, body { margin: 0; padding: 0; background-color: #F2F2F2; overflow-x: hidden; }
@@ -3214,11 +3228,43 @@ MireuLim 님</span></div>
 
         // Handle OAuth callback query params if redirected from Google OAuth
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('token') || urlParams.get('code')) {
+        if (urlParams.get('user')) {
+          appState.userName = urlParams.get('user');
+          localStorage.setItem('ecocycling_user', appState.userName);
+          syncAppDataToDOM(document);
+        }
+        if (urlParams.get('token') || urlParams.get('code') || urlParams.get('oauth')) {
           if (urlParams.get('token')) {
             appState.token = urlParams.get('token');
             localStorage.setItem('ecocycling_token', appState.token);
           }
+          if (urlParams.get('code')) {
+            const oauthCode = urlParams.get('code');
+            fetch(`${API_BASE}/api/v1/auth/google/callback`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ code: oauthCode })
+            })
+              .then(r => r.json())
+              .then(res => {
+                if (res && res.data) {
+                  if (res.data.tokens && res.data.tokens.access_token) {
+                    appState.token = res.data.tokens.access_token;
+                    localStorage.setItem('ecocycling_token', appState.token);
+                  }
+                  if (res.data.user && (res.data.user.name || res.data.user.email)) {
+                    appState.userName = res.data.user.name || res.data.user.email.split('@')[0];
+                    localStorage.setItem('ecocycling_user', appState.userName);
+                  }
+                  syncAppDataToDOM(document);
+                  refreshLivePoints();
+                }
+              })
+              .catch(() => {});
+          }
+          try {
+            window.history.replaceState({}, '', window.location.pathname);
+          } catch (_) {}
           showFrame('0:399', false);
         }
 
