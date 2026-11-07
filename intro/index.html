@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONECYCLE (EcoCycling) — 스마트 분리배출 에코-리워드 플랫폼</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background-color: #F2F2F2;
+      color: #2B2B2B;
+    }
+    .font-archivo {
+      font-family: 'Archivo Black', sans-serif;
+    }
+    .font-ubuntu {
+      font-family: 'Ubuntu', sans-serif;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Navigation Header -->
+  <header class="sticky top-0 z-50 bg-[#3A5451]/95 backdrop-blur border-b border-white/10 text-[#F5F5F5]">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="font-archivo text-2xl tracking-tight text-[#F5F5F5]">ONECYCLE</span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#BAC9C7] text-[#3A5451] font-semibold">by None Labs</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-[#F5F5F5]/90">
+        <a href="/intro/" class="hover:text-white transition">소개 페이지 (/intro)</a>
+        <a href="/app/" class="hover:text-white transition">앱 서비스 (/app)</a>
+        <a href="/kiosk/" class="hover:text-white transition">하드웨어 서비스 (/kiosk)</a>
+        <a href="#live-services" class="px-4 py-2 rounded-lg bg-[#F5F5F5] text-[#3A5451] font-semibold hover:bg-[#BAC9C7] transition">서비스 경로 &amp; 컨테이너</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-[#3A5451] text-[#F5F5F5] overflow-hidden py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-6 relative z-10 grid md:grid-cols-12 gap-12 items-center">
+      <div class="md:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-medium tracking-wide">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>GCP Cloud Run (asia-northeast3) 실시간 운영 중</span>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
+          일상의 분리배출이<br />
+          <span class="font-archivo text-[#BAC9C7]">ONECYCLE</span> 리워드가 되다
+        </h1>
+        <p class="text-lg md:text-xl text-[#F5F5F5]/85 leading-relaxed max-w-2xl">
+          <strong>EcoCycling (ONECYCLE)</strong>은 AI 비전 객체 분류와 IoT 스마트 쓰레기통 키오스크를 결합해,
+          캔·페트병·유리병·일반쓰레기를 분리배출할 때마다 실시간 포인트를 적립하고 지역 친환경 가맹점에서 사용할 수 있는 스마트 자원순환 플랫폼입니다.
+        </p>
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a href="/kiosk/"
+             class="px-5 py-3.5 rounded-xl bg-[#F5F5F5] text-[#3A5451] font-bold text-base shadow-lg hover:bg-[#BAC9C7] transition flex items-center gap-2">
+            <span>🖥️ 하드웨어 서비스 (/kiosk)</span>
+            <span>→</span>
+          </a>
+          <a href="/app/"
+             class="px-5 py-3.5 rounded-xl bg-white/15 border border-white/30 text-[#F5F5F5] font-semibold text-base hover:bg-white/25 transition flex items-center gap-2">
+            <span>📱 앱 서비스 (/app · 모바일 전용)</span>
+            <span>→</span>
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-3 text-xs text-[#BAC9C7]">
+          <span>컨테이너 직접 접속:</span>
+          <a href="https://ecocycling-kiosk-service-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener" class="underline hover:text-white">Cloud Run 키오스크 컨테이너 ↗</a>
+          <span>·</span>
+          <a href="https://ecocycling-web-client-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener" class="underline hover:text-white">Cloud Run 모바일 웹 컨테이너 ↗</a>
+        </div>
+        <p class="text-xs text-[#BAC9C7]">
+          * 모바일 웹 어플리케이션(1차)은 모바일 전용 정책이 적용되어 스마트폰 또는 모바일 뷰포트(폭 768px 이하)에서만 이용 가능합니다. (2차 네이티브 Android 앱 출시 예정)
+        </p>
+      </div>
+
+      <!-- Brand Card Showcase -->
+      <div class="md:col-span-5">
+        <div class="bg-[#2B3F3D] border border-white/15 rounded-3xl p-6 shadow-2xl space-y-5">
+          <div class="flex items-center justify-between border-b border-white/10 pb-4">
+            <div>
+              <div class="font-archivo text-2xl text-[#F5F5F5]">ONECYCLE</div>
+              <div class="text-xs text-[#BAC9C7]">Smart Waste Sorting &amp; Eco-Reward</div>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold">Production v1.0</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div class="text-xs text-[#BAC9C7]">캔 (CAN)</div>
+              <div class="text-2xl font-bold mt-1">+80 <span class="text-sm font-normal">pts/개</span></div>
+            </div>
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div class="text-xs text-[#BAC9C7]">페트병 (PET)</div>
+              <div class="text-2xl font-bold mt-1">+100 <span class="text-sm font-normal">pts/개</span></div>
+            </div>
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div class="text-xs text-[#BAC9C7]">유리병 (GLASS)</div>
+              <div class="text-2xl font-bold mt-1">+120 <span class="text-sm font-normal">pts/개</span></div>
+            </div>
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <div class="text-xs text-[#BAC9C7]">탄소 절감 효과</div>
+              <div class="text-2xl font-bold mt-1">250 <span class="text-sm font-normal">kg CO₂</span></div>
+            </div>
+          </div>
+          <div class="bg-[#3A5451] rounded-2xl p-4 flex items-center justify-between">
+            <div>
+              <div class="text-xs text-[#BAC9C7]">1회 분리수거 예시 적립량</div>
+              <div class="text-sm text-white/90 mt-0.5">캔 5개 · 페트 3개 · 유리 2개 · 일반 10개</div>
+            </div>
+            <div class="text-2xl font-bold text-white">+945 pts</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About & Core Value Section -->
+  <section id="about" class="py-16 md:py-24 max-w-6xl mx-auto px-6">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">Core Features</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-3 text-[#2B2B2B]">EcoCycling이 만드는 지속 가능한 순환 생태계</h2>
+      <p class="text-[#565656] mt-3">모바일 앱과 스마트 키오스크, AI 분류 엔진이 유기적으로 연결되어 누구나 쉽고 즐겁게 자원순환에 참여합니다.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">01</div>
+        <h3 class="text-xl font-bold text-[#2B2B2B]">모바일 앱 (1:1 Figma UX)</h3>
+        <p class="text-sm text-[#565656] leading-relaxed">
+          휴대폰 번호 인증 및 Google OAuth 2.0 간편 로그인, 키오스크 QR 스캔, 실시간 포인트 바코드 및 모바일 상품권 교환, 내 주변 친환경 가맹점(Certified Place) 지도 탐색을 제공합니다.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">02</div>
+        <h3 class="text-xl font-bold text-[#2B2B2B]">스마트 키오스크 에이전트</h3>
+        <p class="text-sm text-[#565656] leading-relaxed">
+          Golang 기반 IoT 상태 머신과 WebSocket 실시간 양방향 동기화를 통해 대기 화면부터 QR 스캔, 투입구 개방 및 품목별 카운팅, AI 비전 분석, 포인트 적립 완료까지 5단계 레이아웃을 제어합니다.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-7 shadow-sm border border-black/5 space-y-3">
+        <div class="w-12 h-12 rounded-xl bg-[#3A5451] text-white flex items-center justify-center text-2xl font-bold">03</div>
+        <h3 class="text-xl font-bold text-[#2B2B2B]">탄소 저감 통계 &amp; 가맹점 리워드</h3>
+        <p class="text-sm text-[#565656] leading-relaxed">
+          내가 버린 쓰레기 무게(kg)와 감축한 탄소 배출량(나무 식재 효과·자동차 감소 효과)을 직관적인 통계로 확인하고, 적립된 포인트를 지역 가맹점 및 편의점에서 즉시 사용할 수 있습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-Step Workflow Section -->
+  <section id="workflow" class="py-16 bg-white border-y border-black/5">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">How It Works</span>
+        <h2 class="text-3xl font-bold mt-3 text-[#2B2B2B]">스마트 키오스크 4단계 분리배출 프로세스</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5">
+          <div class="text-xs font-bold text-[#3A5451]">STEP 01 · QR 인증</div>
+          <div class="text-lg font-bold mt-1">ONECYCLE 앱 QR 스캔</div>
+          <p class="text-sm text-[#565656] mt-2">키오스크 화면을 터치해 깨운 뒤, 모바일 앱으로 화면의 QR코드를 스캔하여 사용자를 인증합니다.</p>
+        </div>
+
+        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5">
+          <div class="text-xs font-bold text-[#3A5451]">STEP 02 · 쓰레기 투입</div>
+          <div class="text-lg font-bold mt-1">투입구 개방 및 분리배출</div>
+          <p class="text-sm text-[#565656] mt-2">투입구 도어가 자동으로 열리고 캔, 페트병, 유리병, 일반쓰레기 투입 수량과 예상 적립 포인트가 실시간 집계됩니다.</p>
+        </div>
+
+        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5">
+          <div class="text-xs font-bold text-[#3A5451]">STEP 03 · AI 분석</div>
+          <div class="text-lg font-bold mt-1">카메라 비전 &amp; 로드셀 측정</div>
+          <p class="text-sm text-[#565656] mt-2">투입 완료 시 도어가 닫히며 AI 카메라 객체 인식과 로드셀 무게 센서로 재질 및 중량을 정밀 검증합니다.</p>
+        </div>
+
+        <div class="rounded-2xl bg-[#F2F2F2] p-6 border border-black/5">
+          <div class="text-xs font-bold text-[#3A5451]">STEP 04 · 적립 완료</div>
+          <div class="text-lg font-bold mt-1">포인트 즉시 지급</div>
+          <p class="text-sm text-[#565656] mt-2">검증된 포인트가 사용자 계정에 즉시 적립되며, 모바일 앱에서 적립 내역과 탄소 감축량을 바로 확인할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Services Section -->
+  <section id="live-services" class="py-16 md:py-24 max-w-6xl mx-auto px-6">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-xs font-bold uppercase tracking-widest text-[#3A5451] bg-[#BAC9C7] px-3 py-1 rounded-full">Separated Service Paths &amp; Cloud Run Containers</span>
+      <h2 class="text-3xl font-bold mt-3 text-[#2B2B2B]">서비스별 분리 경로 및 컨테이너 바로가기</h2>
+      <p class="text-[#565656] mt-2">소개 페이지(<code>/</code>, <code>/intro/</code>), 앱 서비스(<code>/app/</code>), 하드웨어 서비스(<code>/kiosk/</code>, <code>/hardware/</code>) 경로가 분리되어 있으며, GCP 서울 리전(<code>asia-northeast3</code>) Cloud Run 컨테이너와 실시간 연동됩니다.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Mobile Web App -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/10 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-[#BAC9C7] text-[#3A5451] text-xs font-bold">앱 서비스 · /app/</span>
+            <span class="text-xs text-emerald-600 font-semibold">● 35 Frames Flow</span>
+          </div>
+          <h3 class="text-xl font-bold mt-4">모바일 웹 어플리케이션 (1차)</h3>
+          <p class="text-sm text-[#565656] mt-2">
+            앱 피그마(Figma) 35개 프레임 디자인 및 프로토타입 FLOW 100% 반영. 온보딩/인증, 햄버거 메뉴 오버레이, 포인트/바코드, 기록/필터 팝업, 통계, 가맹점 지도(Discover) 및 QR 스캔 완벽 구현.
+          </p>
+          <div class="mt-4 p-3 rounded-xl bg-[#F2F2F2] text-xs text-[#3A5451] space-y-1">
+            <div><strong>접근 경로:</strong> <code>ecocycling.github.io/app/</code></div>
+            <div><strong>플랫폼 정책:</strong> 모바일 기기 전용 (데스크톱 차단 게이트 적용)</div>
+          </div>
+        </div>
+        <div class="mt-6 space-y-2">
+          <a href="/app/"
+             class="block w-full py-3 rounded-xl bg-[#3A5451] text-white font-semibold text-sm text-center hover:bg-[#2B3F3D] transition">
+            앱 서비스 경로 이동 (/app/) →
+          </a>
+          <a href="https://ecocycling-web-client-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener"
+             class="block w-full py-2.5 rounded-xl bg-[#F2F2F2] text-[#3A5451] font-semibold text-xs text-center hover:bg-[#BAC9C7] transition">
+            Cloud Run 컨테이너 직접 열기 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Smart Kiosk Container -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/10 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-[#BAC9C7] text-[#3A5451] text-xs font-bold">하드웨어 서비스 · /kiosk/</span>
+            <span class="text-xs text-emerald-600 font-semibold">● 5 Frames Flow</span>
+          </div>
+          <h3 class="text-xl font-bold mt-4">스마트 키오스크 하드웨어 서비스</h3>
+          <p class="text-sm text-[#565656] mt-2">
+            키오스크 피그마(Figma) 5대 레이아웃(<code>1:6 Stand by</code> → <code>1:8 Step 1</code> → <code>1:563 Step 2</code> → <code>1:107 Step 3</code> → <code>1:192 Step 4</code>) 프로토타입 FLOW 및 Golang IoT 에이전트 연동.
+          </p>
+          <div class="mt-4 p-3 rounded-xl bg-[#F2F2F2] text-xs text-[#3A5451] space-y-1">
+            <div><strong>접근 경로:</strong> <code>/kiosk/</code> 또는 <code>/hardware/</code></div>
+            <div><strong>컨테이너:</strong> Go 1.22 에이전트 + WebSocket 상태 머신 (<code>ecocycling-iot-sa</code>)</div>
+          </div>
+        </div>
+        <div class="mt-6 space-y-2">
+          <div class="grid grid-cols-2 gap-2">
+            <a href="/kiosk/"
+               class="py-3 rounded-xl bg-[#3A5451] text-white font-semibold text-sm text-center hover:bg-[#2B3F3D] transition">
+              /kiosk/ 이동 →
+            </a>
+            <a href="/hardware/"
+               class="py-3 rounded-xl bg-[#3A5451] text-white font-semibold text-sm text-center hover:bg-[#2B3F3D] transition">
+              /hardware/ 이동 →
+            </a>
+          </div>
+          <a href="https://ecocycling-kiosk-service-727814611731.asia-northeast3.run.app" target="_blank" rel="noopener"
+             class="block w-full py-2.5 rounded-xl bg-[#F2F2F2] text-[#3A5451] font-semibold text-xs text-center hover:bg-[#BAC9C7] transition">
+            Cloud Run 키오스크 컨테이너 직접 열기 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Intro & Backend API Server -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-black/10 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-[#BAC9C7] text-[#3A5451] text-xs font-bold">소개 &amp; 코어 API · /intro/</span>
+            <span class="text-xs text-emerald-600 font-semibold">● ONLINE</span>
+          </div>
+          <h3 class="text-xl font-bold mt-4">서비스 소개 &amp; 백엔드 API 서버</h3>
+          <p class="text-sm text-[#565656] mt-2">
+            EcoCycling 플랫폼 소개 페이지(<code>/</code>, <code>/intro/</code>) 및 Golang (Fiber) 기반 코어 RESTful API 서버. JWT 인증, 포인트 트랜잭션, IoT 키오스크 적립 API 제공.
+          </p>
+          <div class="mt-4 p-3 rounded-xl bg-[#F2F2F2] text-xs text-[#3A5451] space-y-1">
+            <div><strong>소개 경로:</strong> <code>ecocycling.github.io/intro/</code></div>
+            <div><strong>보안 아키텍처:</strong> GCP Secret Manager &amp; <code>ecocycling-api-sa</code> 분리 운영</div>
+          </div>
+        </div>
+        <div class="mt-6 space-y-2">
+          <a href="/intro/"
+             class="block w-full py-3 rounded-xl bg-[#2B2B2B] text-white font-semibold text-sm text-center hover:bg-black transition">
+            소개 페이지 경로 (/intro/) →
+          </a>
+          <a href="https://ecocycling-api-server-lajbl2hcgq-du.a.run.app/health" target="_blank" rel="noopener"
+             class="block w-full py-2.5 rounded-xl bg-[#F2F2F2] text-[#2B2B2B] font-semibold text-xs text-center hover:bg-black/10 transition">
+            Cloud Run API 상태 확인 (/health) ↗
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture & Security Governance -->
+  <section id="architecture" class="py-14 bg-[#2B2B2B] text-[#F2F2F2]">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-2xl font-bold mb-6">클라우드 인프라 및 보안 격리 아키텍처 (Terraform &amp; GitHub Actions)</h2>
+      <div class="grid md:grid-cols-4 gap-4 text-sm">
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div class="text-[#BAC9C7] font-bold">GCP Region &amp; Cost</div>
+          <div class="mt-1 text-white/80">서울 리전 (<code>asia-northeast3</code>) · Cloud Run Scale-to-Zero (<code>min=0, max=2, cpu_idle=true</code>) 최저 비용 구성</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div class="text-[#BAC9C7] font-bold">IAM 계정 분리</div>
+          <div class="mt-1 text-white/80">서비스별 전용 SA (<code>ecocycling-api-sa</code>, <code>ecocycling-iot-sa</code>, <code>ecocycling-ai-sa</code>, <code>github-actions-deployer</code>) 격리</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div class="text-[#BAC9C7] font-bold">Zero Hardcoded Secrets</div>
+          <div class="mt-1 text-white/80"><code>GoogleClientSecret</code>, <code>JWTSecret</code> 등 모든 민감 정보는 GCP Secret Manager 및 GitHub Secrets로만 주입</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div class="text-[#BAC9C7] font-bold">IaC &amp; GitOps</div>
+          <div class="mt-1 text-white/80">Terraform Remote Backend (<code>gs://nonelabs-ecocycling-tfstate</code>) 및 GitHub Actions 자동 배포 파이프라인</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-8 bg-[#1F1F1F] text-white/60 text-xs">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-archivo text-white text-sm">ONECYCLE</span>
+        <span>© 2026 EcoCycling by None Labs. All rights reserved.</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/EcoCycling" target="_blank" rel="noopener" class="hover:text-white transition">GitHub Organization</a>
+        <span>·</span>
+        <span>PM &amp; Owner: limmireu1214@gmail.com</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
